@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
     'bootstrap4',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,5 @@ SECURE_HSTS_SECONDS = int(os.environ.get('DJANGO_SECURE_HSTS_SECONDS', 0))
 SECURE_SSL_REDIRECT = eval(os.environ.get('DJANGO_SECURE_SSL_REDIRECT', 'False'))
 SESSION_COOKIE_SECURE = eval(os.environ.get('DJANGO_SESSION_COOKIE_SECURE', 'False'))
 CSRF_COOKIE_SECURE = eval(os.environ.get('DJANGO_CSRF_COOKIE_SECURE', 'False'))
+
+AUTH_USER_MODEL = 'main.AdvUser'
