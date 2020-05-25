@@ -1,7 +1,10 @@
 from django.contrib import admin
 import datetime
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
 
-from .models import AdvUser
+
+admin.site.unregister(User)
 
 
 class NonactivatedFilter(admin.SimpleListFilter):
@@ -26,18 +29,23 @@ class NonactivatedFilter(admin.SimpleListFilter):
             d = datetime.date.today() - datetime.timedelta(weeks=1)
             return queryset.filter(is_active=False, date_joined__date__lt=d)
 
+@admin.register(User)
+class AdvUserAdmin(UserAdmin):
 
-class AdvUserAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'id', 'last_name', 'first_name', 'email','is_active', 'date_joined')
-    search_fields = ('username', 'email', 'first_name', 'last_name')
+    # list_display = ('__str__', 'id', 'last_name', 'first_name', 'email','is_active', 'date_joined')
+    # search_fields = ('username', 'email', 'first_name', 'last_name')
     list_filter = (NonactivatedFilter,)
-    fields = (
-        ('username', 'email'), ('first_name', 'last_name'),
-        ('is_active', 'is_staff', 'is_superuser'),
-        'groups', 'user_permissions',
-        ('last_login', 'date_joined'),
-    )
-    readonly_fields = ('last_login', 'date_joined')
+    # fields = (
+    #     ('username', 'email'), ('first_name', 'last_name'),
+    #     'password',
+    #     ('is_active', 'is_staff', 'is_superuser'),
+    #     'groups', 'user_permissions',
+    #     ('last_login', 'date_joined'),
+    # )
+    # readonly_fields = ('last_login', 'date_joined')
+
+    # class Meta:
+    #     model = User
 
 
-admin.site.register(AdvUser, AdvUserAdmin)
+# admin.site.register(User, AdvUserAdmin)

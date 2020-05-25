@@ -136,4 +136,4 @@ SECURE_SSL_REDIRECT = eval(os.environ.get('DJANGO_SECURE_SSL_REDIRECT', 'False')
 SESSION_COOKIE_SECURE = eval(os.environ.get('DJANGO_SESSION_COOKIE_SECURE', 'False'))
 CSRF_COOKIE_SECURE = eval(os.environ.get('DJANGO_CSRF_COOKIE_SECURE', 'False'))
 
-AUTH_USER_MODEL = 'main.AdvUser'
+# AUTH_USER_MODEL = 'main.AdvUser'
