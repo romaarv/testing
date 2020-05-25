@@ -3,8 +3,10 @@ import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
 
+from .models import AdvUser
 
-admin.site.unregister(User)
+
+# admin.site.unregister(User)
 
 
 class NonactivatedFilter(admin.SimpleListFilter):
@@ -29,10 +31,11 @@ class NonactivatedFilter(admin.SimpleListFilter):
             d = datetime.date.today() - datetime.timedelta(weeks=1)
             return queryset.filter(is_active=False, date_joined__date__lt=d)
 
-@admin.register(User)
-class AdvUserAdmin(UserAdmin):
 
-    # list_display = ('__str__', 'id', 'last_name', 'first_name', 'email','is_active', 'date_joined')
+@admin.register(AdvUser)
+class AdvUserAdmin(UserAdmin, admin.ModelAdmin):
+    #list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+    list_display = ('__str__', 'username', 'id', 'email', 'is_active', 'is_staff', 'is_superuser')
     # search_fields = ('username', 'email', 'first_name', 'last_name')
     list_filter = (NonactivatedFilter,)
     # fields = (
@@ -48,4 +51,4 @@ class AdvUserAdmin(UserAdmin):
     #     model = User
 
 
-# admin.site.register(User, AdvUserAdmin)
+# admin.site.register(AdvUser, AdvUserAdmin)

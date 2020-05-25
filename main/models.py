@@ -1,25 +1,25 @@
 from django.db import models
 from datetime import datetime
-from django.contrib.auth.models import AbstractUser, User
+from django.contrib.auth.models import AbstractUser
 
 
-# class AdvUser(AbstractUser):
+class AdvUser(AbstractUser):
 
-#     class Meta(AbstractUser.Meta):
-#         pass
+    class Meta(AbstractUser.Meta):
+        pass
 
-    # def __str__(self):
-    #     str = ''
-    #     if (len(self.last_name) > 0) or (len(self.first_name) > 0):
-    #         str = self.last_name
-    #         if len(self.first_name) > 0:
-    #             if len(str) > 0:
-    #                 str = '%s %s' % (str, self.first_name)
-    #             else:
-    #                 str = self.first_name
-    #         return str
-    #     else:
-    #         return self.username
+    def __str__(self):
+        str = ''
+        if (len(self.last_name) > 0) or (len(self.first_name) > 0):
+            str = self.last_name
+            if len(self.first_name) > 0:
+                if len(str) > 0:
+                    str = '%s %s' % (str, self.first_name)
+                else:
+                    str = self.first_name
+            return str
+        else:
+            return self.username
 
 
 class Lesson(models.Model):
@@ -71,7 +71,7 @@ class Answer(models.Model):
 
 
 class Exam(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='exams')
+    user = models.ForeignKey(AdvUser, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='exams')
     answer = models.ForeignKey(Answer, on_delete=models.PROTECT, verbose_name='Выбранный ответ', related_name='exams')
     tasks = models.ManyToManyField(Task, through='Test')
 
