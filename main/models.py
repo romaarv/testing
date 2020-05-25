@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class AdvUser(AbstractUser):
+    is_activated = models.BooleanField(default=False, db_index=True, verbose_name='Статус подтверждения', help_text='Пользователь, прошедший процесс подтверждения')
 
     class Meta(AbstractUser.Meta):
         pass
