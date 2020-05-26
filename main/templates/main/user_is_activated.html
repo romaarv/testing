@@ -1,0 +1,15 @@
+{% extends "main/basic.html" %}
+
+{% block title %}Пользователь уже активирован{% endblock %}
+
+{% block content %}
+    <h2>Активация</h2>
+    <h5>Здравствуйте {{ user_new }}!</h5>
+    <h5 class="text-danger">Пользователь с логином {{ user_new.username }} был активирован ранее.</h5>
+    {% if user.is_authenticated %}
+        <h5 class="text-danger">Данный сеанс использует пользователь с логином {{ user.username }}.</h5>
+        <h5>Для смены пользователя Вам необходимо <a href="{% url 'main:logout' %}">выйти</a> с текущего сеанса.</h5>
+    {% else %}
+        <h5>Вы можете <a href="{% url 'main:login' %}">войти</a> на сайт!</h5>
+    {% endif %}
+{% endblock %}

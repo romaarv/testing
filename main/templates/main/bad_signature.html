@@ -1,0 +1,9 @@
+{% extends "main/basic.html" %}
+
+{% block title %}Ошибка при активации{% endblock %}
+
+{% block content %}
+    <h2>Активация</h2>
+    <h5 class="text-danger">Активация пользователя прошла неудачно.</h5>
+    <h5>Попробуйте пройти <a href="{% url 'main:register' %}">регистрирацию</a> еще раз.</h5>
+{% endblock %}

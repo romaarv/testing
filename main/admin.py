@@ -3,14 +3,11 @@ import datetime
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from .models import AdvUser
-
-
-# admin.site.unregister(User)
+from .models import AdvUser, Lesson
 
 
 class NonactivatedFilter(admin.SimpleListFilter):
-    title = 'Статус подтверждения'
+    title = 'Подтверждение аккаунта'
     parameter_name = 'actstate'
 
     def lookups(self, request, model_admin):
@@ -48,3 +45,6 @@ class AdvUserAdmin(UserAdmin, admin.ModelAdmin):
     )
     list_editable = ('is_active', 'is_activated', 'is_staff', 'is_superuser')
     readonly_fields = ('last_login', 'date_joined')
+
+
+admin.site.register(Lesson)

@@ -1,0 +1,12 @@
+{% extends "main/basic.html" %}
+
+{% load static %}
+
+{% block title %}О сайте{% endblock %}
+
+{% block content %}
+    <h2>О сайте</h2>
+    <img src="{% static 'main/images.jpg' %}" alt="Логотип" align="left" hspace="5">
+    <h5>Сайт для подготовки и публикации тестов, а также оценки ответов на них.</h5>
+    <h5>Все права принадлежат <a target="_blank" href="https://github.com/romaarv">ArvSoft</a>.</h5>
+{% endblock %}

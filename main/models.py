@@ -1,11 +1,14 @@
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import AbstractUser
+from django.dispatch import Signal
+
+from .utilities import send_activation_notification
 
 
 class AdvUser(AbstractUser):
-    is_activated = models.BooleanField(default=False, db_index=True, verbose_name='Статус подтверждения',
-                    help_text='Пользователь, прошедший процесс подтверждения')
+    is_activated = models.BooleanField(default=True, db_index=True, verbose_name='Подтверждение аккаунта',
+                    help_text='Пользовательский аккаунт, который прошел процесс подтверждения')
 
     class Meta(AbstractUser.Meta):
         pass
@@ -27,6 +30,11 @@ class AdvUser(AbstractUser):
 class Lesson(models.Model):
     name = models.CharField(max_length=25, db_index=True, verbose_name='Название',
             help_text='Предмет, знания которого проверяются в тесте')
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Предмет'
+        verbose_name_plural = 'Предметы'
 
     def __str__(self):
         return '%s' % (self.name)
@@ -85,7 +93,7 @@ class Exam(models.Model):
     tasks = models.ManyToManyField(Task, through='Test')
 
     def __str__(self):
-        return '%s' % (self.user)
+        return '%s - %d' % (self.tasks, self.tasks.test_score)
 
 
 class Test(models.Model):
@@ -94,5 +102,13 @@ class Test(models.Model):
     test_start = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Тест начат')
     test_end = models.DateTimeField(default=None, blank=True, db_index=True, verbose_name='Тест закончен')
     test_score = models.PositiveIntegerField(default=None, blank=True, db_index=True, verbose_name='Оценка')
+
+
+user_registrated = Signal(providing_args=['instance'])
+
+def user_registrated_dispatcher(sender, **kwargs):
+    send_activation_notification(kwargs['instance'])
+
+user_registrated.connect(user_registrated_dispatcher)
 
 

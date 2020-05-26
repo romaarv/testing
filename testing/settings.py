@@ -66,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'main.middlewares.testing_context_processor',
             ],
         },
     },
@@ -137,3 +138,13 @@ SESSION_COOKIE_SECURE = eval(os.environ.get('DJANGO_SESSION_COOKIE_SECURE', 'Fal
 CSRF_COOKIE_SECURE = eval(os.environ.get('DJANGO_CSRF_COOKIE_SECURE', 'False'))
 
 AUTH_USER_MODEL = 'main.AdvUser'
+
+EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_HOST_USER', 'secret')
+EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD', 'secret')
+DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_EMAIL_HOST_USER', 'secret')
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
