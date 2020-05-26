@@ -4,7 +4,8 @@ from django.contrib.auth.models import AbstractUser
 
 
 class AdvUser(AbstractUser):
-    is_activated = models.BooleanField(default=False, db_index=True, verbose_name='Статус подтверждения', help_text='Пользователь, прошедший процесс подтверждения')
+    is_activated = models.BooleanField(default=False, db_index=True, verbose_name='Статус подтверждения',
+                    help_text='Пользователь, прошедший процесс подтверждения')
 
     class Meta(AbstractUser.Meta):
         pass
@@ -24,7 +25,8 @@ class AdvUser(AbstractUser):
 
 
 class Lesson(models.Model):
-    name = models.CharField(max_length=25, db_index=True, verbose_name='Название предмета')
+    name = models.CharField(max_length=25, db_index=True, verbose_name='Название',
+            help_text='Предмет, знания которого проверяются в тесте')
 
     def __str__(self):
         return '%s' % (self.name)
@@ -32,12 +34,14 @@ class Lesson(models.Model):
 
 class Task(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='Предмет', related_name='tests')
-    name = models.CharField(max_length=100, verbose_name='Название теста')
-    max_score = models.PositiveIntegerField(default=12, verbose_name='Максимальная оценка теста')
-    content = models.TextField(verbose_name='Описание теста')
-    is_active = models.BooleanField(default=False, db_index=True, verbose_name='Тест опубликован?')
-    public_at = models.DateTimeField(default=None, blank=True,
-                db_index=True, verbose_name='Дата публикации теста')
+    name = models.CharField(max_length=100, verbose_name='Название ', help_text='Короткое название теста')
+    max_score = models.PositiveIntegerField(default=12, verbose_name='Максимальная оценка',
+                help_text='Максимальное количество балов которые можно набрать за все правильные ответы в тесте')
+    content = models.TextField(verbose_name='Описание', help_text='Детальное описание теста')
+    is_active = models.BooleanField(default=False, db_index=True, verbose_name='Статус публикации',
+                help_text='Вопросы составлены и тест готов к публикации')
+    public_at = models.DateTimeField(default=None, blank=True, db_index=True, verbose_name='Дата публикации',
+                help_text='Дата публикации теста')
 
     def __str__(self):
         if is_active:
@@ -48,25 +52,29 @@ class Task(models.Model):
 
 class Question(models.Model):
     test = models.ForeignKey(Task, on_delete=models.PROTECT, verbose_name='Тест', related_name='questions')
-    content = models.TextField(verbose_name='Вопрос')
-    score = models.FloatField(default=1.00, verbose_name='Оценка за правильный ответ')
-    variant = models.PositiveIntegerField(default=1, db_index=True, verbose_name='№ варианта')
+    content = models.TextField(verbose_name='Вопрос', help_text='Описание задаваемого вопроса в тесте')
+    score = models.FloatField(default=1.00, verbose_name='Оценка за ответ',
+            help_text='Количество балов начисленных за правильный ответ')
+    variant = models.PositiveIntegerField(default=1, db_index=True, verbose_name='№ варианта',
+            help_text='При создании нескольких вариантов теста')
+    type_answer = models.BooleanField(default=False, verbose_name='Множественный выбор',
+            help_text='Дать возможность выбора нескольких вариантов ответа')
 
     def __str__(self):
         if len(self.content)>100:
-            return '%s - %s...' % (self.test, self.content[:97])
+            return '%s - %s...' % (self.test, self.content[:96])
         else:
             return '%s - %s' % (self.test, self.content)
 
 
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='Вопрос', related_name='answers')
-    content = models.TextField(verbose_name='Ответ')
-    is_true = models.BooleanField(default=False, db_index=True, verbose_name='Верный ответ?')
+    content = models.TextField(verbose_name='Ответ', help_text='Описание возможного ответа')
+    is_true = models.BooleanField(default=False, db_index=True, verbose_name='Правильный ответ', help_text='Статус правильного ответ на вопорос')
 
     def __str__(self):
         if len(self.content)>100:
-            return '%s...' % (self.content[:97])
+            return '%s...' % (self.content[:96])
         else:
             return '%s' % (self.content)
 
@@ -85,6 +93,6 @@ class Test(models.Model):
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     test_start = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Тест начат')
     test_end = models.DateTimeField(default=None, blank=True, db_index=True, verbose_name='Тест закончен')
-    test_score = models.PositiveIntegerField(default=None, blank=True, db_index=True, verbose_name='Набрано балов')
+    test_score = models.PositiveIntegerField(default=None, blank=True, db_index=True, verbose_name='Оценка')
 
 
