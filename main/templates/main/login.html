@@ -15,8 +15,6 @@
             <input type="hidden" name="next" value="{{ next }}">
             {% buttons submit='Войти' %}{% endbuttons %}
         </form>
-        {% comment %}
         <p><a href="{% url 'social:begin' 'facebook' %}">Войти через Facebook</a></p>
-        {% endcomment %}
     {% endif %}
 {% endblock %}

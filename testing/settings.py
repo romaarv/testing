@@ -66,6 +66,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
                 'main.middlewares.testing_context_processor',
             ],
         },
@@ -146,5 +148,28 @@ EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_HOST_USER', 'secret')
 EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD', 'secret')
 DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_EMAIL_HOST_USER', 'secret')
 
-# if DEBUG:
-#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get('DJANGO_SOCIAL_AUTH_FACEBOOK_KEY', 'secret')
+SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get('DJANGO_SOCIAL_AUTH_FACEBOOK_SECRET', 'secret')
+SOCIAL_AUTH_FACEBOOK_APP_NAMESPACE = 'Доска объявлений'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'locale': 'ua',
+    'fields': 'id, name, email' #first_name, last_name, short_name, , picture.type(large)'
+}
+
+SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [
+    ('name', 'name'),
+    ('email', 'email'),
+    # ('first_name', 'first_name'),
+    # ('last_name', 'last_name'),
+]
+
