@@ -6,7 +6,6 @@ from testing.settings import ALLOWED_HOSTS
 
 signer = Signer()
 
-
 def send_activation_notification(user):
     if ALLOWED_HOSTS:
         host = 'http://' + ALLOWED_HOSTS[0]
