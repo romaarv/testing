@@ -3,9 +3,8 @@ import datetime
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 from crum import get_current_user
-from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 
-from .models import AdvUser, Lesson, Task, Question
+from .models import AdvUser, Lesson, Task, Question, Answer
 
 
 class NonactivatedFilter(admin.SimpleListFilter):
@@ -50,14 +49,20 @@ class AdvUserAdmin(UserAdmin, admin.ModelAdmin):
 
 class AdditionalTaskInline(admin.StackedInline):
     model = Task
-    fields = ('author', ('name', 'max_score'), 'content', ('is_active', 'public_at'),)
-    readonly_fields = ('public_at', 'author', )
+    fields = ('author', ('name', 'max_score'), 'content', ('is_active', 'public_at', 'last_modified'),)
+    readonly_fields = ('public_at', 'author', 'last_modified',)
     extra = 0
 
 
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'is_active', 'last_modified')
     search_fields = ('name',)
+    fields = (
+        'name',
+        ('is_active', 'last_modified')
+    )
+    list_filter = ('is_active',)
+    readonly_fields = ('last_modified',)
     inlines = (AdditionalTaskInline,)
 
 
@@ -66,24 +71,53 @@ admin.site.register(Lesson, LessonAdmin)
 
 class AdditionalQuestionInline(admin.StackedInline):
     model = Question
+    fields = (
+        'content',
+        ('score', 'type_answer'),
+        ('is_active', 'variant', 'last_modified')
+    )
+    readonly_fields = ('last_modified',)
     extra = 0
 
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ( '__str__', 'lesson', 'author','max_score', 'is_active', 'public_at',)
-    list_filter = ('is_active', 'lesson', ('lesson', RelatedOnlyFieldListFilter), ('author', RelatedOnlyFieldListFilter),)
-    search_fields = ('name', 'lesson',)
+    list_display = ( '__str__', 'lesson','max_score', 'is_active', 'last_modified')
+    list_filter = ('is_active', 'lesson',)
+    search_fields = ('name',)
     fields = (
-        ('lesson', 'author', 'name'),
+        'name',
+        ('lesson', 'author'),
         'content',
-        ('max_score', 'is_active', 'public_at')
+        ('max_score', 'is_active'),
+        ('public_at', 'last_modified')
     )
-    readonly_fields = ('public_at', 'author')
+    readonly_fields = ('public_at', 'author', 'last_modified')
     inlines = (AdditionalQuestionInline,)
     list_editable = ('is_active', )
 
 
-
-
-
 admin.site.register(Task, TaskAdmin)
+
+
+class AdditionalAnswerInline(admin.StackedInline):
+    model = Answer
+    fields = (
+        'content',
+        ('is_true', 'is_active', 'last_modified')
+    )
+    readonly_fields = ('last_modified',)
+    extra = 0
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'test', 'variant', 'is_active', 'last_modified')
+    list_editable = ('is_active',)
+    fields = (
+        'content',
+        ('score', 'type_answer'),
+        ('is_active', 'variant', 'last_modified')
+    )
+    readonly_fields = ('last_modified',)
+    inlines = (AdditionalAnswerInline,)
+
+admin.site.register(Question, QuestionAdmin)

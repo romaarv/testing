@@ -9,7 +9,7 @@ from .utilities import send_activation_notification
 
 class AdvUser(AbstractUser):
     is_activated = models.BooleanField(default=True, db_index=True, verbose_name='Подтверждение аккаунта',
-                    help_text='Пользовательский аккаунт, который прошел процесс подтверждения')
+            help_text='Пользовательский аккаунт, который прошел процесс подтверждения')
 
     class Meta(AbstractUser.Meta):
         pass
@@ -29,10 +29,12 @@ class AdvUser(AbstractUser):
 
 
 class Lesson(models.Model):
-    name = models.CharField(max_length=25, db_index=True, verbose_name='Название',
+    name = models.CharField(max_length=100, db_index=True, verbose_name='Название',
             help_text='Предмет, знания которого проверяются в тесте')
-    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Статус предмета',
-                help_text='Отображение на сайте')
+    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Отображение на сайте',
+            help_text='Опубликовать предмет на сайте')
+    last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
+            related_name='lessons_modified')
 
     class Meta:
         unique_together = ('name',)
@@ -43,18 +45,24 @@ class Lesson(models.Model):
     def __str__(self):
         return '%s' % (self.name)
 
+    def save(self, *args, **kwargs):
+        self.last_modified = get_current_user()
+        super().save(*args, **kwargs)
+
 
 class Task(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='Предмет', related_name='tasks')
     author = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Автор теста', related_name='tasks')
-    name = models.CharField(max_length=100, verbose_name='Название ', help_text='Короткое название теста')
+    name = models.CharField(max_length=100, db_index=True, verbose_name='Название ', help_text='Короткое название теста')
     max_score = models.PositiveIntegerField(default=12, verbose_name='Максимальная оценка',
                 help_text='Максимальное количество балов которые можно набрать за все правильные ответы в тесте')
-    content = models.TextField(verbose_name='Описание', help_text='Детальное описание теста')
-    is_active = models.BooleanField(default=False, db_index=True, verbose_name='Статус публикации',
+    content = models.TextField(verbose_name='Описание', db_index=True, help_text='Детальное описание теста')
+    is_active = models.BooleanField(default=False, db_index=True, verbose_name='Отображение на сайте',
                 help_text='Опубликовать тест на сайте')
     public_at = models.DateTimeField(default=None, blank=True, null=True, db_index=True, verbose_name='Дата публикации',
                 help_text='Дата публикации теста на сайте')
+    last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
+            related_name='tasks_modified')
 
     class Meta:
         unique_together = ('lesson', 'author', 'name')
@@ -63,31 +71,39 @@ class Task(models.Model):
         verbose_name_plural = 'Тесты'
 
     def __str__(self):
-        if self.is_active:
-            return '%s от %s' % (self.name, self.public_at.strftime('%d.%m.%Y'))
+        if len(self.name)>100:
+            name = '%s...' % (self.name[:96])
         else:
-            return '%s' % (self.name)
+            name =  '%s' % (self.name)
+        if self.is_active:
+            return '%s [Автор: %s, дата публикации: %s]' % (name, self.author, self.public_at.strftime('%d.%m.%Y'))
+        else:
+            return '%s [Автор: %s, тест не опубликован]' % (name, self.author)
 
     def save(self, *args, **kwargs):
         if self.is_active == True:
             self.public_at = datetime.now()
         else:
             self.public_at = None
-        self.author = get_current_user()
+        if self.author == None:
+            self.author = get_current_user()
+        self.last_modified = get_current_user()
         super().save(*args, **kwargs)
 
 
 class Question(models.Model):
     test = models.ForeignKey(Task, on_delete=models.PROTECT, verbose_name='Тест', related_name='questions')
     content = models.TextField(verbose_name='Вопрос', help_text='Описание задаваемого вопроса в тесте')
-    score = models.FloatField(default=1.00, verbose_name='Оценка за ответ',
+    score = models.FloatField(default=1.00, verbose_name='Балов за ответ',
             help_text='Количество балов начисленных за правильный ответ')
     variant = models.PositiveIntegerField(default=1, db_index=True, verbose_name='№ варианта',
             help_text='При создании нескольких вариантов теста')
-    type_answer = models.BooleanField(default=False, verbose_name='Множественный выбор',
+    type_answer = models.BooleanField(default=False, db_index=True, verbose_name='Множественный выбор',
             help_text='Возможность выбора нескольких вариантов ответа')
-    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Статус вопроса',
-                help_text='Отображение и учитывание вопроса в тесте')
+    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Вопрос учтен',
+                help_text='Учитывать вопрос в тесте')
+    last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
+            related_name='questions_modified')
 
     class Meta:
         unique_together = ('test', 'content', 'variant')
@@ -97,17 +113,24 @@ class Question(models.Model):
 
     def __str__(self):
         if len(self.content)>100:
-            return '%s - %s...' % (self.test, self.content[:96])
+            return '%s...' % (self.content[:96])
         else:
-            return '%s - %s' % (self.test, self.content)
+            return '%s' % (self.content)
+
+    def save(self, *args, **kwargs):
+        self.last_modified = get_current_user()
+        super().save(*args, **kwargs)
 
 
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='Вопрос', related_name='answers')
-    content = models.TextField(verbose_name='Ответ', help_text='Описание возможного ответа')
-    is_true = models.BooleanField(default=False, db_index=True, verbose_name='Правильный ответ', help_text='Статус правильного ответ на вопорос')
-    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Статус ответа',
-                help_text='Отображение и учитывание ответа в вопросе')
+    content = models.TextField(verbose_name='Ответ', db_index=True, help_text='Описание возможного ответа')
+    is_true = models.BooleanField(default=False, db_index=True, verbose_name='Правильный ответ',
+        help_text='Статус правильного ответ на вопорос')
+    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Ответ учтен',
+                help_text='Учитывать ответ при отображение вопроса')
+    last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
+            related_name='answers_modified')
 
     class Meta:
         unique_together = ('question', 'content')
@@ -115,10 +138,14 @@ class Answer(models.Model):
         verbose_name_plural = 'Ответы'
 
     def __str__(self):
-        if len(self.content)>100:
-            return '%s...' % (self.content[:96])
+        if len(self.content)>30:
+            return '%s...' % (self.content[:26])
         else:
             return '%s' % (self.content)
+
+    def save(self, *args, **kwargs):
+        self.last_modified = get_current_user()
+        super().save(*args, **kwargs)
 
 
 class Exam(models.Model):
