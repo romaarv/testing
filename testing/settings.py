@@ -135,10 +135,11 @@ STATIC_URL = '/static/'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-SECURE_HSTS_SECONDS = int(os.environ.get('DJANGO_SECURE_HSTS_SECONDS', 0))
-SECURE_SSL_REDIRECT = eval(os.environ.get('DJANGO_SECURE_SSL_REDIRECT', 'False'))
-SESSION_COOKIE_SECURE = eval(os.environ.get('DJANGO_SESSION_COOKIE_SECURE', 'False'))
-CSRF_COOKIE_SECURE = eval(os.environ.get('DJANGO_CSRF_COOKIE_SECURE', 'False'))
+if not DEBUG:
+    SECURE_HSTS_SECONDS = 3600
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 AUTH_USER_MODEL = 'main.AdvUser'
 
@@ -147,8 +148,8 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 # EMAIL_PORT = 465
-EMAIL_HOST_USER = os.environ.get('SENDGRID_USERNAME', 'secret@secret.com')
-EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_PASSWORD', 'secret')
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_API_KEY', 'secret')
 DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', 'secret@secret.com')
 
 # if DEBUG:
