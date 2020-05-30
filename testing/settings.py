@@ -143,11 +143,15 @@ if not DEBUG:
 
 AUTH_USER_MODEL = 'main.AdvUser'
 
-EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = True
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
+
+EMAIL_USE_SSL = True
+EMAIL_PORT = 465
+
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_PORT = 587
-# EMAIL_PORT = 465
+
+
 EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_API_KEY', 'secret')
 DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', 'secret@secret.com')
