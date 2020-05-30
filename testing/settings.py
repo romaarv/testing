@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'secret')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = eval(os.environ.get('DJANGO_DEBUG', 'True'))
 
-ALLOWED_HOSTS = [os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1')]
+ALLOWED_HOSTS = [os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1'), 'localhost']
 
 
 # Application definition
@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'crum.CurrentRequestUserMiddleware',
 ]
 
 ROOT_URLCONF = 'testing.urls'
@@ -172,4 +173,6 @@ SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [
     # ('first_name', 'first_name'),
     # ('last_name', 'last_name'),
 ]
+
+SECURE_CONTENT_TYPE_NOSNIFF = False
 

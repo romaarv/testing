@@ -2,6 +2,7 @@ from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import AbstractUser
 from django.dispatch import Signal
+from crum import get_current_user
 
 from .utilities import send_activation_notification
 
@@ -30,8 +31,11 @@ class AdvUser(AbstractUser):
 class Lesson(models.Model):
     name = models.CharField(max_length=25, db_index=True, verbose_name='Название',
             help_text='Предмет, знания которого проверяются в тесте')
+    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Статус предмета',
+                help_text='Отображение на сайте')
 
     class Meta:
+        unique_together = ('name',)
         ordering = ('name',)
         verbose_name = 'Предмет'
         verbose_name_plural = 'Предметы'
@@ -41,21 +45,36 @@ class Lesson(models.Model):
 
 
 class Task(models.Model):
-    lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='Предмет', related_name='tests')
+    lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='Предмет', related_name='tasks')
+    author = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Автор теста', related_name='tasks')
     name = models.CharField(max_length=100, verbose_name='Название ', help_text='Короткое название теста')
     max_score = models.PositiveIntegerField(default=12, verbose_name='Максимальная оценка',
                 help_text='Максимальное количество балов которые можно набрать за все правильные ответы в тесте')
     content = models.TextField(verbose_name='Описание', help_text='Детальное описание теста')
     is_active = models.BooleanField(default=False, db_index=True, verbose_name='Статус публикации',
-                help_text='Вопросы составлены и тест готов к публикации')
-    public_at = models.DateTimeField(default=None, blank=True, db_index=True, verbose_name='Дата публикации',
-                help_text='Дата публикации теста')
+                help_text='Опубликовать тест на сайте')
+    public_at = models.DateTimeField(default=None, blank=True, null=True, db_index=True, verbose_name='Дата публикации',
+                help_text='Дата публикации теста на сайте')
+
+    class Meta:
+        unique_together = ('lesson', 'author', 'name')
+        ordering = ('-public_at',)
+        verbose_name = 'Тест'
+        verbose_name_plural = 'Тесты'
 
     def __str__(self):
-        if is_active:
+        if self.is_active:
             return '%s от %s' % (self.name, self.public_at.strftime('%d.%m.%Y'))
         else:
             return '%s' % (self.name)
+
+    def save(self, *args, **kwargs):
+        if self.is_active == True:
+            self.public_at = datetime.now()
+        else:
+            self.public_at = None
+        self.author = get_current_user()
+        super().save(*args, **kwargs)
 
 
 class Question(models.Model):
@@ -66,7 +85,15 @@ class Question(models.Model):
     variant = models.PositiveIntegerField(default=1, db_index=True, verbose_name='№ варианта',
             help_text='При создании нескольких вариантов теста')
     type_answer = models.BooleanField(default=False, verbose_name='Множественный выбор',
-            help_text='Дать возможность выбора нескольких вариантов ответа')
+            help_text='Возможность выбора нескольких вариантов ответа')
+    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Статус вопроса',
+                help_text='Отображение и учитывание вопроса в тесте')
+
+    class Meta:
+        unique_together = ('test', 'content', 'variant')
+        ordering = ('test', 'content',)
+        verbose_name = 'Вопрос'
+        verbose_name_plural = 'Вопросы'
 
     def __str__(self):
         if len(self.content)>100:
@@ -79,6 +106,13 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.PROTECT, verbose_name='Вопрос', related_name='answers')
     content = models.TextField(verbose_name='Ответ', help_text='Описание возможного ответа')
     is_true = models.BooleanField(default=False, db_index=True, verbose_name='Правильный ответ', help_text='Статус правильного ответ на вопорос')
+    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Статус ответа',
+                help_text='Отображение и учитывание ответа в вопросе')
+
+    class Meta:
+        unique_together = ('question', 'content')
+        verbose_name = 'Ответ'
+        verbose_name_plural = 'Ответы'
 
     def __str__(self):
         if len(self.content)>100:
@@ -92,8 +126,16 @@ class Exam(models.Model):
     answer = models.ForeignKey(Answer, on_delete=models.PROTECT, verbose_name='Выбранный ответ', related_name='exams')
     tasks = models.ManyToManyField(Task, through='Test')
 
+    class Meta:
+        unique_together = ('user', 'answer')
+        verbose_name = 'Ответил'
+        verbose_name_plural = 'Ответили'
+
     def __str__(self):
-        return '%s - %d' % (self.tasks, self.tasks.test_score)
+        if self.answer.is_true:
+            return '%s - %s - Балов: %0.2f' % (self.user, self.answer, self.answer.question.score)
+        else:
+            return '%s - %s - Балов: %0.2f' % (self.user, self.answer, 0)
 
 
 class Test(models.Model):
@@ -102,6 +144,16 @@ class Test(models.Model):
     test_start = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Тест начат')
     test_end = models.DateTimeField(default=None, blank=True, db_index=True, verbose_name='Тест закончен')
     test_score = models.PositiveIntegerField(default=None, blank=True, db_index=True, verbose_name='Оценка')
+
+    class Meta:
+        verbose_name = 'Сданный тест'
+        verbose_name_plural = 'Сданные тесты'
+
+    def __str__(self):
+        if test_end is None:
+            return '%s - %s - Тест не закончен' % (self.exam.user, self.task)
+        else:
+            return '%s - %s - Балов: %d' % (self.exam.user, self.task, self.test_score)
 
 
 user_registrated = Signal(providing_args=['instance'])
