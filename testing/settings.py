@@ -142,17 +142,15 @@ CSRF_COOKIE_SECURE = eval(os.environ.get('DJANGO_CSRF_COOKIE_SECURE', 'False'))
 
 AUTH_USER_MODEL = 'main.AdvUser'
 
-#EMAIL_USE_SSL = True
 EMAIL_USE_TLS = True
-EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST', 'smtp.gmail.com')
-#EMAIL_PORT = 465
+EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('SENDGRID_USERNAME', 'secret@secret.com')
 EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_PASSWORD', 'secret')
-DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_EMAIL_HOST_USER', 'secret@secret.com')
+DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', 'secret@secret.com')
 
-if DEBUG:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# if DEBUG:
+#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.facebook.FacebookOAuth2',

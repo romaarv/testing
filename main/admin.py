@@ -5,6 +5,14 @@ from django.utils.translation import gettext_lazy as _
 from crum import get_current_user
 
 from .models import AdvUser, Lesson, Task, Question, Answer
+from .utilities import send_activation_notification
+
+def send_activation_notifications(modeladmin, request,queryset):
+    for rec in queryset:
+        if not rec.is_activated:
+            send_activation_notification(rec)
+    modeladmin.message_user(request, 'Письма с оповещением отправлены')
+send_activation_notifications.short_description = 'Отправка писем с оповещениями об активации'
 
 
 class NonactivatedFilter(admin.SimpleListFilter):
@@ -45,6 +53,7 @@ class AdvUserAdmin(UserAdmin, admin.ModelAdmin):
     )
     list_editable = ('is_active', 'is_activated', 'is_staff', 'is_superuser')
     readonly_fields = ('last_login', 'date_joined')
+    actions = (send_activation_notifications,)
 
 
 class AdditionalTaskInline(admin.StackedInline):
