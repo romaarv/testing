@@ -109,8 +109,8 @@ class Question(models.Model):
     class Meta:
         unique_together = ('test', 'content', 'variant')
         ordering = ('test', 'content',)
-        verbose_name = 'Вопрос'
-        verbose_name_plural = 'Вопросы'
+        verbose_name = 'Задание'
+        verbose_name_plural = 'Задания'
 
     def __str__(self):
         if len(self.content)>100:
