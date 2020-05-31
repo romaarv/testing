@@ -85,8 +85,9 @@ class Task(models.Model):
             self.public_at = datetime.now()
         else:
             self.public_at = None
-        if self.author == None:
+        if self.author_id == None:
             self.author = get_current_user()
+            # if self.author = get_current_user()
         self.last_modified = get_current_user()
         super().save(*args, **kwargs)
 
