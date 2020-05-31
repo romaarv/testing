@@ -122,6 +122,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'test', 'variant', 'is_active', 'last_modified')
     list_editable = ('is_active',)
     fields = (
+        'test',
         'content',
         ('score', 'type_answer'),
         ('is_active', 'variant', 'last_modified')
