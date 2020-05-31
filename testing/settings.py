@@ -140,16 +140,18 @@ AUTH_USER_MODEL = 'main.AdvUser'
 DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', 'secret')
 
 if DEBUG:
+    pass
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
-    SECURE_HSTS_SECONDS = 3600
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    EMAIL_HOST_USER = os.environ.get('MAILGUN_SMTP_LOGIN', 'secret')
-    EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_SMTP_PASSWORD', 'secret')
-    EMAIL_HOST = 'smtp.mailgun.org'
-    EMAIL_PORT = 587
+    pass
+SECURE_HSTS_SECONDS = 3600
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+EMAIL_HOST_USER = os.environ.get('MAILGUN_SMTP_LOGIN', 'secret')
+EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_SMTP_PASSWORD', 'secret')
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_PORT = 587
 
 
 AUTHENTICATION_BACKENDS = [
