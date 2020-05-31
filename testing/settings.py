@@ -146,9 +146,15 @@ else:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-    MAILGUN_ACCESS_KEY = os.environ.get('MAILGUN_API_KEY', 'secret')
+    # EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+    # MAILGUN_ACCESS_KEY = os.environ.get('MAILGUN_API_KEY', 'secret')
     MAILGUN_SERVER_NAME = 'smtp.mailgun.org'
+    EMAIL_HOST = os.environ['MAILGUN_SMTP_SERVER']
+    EMAIL_PORT = os.environ['MAILGUN_SMTP_PORT']
+    EMAIL_HOST_USER = os.environ['MAILGUN_SMTP_LOGIN']
+    EMAIL_HOST_PASSWORD = os.environ['MAILGUN_SMTP_PASSWORD']
+    EMAIL_USE_TLS = True
+    
 
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.facebook.FacebookOAuth2',

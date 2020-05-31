@@ -9,7 +9,6 @@ dj-database-url==0.5.0
 Django==3.0.6
 django-bootstrap4==1.1.1
 django-crum==0.7.6
-django-mailgun==0.9.1
 gunicorn==20.0.4
 idna==2.9
 oauthlib==3.1.0
