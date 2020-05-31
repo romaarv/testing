@@ -35,6 +35,8 @@ class Lesson(models.Model):
             help_text='Опубликовать предмет на сайте')
     last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
             related_name='lessons_modified')
+    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изснения',
+                help_text='Дата последнего изменения')
 
     class Meta:
         unique_together = ('name',)
@@ -63,6 +65,8 @@ class Task(models.Model):
                 help_text='Дата публикации теста на сайте')
     last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
             related_name='tasks_modified')
+    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изснения',
+                help_text='Дата последнего изменения')
 
     class Meta:
         unique_together = ('lesson', 'author', 'name')
@@ -94,17 +98,19 @@ class Task(models.Model):
 
 class Question(models.Model):
     test = models.ForeignKey(Task, on_delete=models.PROTECT, verbose_name='Тест', related_name='questions')
-    content = models.TextField(verbose_name='Вопрос', help_text='Описание задаваемого вопроса в тесте')
+    content = models.TextField(verbose_name='Задание', help_text='Описание задаваемого вопроса в тесте')
     score = models.FloatField(default=1.00, verbose_name='Балов за ответ',
             help_text='Количество балов начисленных за правильный ответ')
     variant = models.PositiveIntegerField(default=1, db_index=True, verbose_name='№ варианта',
             help_text='При создании нескольких вариантов теста')
     type_answer = models.BooleanField(default=False, db_index=True, verbose_name='Множественный выбор',
             help_text='Возможность выбора нескольких вариантов ответа')
-    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Вопрос учтен',
+    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Задание учтено',
                 help_text='Учитывать вопрос в тесте')
     last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
             related_name='questions_modified')
+    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изснения',
+                help_text='Дата последнего изменения')
 
     class Meta:
         unique_together = ('test', 'content', 'variant')
@@ -132,6 +138,8 @@ class Answer(models.Model):
                 help_text='Учитывать ответ при отображение вопроса')
     last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
             related_name='answers_modified')
+    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изснения',
+                help_text='Дата последнего изменения')
 
     class Meta:
         unique_together = ('question', 'content')
