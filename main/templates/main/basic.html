@@ -17,7 +17,9 @@
     </header>
     <div class="row">
         <ul class="col nav justify-content-end border">
-            <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}">Для учителей</a></li>
+            {% if user.is_staff %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}">Вход для учителей</a></li>
+            {% endif %}
             {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
                     <li class="nav-item"><section class="nav-link">Здравствуйте, {{ user }}</section></li>
