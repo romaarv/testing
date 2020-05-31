@@ -135,34 +135,20 @@ STATIC_URL = '/static/'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-if not DEBUG:
+AUTH_USER_MODEL = 'main.AdvUser'
+
+DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', 'secret')
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
     SECURE_HSTS_SECONDS = 3600
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-
-AUTH_USER_MODEL = 'main.AdvUser'
-
-EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
-SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', 'secret')
-# SENDGRID_SANDBOX_MODE_IN_DEBUG=True
-# SENDGRID_ECHO_TO_STDOUT=True
-
-# EMAIL_USE_TLS = True
-# EMAIL_PORT = 587
-
-# EMAIL_USE_SSL = True
-# EMAIL_PORT = 465
-
-# EMAIL_HOST = 'smtp.sendgrid.net'
-
-
-# EMAIL_HOST_USER = 'apikey'
-# EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_API_KEY', 'secret')
-DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', 'secret@secret.com')
-
-# if DEBUG:
-#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+    MAILGUN_ACCESS_KEY = os.environ.get('MAILGUN_API_KEY', 'secret')
+    MAILGUN_SERVER_NAME = 'smtp.mailgun.org'
 
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.facebook.FacebookOAuth2',
