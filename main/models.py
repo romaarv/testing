@@ -35,7 +35,7 @@ class Lesson(models.Model):
             help_text='Опубликовать предмет на сайте')
     last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
             related_name='lessons_modified')
-    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изснения',
+    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изменения',
                 help_text='Дата последнего изменения')
 
     class Meta:
@@ -55,17 +55,17 @@ class Lesson(models.Model):
 class Task(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='Предмет', related_name='tasks')
     author = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Автор теста', related_name='tasks')
-    name = models.CharField(max_length=100, db_index=True, verbose_name='Название ', help_text='Короткое название теста')
+    name = models.CharField(max_length=100, db_index=True, verbose_name='Название теста', help_text='Короткое название теста')
     max_score = models.PositiveIntegerField(default=12, verbose_name='Максимальная оценка',
                 help_text='Максимальное количество балов которые можно набрать за все правильные ответы в тесте')
-    content = models.TextField(verbose_name='Описание', db_index=True, help_text='Детальное описание теста')
+    content = models.TextField(verbose_name='Описание теста', db_index=True, help_text='Детальное описание теста')
     is_active = models.BooleanField(default=False, db_index=True, verbose_name='Отображение на сайте',
                 help_text='Опубликовать тест на сайте')
     public_at = models.DateTimeField(default=None, blank=True, null=True, db_index=True, verbose_name='Дата публикации',
                 help_text='Дата публикации теста на сайте')
     last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
             related_name='tasks_modified')
-    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изснения',
+    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изменения',
                 help_text='Дата последнего изменения')
 
     class Meta:
@@ -80,9 +80,9 @@ class Task(models.Model):
         else:
             name =  '%s' % (self.name)
         if self.is_active:
-            return '%s [Автор: %s, дата публикации: %s]' % (name, self.author, self.public_at.strftime('%d.%m.%Y'))
+            return '%s [%s - %s, %s]' % (name, self.lesson, self.author.last_name, self.public_at.strftime('%d.%m.%Y'))
         else:
-            return '%s [Автор: %s, тест не опубликован]' % (name, self.author)
+            return '%s [%s - %s, не опубликован]' % (name, self.author.last_name, self.lesson)
 
     def save(self, *args, **kwargs):
         if self.is_active == True:
@@ -109,12 +109,12 @@ class Question(models.Model):
                 help_text='Учитывать вопрос в тесте')
     last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
             related_name='questions_modified')
-    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изснения',
+    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изменения',
                 help_text='Дата последнего изменения')
 
     class Meta:
         unique_together = ('test', 'content', 'variant')
-        ordering = ('test', 'content',)
+        ordering = ('variant', 'test', 'content')
         verbose_name = 'Задание'
         verbose_name_plural = 'Задания'
 
@@ -138,7 +138,7 @@ class Answer(models.Model):
                 help_text='Учитывать ответ при отображение вопроса')
     last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
             related_name='answers_modified')
-    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изснения',
+    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изменения',
                 help_text='Дата последнего изменения')
 
     class Meta:
