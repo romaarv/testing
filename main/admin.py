@@ -157,10 +157,6 @@ class QuestionAdmin(admin.ModelAdmin):
     )
     readonly_fields = ('last_modified', 'modified_at')
     inlines = (AdditionalAnswerInline,)
-    # formfield_overrides = {
-    #     models.TextField: {'widget': RichTextEditorWidget},
-    # }
-
     formfield_overrides = {
         models.TextField: {
             'widget': Textarea(
