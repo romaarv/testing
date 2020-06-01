@@ -153,7 +153,7 @@ class QuestionAdmin(admin.ModelAdmin):
         'test',
         'content',
         ('score', 'type_answer'),
-        ('is_active', 'variant', 'last_modified')
+        ('is_active', 'variant', 'last_modified', 'modified_at')
     )
     readonly_fields = ('last_modified', 'modified_at')
     inlines = (AdditionalAnswerInline,)
