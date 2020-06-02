@@ -5,6 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from crum import get_current_user
 from django.db import models
 from django.forms import Textarea
+from django.contrib import messages
+from django.utils.safestring import mark_safe
 
 from .models import AdvUser, Lesson, Task, Question, Answer
 from .utilities import send_activation_notification
@@ -58,30 +60,31 @@ class AdvUserAdmin(UserAdmin, admin.ModelAdmin):
     actions = (send_activation_notifications, )
 
 
-class AdditionalTaskInline(admin.TabularInline):
-    model = Task
-    fields = (('name', 'author', 'max_score'), 'content', ('is_active', 'public_at', 'last_modified', 'modified_at'))
-    readonly_fields = ('public_at', 'author', 'last_modified', 'modified_at')
-    extra = 0
-    formfield_overrides = {
-        models.TextField: {
-            'widget': Textarea(
-            attrs={'rows': 1,
-                'cols': 90,
-                'style': 'height: 4em;'})
-        },
-    }
+# class AdditionalTaskInline(admin.TabularInline):
+#     model = Task
+#     fields = (('name', 'author', 'max_score'), 'content', ('is_active', 'public_at', 'last_modified', 'modified_at'))
+#     readonly_fields = ('public_at', 'author', 'last_modified', 'modified_at')
+#     extra = 0
+#     formfield_overrides = {
+#         models.TextField: {
+#             'widget': Textarea(
+#             attrs={'rows': 1,
+#                 'cols': 90,
+#                 'style': 'height: 4em;'})
+#         },
+#     }
 
 
 class LessonAdmin(admin.ModelAdmin):
     list_display = ('name', 'is_active', 'last_modified', 'modified_at')
     search_fields = ('name', )
-    fields = (
-        ('name', 'is_active', 'last_modified', 'modified_at'),
-    )
+    list_editable = ('is_active', )
+    # fields = (
+    #     ('name', 'is_active', 'last_modified', 'modified_at'),
+    # )
     list_filter = ('is_active', )
     readonly_fields = ('last_modified', 'modified_at')
-    inlines = (AdditionalTaskInline, )
+    # inlines = (AdditionalTaskInline, )
 
 
 admin.site.register(Lesson, LessonAdmin)
@@ -122,6 +125,12 @@ class TaskAdmin(admin.ModelAdmin):
                 'style': 'height: 4em;'})
         },
     }
+
+    def save_model(self, request, obj, form, change):
+        if obj.is_active:
+            messages.add_message(request, messages.INFO, mark_safe('Тест <a href="/admin/main/task/%d/change/">%s</a> может быть отмечен как неопубликованный' % (obj.id ,obj.name)))
+        obj.save()
+
 
 admin.site.register(Task, TaskAdmin)
 
@@ -165,5 +174,11 @@ class QuestionAdmin(admin.ModelAdmin):
                 'style': 'height: 5em;'})
         },
     }
+
+    def save_model(self, request, obj, form, change):
+        if obj.test.is_active:
+            messages.add_message(request, messages.INFO, mark_safe('Тест <a href="/admin/main/task/%d/change/">%s</a> отмечен как неопубликованный' % (obj.test.id ,obj.test)))
+        obj.save()
+
 
 admin.site.register(Question, QuestionAdmin)

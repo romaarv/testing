@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib.auth.models import AbstractUser
 from django.dispatch import Signal
 from crum import get_current_user
+from django.db.models import CheckConstraint, Q
 
 from .utilities import send_activation_notification
 
@@ -73,6 +74,11 @@ class Task(models.Model):
         ordering = ('-public_at',)
         verbose_name = 'Тест'
         verbose_name_plural = 'Тесты'
+        constraints = [
+            CheckConstraint(
+                check=Q(max_score__gt=0), name='max_score_non_negative',
+            ),
+        ]
 
     def __str__(self):
         if len(self.name)>100:
@@ -91,8 +97,9 @@ class Task(models.Model):
             self.public_at = None
         if self.author_id == None:
             self.author = get_current_user()
-            # if self.author = get_current_user()
         self.last_modified = get_current_user()
+        # if max_score <= 0:
+        #     raise Exception, "Максимальная оценка должна быть больше нуля"
         super().save(*args, **kwargs)
 
 
@@ -117,6 +124,14 @@ class Question(models.Model):
         ordering = ('variant', 'test', 'content')
         verbose_name = 'Задание'
         verbose_name_plural = 'Задания'
+        constraints = [
+            CheckConstraint(
+                check=Q(score__gt=0), name='score_non_negative',
+            ),
+            CheckConstraint(
+                check=Q(variant__gte=1), name='variant_non_zero',
+            ),
+        ]
 
     def __str__(self):
         if len(self.content)>100:
@@ -126,6 +141,8 @@ class Question(models.Model):
 
     def save(self, *args, **kwargs):
         self.last_modified = get_current_user()
+        self.test.is_active = False
+        self.test.save()
         super().save(*args, **kwargs)
 
 
@@ -154,6 +171,8 @@ class Answer(models.Model):
 
     def save(self, *args, **kwargs):
         self.last_modified = get_current_user()
+        self.question.test.is_active = False
+        self.question.test.save()
         super().save(*args, **kwargs)
 
 
