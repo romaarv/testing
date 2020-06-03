@@ -1,8 +1,6 @@
 from django.db import models
-from datetime import datetime
 from django.contrib.auth.models import AbstractUser
 from django.dispatch import Signal
-from crum import get_current_user
 from django.db.models import CheckConstraint, Q
 
 from .utilities import send_activation_notification
@@ -29,18 +27,35 @@ class AdvUser(AbstractUser):
             return self.username
 
 
+class Group(models.Model):
+    name = models.CharField(max_length=100, db_index=True, verbose_name='Название',
+            help_text='Название класса или группы')
+    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Отображение на сайте',
+            help_text='Опубликовать группу на сайте')
+
+
+    class Meta:
+        unique_together = ('name', 'is_active')
+        ordering = ('name',)
+        verbose_name = 'Группа'
+        verbose_name_plural = 'Группы'
+
+    def __str__(self):
+        if self.is_active:
+            return '%s [Отображается на сайте]' % (self.name)
+        else:
+            return '%s [Неотображается на сайте]' % (self.name)
+
+
 class Lesson(models.Model):
     name = models.CharField(max_length=100, db_index=True, verbose_name='Название',
             help_text='Предмет, знания которого проверяются в тесте')
     is_active = models.BooleanField(default=True, db_index=True, verbose_name='Отображение на сайте',
             help_text='Опубликовать предмет на сайте')
-    last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
-            related_name='lessons_modified')
-    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изменения',
-                help_text='Дата последнего изменения')
+
 
     class Meta:
-        unique_together = ('name',)
+        unique_together = ('name', 'is_active')
         ordering = ('name',)
         verbose_name = 'Предмет'
         verbose_name_plural = 'Предметы'
@@ -48,35 +63,26 @@ class Lesson(models.Model):
     def __str__(self):
         return '%s' % (self.name)
 
-    def save(self, *args, **kwargs):
-        self.last_modified = get_current_user()
-        super().save(*args, **kwargs)
-
 
 class Task(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='Предмет', related_name='tasks')
-    author = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Автор теста', related_name='tasks')
+    groups = models.ManyToManyField(Group, verbose_name='Названия', help_text='Название класса или группы')
     name = models.CharField(max_length=100, db_index=True, verbose_name='Название теста', help_text='Короткое название теста')
     max_score = models.PositiveIntegerField(default=12, verbose_name='Максимальная оценка',
                 help_text='Максимальное количество балов которые можно набрать за все правильные ответы в тесте')
     content = models.TextField(verbose_name='Описание теста', db_index=True, help_text='Детальное описание теста')
     is_active = models.BooleanField(default=False, db_index=True, verbose_name='Отображение на сайте',
                 help_text='Опубликовать тест на сайте')
-    public_at = models.DateTimeField(default=None, blank=True, null=True, db_index=True, verbose_name='Дата публикации',
-                help_text='Дата публикации теста на сайте')
-    last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
-            related_name='tasks_modified')
-    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изменения',
-                help_text='Дата последнего изменения')
+
 
     class Meta:
-        unique_together = ('lesson', 'author', 'name')
-        ordering = ('-public_at',)
+        unique_together = ('name', 'lesson', 'content', 'is_active')
+        ordering = ('id',)
         verbose_name = 'Тест'
         verbose_name_plural = 'Тесты'
         constraints = [
             CheckConstraint(
-                check=Q(max_score__gt=0), name='max_score_non_negative',
+                check=Q(max_score__gt=0), name='max_score_above_zero',
             ),
         ]
 
@@ -84,23 +90,9 @@ class Task(models.Model):
         if len(self.name)>100:
             name = '%s...' % (self.name[:96])
         else:
-            name =  '%s' % (self.name)
-        if self.is_active:
-            return '%s [%s - %s, %s]' % (name, self.lesson, self.author.last_name, self.public_at.strftime('%d.%m.%Y'))
-        else:
-            return '%s [%s - %s, не опубликован]' % (name, self.author.last_name, self.lesson)
+            name = '%s' % (self.name)
+        return '%s [%s - %s]' % (name, self.lesson, self.groups.name)
 
-    def save(self, *args, **kwargs):
-        if self.is_active == True:
-            self.public_at = datetime.now()
-        else:
-            self.public_at = None
-        if self.author_id == None:
-            self.author = get_current_user()
-        self.last_modified = get_current_user()
-        # if max_score <= 0:
-        #     raise Exception, "Максимальная оценка должна быть больше нуля"
-        super().save(*args, **kwargs)
 
 
 class Question(models.Model):
@@ -114,22 +106,19 @@ class Question(models.Model):
             help_text='Возможность выбора нескольких вариантов ответа')
     is_active = models.BooleanField(default=True, db_index=True, verbose_name='Задание учтено',
                 help_text='Учитывать вопрос в тесте')
-    last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
-            related_name='questions_modified')
-    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изменения',
-                help_text='Дата последнего изменения')
+
 
     class Meta:
-        unique_together = ('test', 'content', 'variant')
+        unique_together = ('content', 'test', 'variant', 'is_active')
         ordering = ('variant', 'test', 'content')
         verbose_name = 'Задание'
         verbose_name_plural = 'Задания'
         constraints = [
             CheckConstraint(
-                check=Q(score__gt=0), name='score_non_negative',
+                check=Q(score__gt=0), name='score_above_zero',
             ),
             CheckConstraint(
-                check=Q(variant__gte=1), name='variant_non_zero',
+                check=Q(variant__gte=1), name='variant_above_zero',
             ),
         ]
 
@@ -140,7 +129,6 @@ class Question(models.Model):
             return '%s' % (self.content)
 
     def save(self, *args, **kwargs):
-        self.last_modified = get_current_user()
         self.test.is_active = False
         self.test.save()
         super().save(*args, **kwargs)
@@ -153,24 +141,20 @@ class Answer(models.Model):
         help_text='Статус правильного ответ на вопорос')
     is_active = models.BooleanField(default=True, db_index=True, verbose_name='Ответ учтен',
                 help_text='Учитывать ответ при отображение вопроса')
-    last_modified = models.ForeignKey(AdvUser, on_delete=models.PROTECT, verbose_name='Последнее изменение',
-            related_name='answers_modified')
-    modified_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата изменения',
-                help_text='Дата последнего изменения')
+
 
     class Meta:
-        unique_together = ('question', 'content')
+        unique_together = ('content', 'question', 'is_active')
         verbose_name = 'Ответ'
         verbose_name_plural = 'Ответы'
 
     def __str__(self):
-        if len(self.content)>30:
-            return '%s...' % (self.content[:26])
+        if len(self.content)>100:
+            return '%s...' % (self.content[:96])
         else:
             return '%s' % (self.content)
 
     def save(self, *args, **kwargs):
-        self.last_modified = get_current_user()
         self.question.test.is_active = False
         self.question.test.save()
         super().save(*args, **kwargs)
@@ -196,13 +180,16 @@ class Exam(models.Model):
 class Test(models.Model):
     task = models.ForeignKey(Task, on_delete=models.PROTECT)
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
-    test_start = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Тест начат')
-    test_end = models.DateTimeField(default=None, blank=True, db_index=True, verbose_name='Тест закончен')
-    test_score = models.PositiveIntegerField(default=None, blank=True, db_index=True, verbose_name='Оценка')
+    test_score = models.FloatField(default=None, blank=True, db_index=True, verbose_name='Оценка')
 
     class Meta:
         verbose_name = 'Сданный тест'
         verbose_name_plural = 'Сданные тесты'
+        constraints = [
+            CheckConstraint(
+                check=Q(test_score__gte=0) | Q(test_score=None), name='test_score_non_negative',
+            ),
+        ]
 
     def __str__(self):
         if test_end is None:

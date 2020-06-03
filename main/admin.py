@@ -2,13 +2,13 @@ from django.contrib import admin
 import datetime
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
-from crum import get_current_user
 from django.db import models
-from django.forms import Textarea
+from django.forms import Textarea, SelectMultiple
 from django.contrib import messages
 from django.utils.safestring import mark_safe
+from django.contrib.admin.models import LogEntry
 
-from .models import AdvUser, Lesson, Task, Question, Answer
+from .models import AdvUser, Lesson, Task, Question, Answer, Group
 from .utilities import send_activation_notification
 
 def send_activation_notifications(modeladmin, request,queryset):
@@ -60,34 +60,22 @@ class AdvUserAdmin(UserAdmin, admin.ModelAdmin):
     actions = (send_activation_notifications, )
 
 
-# class AdditionalTaskInline(admin.TabularInline):
-#     model = Task
-#     fields = (('name', 'author', 'max_score'), 'content', ('is_active', 'public_at', 'last_modified', 'modified_at'))
-#     readonly_fields = ('public_at', 'author', 'last_modified', 'modified_at')
-#     extra = 0
-#     formfield_overrides = {
-#         models.TextField: {
-#             'widget': Textarea(
-#             attrs={'rows': 1,
-#                 'cols': 90,
-#                 'style': 'height: 4em;'})
-#         },
-#     }
-
-
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('name', 'is_active', 'last_modified', 'modified_at')
+    list_display = ('name', 'is_active')
     search_fields = ('name', )
     list_editable = ('is_active', )
-    # fields = (
-    #     ('name', 'is_active', 'last_modified', 'modified_at'),
-    # )
     list_filter = ('is_active', )
-    readonly_fields = ('last_modified', 'modified_at')
-    # inlines = (AdditionalTaskInline, )
-
 
 admin.site.register(Lesson, LessonAdmin)
+
+
+class GroupAdmin(admin.ModelAdmin):
+    list_display = ('name', 'is_active')
+    search_fields = ('name',)
+    list_editable = ('is_active', )
+    list_filter = ('is_active', )
+
+admin.site.register(Group, GroupAdmin)
 
 
 class AdditionalQuestionInline(admin.TabularInline):
@@ -95,9 +83,8 @@ class AdditionalQuestionInline(admin.TabularInline):
     fields = (
         'content',
         ('score', 'type_answer'),
-        ('is_active', 'variant', 'last_modified', 'modified_at')
+        ('is_active', 'variant')
     )
-    readonly_fields = ('last_modified', 'modified_at', )
     extra = 0
     formfield_overrides = {
         models.TextField: {
@@ -109,28 +96,35 @@ class AdditionalQuestionInline(admin.TabularInline):
     }
 
 
+# class AdditionalGroupInline(admin.TabularInline):
+#     model = Group
+#     extra = 1
+
+
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ( 'name', 'lesson', 'author', 'public_at', 'max_score', 'is_active', 'last_modified', 'modified_at')
+    list_display = ( 'name', 'lesson','max_score', 'is_active')
     list_filter = ('is_active', 'lesson')
-    search_fields = ('name', 'author__last_name', 'author__last_name')
-    fields = (('name', 'lesson', 'author'), ('content', 'max_score'), ('is_active', 'public_at', 'last_modified', 'modified_at'))
-    readonly_fields = ('public_at', 'author', 'last_modified', 'modified_at')
-    inlines = (AdditionalQuestionInline,)
+    search_fields = ('name',)
+    fields = (('name', 'lesson'), ('content', 'max_score', 'is_active'), 'groups')
+    filter_horizontal = ('groups', )
+    inlines = (AdditionalQuestionInline, )
     list_editable = ('is_active', )
+    
     formfield_overrides = {
         models.TextField: {
             'widget': Textarea(
             attrs={'rows': 1,
                 'cols': 90,
-                'style': 'height: 4em;'})
+                'style': 'height: 4em;'}),
         },
+         models.ManyToManyField: {'widget': SelectMultiple(attrs={'size':'5', 'style': 'color:blue;width:250px'})},
     }
 
     def save_model(self, request, obj, form, change):
         if obj.is_active:
-            messages.add_message(request, messages.INFO, mark_safe('Тест <a href="/admin/main/task/%d/change/">%s</a> может быть отмечен как неопубликованный' % (obj.id ,obj.name)))
+            messages.add_message(request, messages.INFO,
+                mark_safe('Проверьте тест "<a href="/admin/main/task/%d/change/">%s</a>", он может быть отмечен как неопубликованный' % (obj.id ,obj)))
         obj.save()
-
 
 admin.site.register(Task, TaskAdmin)
 
@@ -139,9 +133,8 @@ class AdditionalAnswerInline(admin.TabularInline):
     model = Answer
     fields = (
         'content',
-        ('is_true', 'is_active', 'last_modified', 'modified_at')
+        ('is_true', 'is_active')
     )
-    readonly_fields = ('last_modified', 'modified_at', )
     extra = 0
     formfield_overrides = {
         models.TextField: {
@@ -154,17 +147,16 @@ class AdditionalAnswerInline(admin.TabularInline):
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'test', 'variant', 'is_active', 'last_modified', 'modified_at')
+    list_display = ('__str__', 'test', 'variant', 'is_active')
     list_editable = ('is_active', )
-    search_fields = ('content', 'test__name', 'test__author__last_name', 'test__author__first_name')
+    search_fields = ('content', 'test__name')
     list_filter = ('is_active', 'test__lesson', 'variant', 'test')
     fields = (
         'test',
         'content',
         ('score', 'type_answer'),
-        ('is_active', 'variant', 'last_modified', 'modified_at')
+        ('is_active', 'variant')
     )
-    readonly_fields = ('last_modified', 'modified_at')
     inlines = (AdditionalAnswerInline,)
     formfield_overrides = {
         models.TextField: {
@@ -177,8 +169,10 @@ class QuestionAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if obj.test.is_active:
-            messages.add_message(request, messages.INFO, mark_safe('Тест <a href="/admin/main/task/%d/change/">%s</a> отмечен как неопубликованный' % (obj.test.id ,obj.test)))
+            messages.add_message(request, messages.INFO, mark_safe('Тест "<a href="/admin/main/task/%d/change/">%s</a>" отмечен как неопубликованный' % (obj.test.id ,obj.test)))
         obj.save()
 
 
 admin.site.register(Question, QuestionAdmin)
+
+admin.site.register(LogEntry)
