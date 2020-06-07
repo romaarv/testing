@@ -30,56 +30,57 @@ class AdvUser(AbstractUser):
 class Group(models.Model):
     name = models.CharField(max_length=100, db_index=True, verbose_name='Название',
             help_text='Название класса или группы')
-    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Отображение на сайте',
-            help_text='Опубликовать группу на сайте')
+    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Статус отображения',
+            help_text='Отображение группы (класса) на сайте')
 
 
     class Meta:
         unique_together = ('name', 'is_active')
-        ordering = ('name',)
-        verbose_name = 'Группа'
-        verbose_name_plural = 'Группы'
+        ordering = ('-is_active', 'name')
+        verbose_name = 'Группа (класс)'
+        verbose_name_plural = 'Группы (классы)'
 
     def __str__(self):
         if self.is_active:
-            return '%s [Отображается на сайте]' % (self.name)
+            return '%s [Отображается]' % (self.name)
         else:
-            return '%s [Неотображается на сайте]' % (self.name)
+            return '%s [Не отображается]' % (self.name)
 
 
 class Lesson(models.Model):
     name = models.CharField(max_length=100, db_index=True, verbose_name='Название',
             help_text='Предмет, знания которого проверяются в тесте')
-    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Отображение на сайте',
-            help_text='Опубликовать предмет на сайте')
-
+    is_active = models.BooleanField(default=True, db_index=True, verbose_name='Статус отображения',
+            help_text='Отображение предмета на сайте')
 
     class Meta:
         unique_together = ('name', 'is_active')
-        ordering = ('name',)
+        ordering = ('-is_active', 'name')
         verbose_name = 'Предмет'
         verbose_name_plural = 'Предметы'
 
     def __str__(self):
-        return '%s' % (self.name)
+        if self.is_active:
+            return '%s [Отображается]' % (self.name)
+        else:
+            return '%s [Не отображается]' % (self.name)
 
 
 class Task(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='Предмет', related_name='tasks')
-    groups = models.ManyToManyField(Group, verbose_name='Названия', help_text='Название класса или группы')
+    groups = models.ManyToManyField(Group, verbose_name='Группы (классы)', help_text='Названия групп (классов) для проводится тест')
     name = models.CharField(max_length=100, db_index=True, verbose_name='Название теста', help_text='Короткое название теста')
     max_score = models.PositiveIntegerField(default=12, verbose_name='Максимальная оценка',
                 help_text='Максимальное количество балов которые можно набрать за все правильные ответы в тесте')
     content = models.TextField(verbose_name='Описание теста', db_index=True, help_text='Детальное описание теста')
-    is_active = models.BooleanField(default=False, db_index=True, verbose_name='Отображение на сайте',
-                help_text='Опубликовать тест на сайте')
-
+    is_active = models.BooleanField(default=False, db_index=True, verbose_name='Статус отображения',
+                help_text='Отображение теста на сайте')
 
     class Meta:
         unique_together = ('name', 'lesson', 'content', 'is_active')
-        ordering = ('id',)
-        verbose_name = 'Тест'
-        verbose_name_plural = 'Тесты'
+        ordering = ('-is_active', 'lesson', 'name')
+        verbose_name = 'Тест (билет)'
+        verbose_name_plural = 'Тесты (билеты)'
         constraints = [
             CheckConstraint(
                 check=Q(max_score__gt=0), name='max_score_above_zero',
@@ -87,12 +88,10 @@ class Task(models.Model):
         ]
 
     def __str__(self):
-        if len(self.name)>100:
-            name = '%s...' % (self.name[:96])
+        if self.is_active:
+            return '%s [Отображается]' % (self.name)
         else:
-            name = '%s' % (self.name)
-        return '%s [%s - %s]' % (name, self.lesson, self.groups.name)
-
+            return '%s [Не отображается]' % (self.name)
 
 
 class Question(models.Model):
