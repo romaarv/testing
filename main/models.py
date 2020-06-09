@@ -42,9 +42,9 @@ class Group(models.Model):
 
     def __str__(self):
         if self.is_active:
-            return '%s [Отображается]' % (self.name)
+            return '%s [отображается]' % (self.name)
         else:
-            return '%s [Не отображается]' % (self.name)
+            return '%s [не отображается]' % (self.name)
 
 
 class Lesson(models.Model):
@@ -56,23 +56,23 @@ class Lesson(models.Model):
     class Meta:
         unique_together = ('name', 'is_active')
         ordering = ('-is_active', 'name')
-        verbose_name = 'Предмет'
-        verbose_name_plural = 'Предметы'
+        verbose_name = 'Предмет (урок)'
+        verbose_name_plural = 'Предметы (уроки)'
 
     def __str__(self):
         if self.is_active:
-            return '%s [Отображается]' % (self.name)
+            return '%s [отображается]' % (self.name)
         else:
-            return '%s [Не отображается]' % (self.name)
+            return '%s [не отображается]' % (self.name)
 
 
 class Task(models.Model):
-    lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='Предмет', related_name='tasks')
-    groups = models.ManyToManyField(Group, verbose_name='Группы (классы)', help_text='Названия групп (классов) для проводится тест')
+    lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='Предмет (урок)', related_name='tasks')
+    groups = models.ManyToManyField(Group, blank=True, verbose_name='Группы (классы)', help_text='Названия групп (классов) где проводится тест')
     name = models.CharField(max_length=100, db_index=True, verbose_name='Название теста', help_text='Короткое название теста')
     max_score = models.PositiveIntegerField(default=12, verbose_name='Максимальная оценка',
                 help_text='Максимальное количество балов которые можно набрать за все правильные ответы в тесте')
-    content = models.TextField(verbose_name='Описание теста', db_index=True, help_text='Детальное описание теста')
+    content = models.TextField(verbose_name='Описание теста', db_index=True, help_text='Полное описание теста')
     is_active = models.BooleanField(default=False, db_index=True, verbose_name='Статус отображения',
                 help_text='Отображение теста на сайте')
 
@@ -89,9 +89,9 @@ class Task(models.Model):
 
     def __str__(self):
         if self.is_active:
-            return '%s [Отображается]' % (self.name)
+            return '%s, %s [отображается]' % (self.lesson, self.name)
         else:
-            return '%s [Не отображается]' % (self.name)
+            return '%s, %s [не отображается]' % (self.lesson, self.name)
 
 
 class Question(models.Model):
@@ -105,7 +105,6 @@ class Question(models.Model):
             help_text='Возможность выбора нескольких вариантов ответа')
     is_active = models.BooleanField(default=True, db_index=True, verbose_name='Задание учтено',
                 help_text='Учитывать вопрос в тесте')
-
 
     class Meta:
         unique_together = ('content', 'test', 'variant', 'is_active')
