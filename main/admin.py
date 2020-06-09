@@ -2,12 +2,13 @@ from django.contrib import admin
 import datetime
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
-from django.db import models
-from django.forms import Textarea, SelectMultiple
+from django.db import models, IntegrityError
+from django.forms import Textarea, NumberInput, TextInput
 from django.contrib import messages
 from django.utils.safestring import mark_safe
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
+
 
 from .models import AdvUser, Lesson, Task, Question, Answer, Group
 from .utilities import send_activation_notification
@@ -62,28 +63,55 @@ class AdvUserAdmin(UserAdmin, admin.ModelAdmin):
 
 
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('name', 'is_active')
+    list_display = ('name', 'is_active', 'creator', 'modified')
     search_fields = ('name', )
     list_editable = ('is_active', )
     list_filter = ('is_active', )
+
+    def creator(self, rec):
+        str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Lesson),
+                object_id=rec.id).order_by('action_time')[:1]
+        if len(str) > 0:
+            return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
+        else:
+            return None
+    creator.short_description = 'Создание'
+
+    def modified(self, rec):
+        str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Lesson),
+                object_id=rec.id).order_by('-action_time')[:1]
+        if len(str) > 0:
+            return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
+        else:
+            return None
+    modified.short_description = 'Последнее изменение'
 
 admin.site.register(Lesson, LessonAdmin)
 
 
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ('name', 'is_active', 'creator')
+    list_display = ('name', 'is_active', 'creator', 'modified')
     search_fields = ('name',)
     list_editable = ('is_active', )
     list_filter = ('is_active', )
 
     def creator(self, rec):
-        str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Group), object_id=rec.id)
-        return '%s - %s -%s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'), datetime.datetime.today().strftime('%d.%m.%Y %H:%M:%S'))
+        str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Group),
+                object_id=rec.id).order_by('action_time')[:1]
+        if len(str) > 0:
+            return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
+        else:
+            return None
+    creator.short_description = 'Создание'
 
-        def get_queryset(self):
-            return self.first()
-
-    creator.short_description = 'Создатель'
+    def modified(self, rec):
+        str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Group),
+                object_id=rec.id).order_by('-action_time')[:1]
+        if len(str) > 0:
+            return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
+        else:
+            return None
+    modified.short_description = 'Последнее изменение'
 
 admin.site.register(Group, GroupAdmin)
 
@@ -99,32 +127,56 @@ class AdditionalQuestionInline(admin.TabularInline):
     formfield_overrides = {
         models.TextField: {
             'widget': Textarea(
-            attrs={'rows': 1,
-                'cols': 90,
-                'style': 'height: 4em;'})
+            attrs={'rows': 1, 'cols': 90, 'style': 'height: 4em;'})
+        },
+        models.PositiveIntegerField: {
+            'widget': TextInput(
+            attrs={'min': '1', 'type': 'number'}),
+        },
+        models.FloatField: {
+            'widget': TextInput(
+            attrs={'type': 'number', 'min': '0.01', 'step':'0.01'}),
         },
     }
 
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'lesson', 'task_groups','max_score', 'is_active')
+    list_display = ('name', 'lesson', 'task_groups','max_score', 'is_active', 'creator', 'modified')
     list_filter = ('is_active', 'lesson', 'groups')
     search_fields = ('name', 'lesson__name')
-    fields = (('name', 'lesson'), ('content', 'max_score', 'is_active'), 'groups')
+    fields = (('name', 'lesson', 'is_active'), ('content', 'max_score'), 'groups')
     filter_horizontal = ('groups', )
-    inlines = (AdditionalQuestionInline, )
+    # inlines = (AdditionalQuestionInline, )
     list_editable = ('is_active', )
     is_show = False
     formfield_overrides = {
         models.TextField: {
             'widget': Textarea(
-            attrs={'rows': 1,
-                'cols': 90,
-                'style': 'height: 4em;'}),
+                attrs={'rows': 1, 'cols': 90, 'style': 'height: 4em;'}),
         },
-         # models.ManyToManyField: {'widget': SelectMultiple(attrs={'size':'5', 'style': 'color:blue;width:250px'})},
+        models.PositiveIntegerField: {
+            'widget': TextInput(
+            attrs={'min': '1', 'type': 'number'}),
+        },
     }
 
+    def creator(self, rec):
+        str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Task),
+                object_id=rec.id).order_by('action_time')[:1]
+        if len(str) > 0:
+            return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
+        else:
+            return None
+    creator.short_description = 'Создание'
+
+    def modified(self, rec):
+        str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Task),
+            object_id=rec.id).order_by('-action_time')[:1]
+        if len(str) > 0:
+            return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
+        else:
+            return None
+    modified.short_description = 'Последнее изменение'
 
     def save_model(self, request, obj, form, change):
         self.is_show = obj.is_active
@@ -133,8 +185,8 @@ class TaskAdmin(admin.ModelAdmin):
     def response_change(self, request, obj):
         if (obj.is_active == False) and (self.is_show != obj.is_active):
             messages.warning(request, 
-                    mark_safe('Внесенные измененения требует повторной проверки теста (билета). Тест (билет) "\
-                        <a href="/admin/main/task/%d/change/">%s</a>" отмечен как неопубликованный.' % (obj.id ,obj)))
+                    mark_safe('Внесенные измененения требует повторной проверки. Тест (билет) "\
+                        <a href="/admin/main/task/%d/change/">%s</a>" отмечен как неотображаемый.' % (obj.id ,obj)))
         self.is_show = obj.is_active
         return super().response_change(request, obj)
 
@@ -198,7 +250,7 @@ class AdditionalAnswerInline(admin.TabularInline):
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'test', 'variant', 'is_active')
+    list_display = ('__str__', 'test', 'variant', 'is_active', 'creator', 'modified')
     list_editable = ('is_active', )
     search_fields = ('content', 'test__name')
     list_filter = ('is_active', 'test__lesson', 'variant', 'test')
@@ -218,11 +270,29 @@ class QuestionAdmin(admin.ModelAdmin):
         },
     }
 
+    def creator(self, rec):
+        str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Question),
+                object_id=rec.id).order_by('action_time')[:1]
+        if len(str) > 0:
+            return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
+        else:
+            return None
+    creator.short_description = 'Создание'
+
+    def modified(self, rec):
+        str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Question),
+                object_id=rec.id).order_by('-action_time')[:1]
+        if len(str) > 0:
+            return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
+        else:
+            return None
+    modified.short_description = 'Последнее изменение'
+
     def save_model(self, request, obj, form, change):
         if obj.test.is_active:
             messages.warning(request, 
-                    mark_safe('Внесенные измененения требует повторной проверки теста (билета). Тест (билет) "\
-                        <a href="/admin/main/task/%d/change/">%s</a>" отмечен как неопубликованный.' % (obj.id ,obj)))
+                    mark_safe('Внесенные измененения требует повторной проверки. Тест (билет) "\
+                        <a href="/admin/main/task/%d/change/">%s</a>" отмечен как неотображаемый.' % (obj.test.id ,obj.test)))
         obj.save()
 
 
