@@ -116,37 +116,12 @@ class GroupAdmin(admin.ModelAdmin):
 admin.site.register(Group, GroupAdmin)
 
 
-class AdditionalQuestionInline(admin.TabularInline):
-    model = Question
-    fields = (
-        'content',
-        ('score', 'type_answer'),
-        ('is_active', 'variant')
-    )
-    extra = 0
-    formfield_overrides = {
-        models.TextField: {
-            'widget': Textarea(
-            attrs={'rows': 1, 'cols': 90, 'style': 'height: 4em;'})
-        },
-        models.PositiveIntegerField: {
-            'widget': TextInput(
-            attrs={'min': '1', 'type': 'number'}),
-        },
-        models.FloatField: {
-            'widget': TextInput(
-            attrs={'type': 'number', 'min': '0.01', 'step':'0.01'}),
-        },
-    }
-
-
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('name', 'lesson', 'task_groups','max_score', 'is_active', 'creator', 'modified')
     list_filter = ('is_active', 'lesson', 'groups')
     search_fields = ('name', 'lesson__name')
     fields = (('name', 'lesson', 'is_active'), ('content', 'max_score'), 'groups')
     filter_horizontal = ('groups', )
-    # inlines = (AdditionalQuestionInline, )
     list_editable = ('is_active', )
     is_show = False
     formfield_overrides = {
@@ -228,7 +203,6 @@ class TaskAdmin(admin.ModelAdmin):
         return '%s' % (str)
     task_groups.short_description = 'Номера групп (классов)'
 
-
 admin.site.register(Task, TaskAdmin)
 
 
@@ -295,7 +269,7 @@ class QuestionAdmin(admin.ModelAdmin):
                         <a href="/admin/main/task/%d/change/">%s</a>" отмечен как неотображаемый.' % (obj.test.id ,obj.test)))
         obj.save()
 
-
 admin.site.register(Question, QuestionAdmin)
+
 
 admin.site.register(LogEntry)

@@ -68,7 +68,8 @@ class Lesson(models.Model):
 
 class Task(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='Предмет (урок)', related_name='tasks')
-    groups = models.ManyToManyField(Group, blank=True, verbose_name='Группы (классы)', help_text='Названия групп (классов) где проводится тест')
+    groups = models.ManyToManyField(Group, blank=True, verbose_name='Группы (классы)',
+            help_text='Названия групп (классов) где проводится тест')
     name = models.CharField(max_length=100, db_index=True, verbose_name='Название теста', help_text='Короткое название теста')
     max_score = models.PositiveIntegerField(default=12, verbose_name='Максимальная оценка',
                 help_text='Максимальное количество балов которые можно набрать за все правильные ответы в тесте')

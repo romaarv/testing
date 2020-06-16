@@ -1,17 +1,21 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.contrib import messages
+from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.template import TemplateDoesNotExist
-from django.template.loader import get_template
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic.edit import UpdateView, CreateView
+from django.template import TemplateDoesNotExist
+from django.template.loader import get_template
+from django.views.generic.edit import UpdateView, CreateView, DeleteView
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.core.signing import BadSignature
+from django.contrib.admin.models import LogEntry
+from django.contrib.contenttypes.models import ContentType
 
-from .models import Lesson, Exam, AdvUser
+from .models import *
 from .forms import ChangeUserInfoForm, RegisterUserForm
 from .utilities import signer
 
@@ -25,7 +29,28 @@ def other_page(request, page):
 
 
 def index(request):
-    return render(request, 'main/index.html')
+    last_tests = Task.objects.filter(is_active=True).order_by('-id')[:10]
+    for test in last_tests:
+        str = ''
+        test.group_in = str
+        max_len = len(test.groups.filter(is_active=True))
+        count = 0
+        for group in test.groups.filter(is_active=True):
+            count += 1
+            if count == 1:
+                str = group.name
+            else:
+                str += ', ' + group.name
+        if max_len > 0:
+            str += '.'
+        test.group_in = str
+        test.modified_at = ''
+        str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Task),
+            object_id=test.id).order_by('-action_time')[:1]
+        if len(str) > 0:
+            test.modified_at = str[0].action_time.strftime('%d.%m.%Y')
+    context = {'tests': last_tests}
+    return render(request, 'main/index.html', context)
 
 
 class TestingLoginView(LoginView):
@@ -92,5 +117,26 @@ def user_activate(request, sign):
         user.is_activated = True
         user.save()
     return render(request, template, context)
+
+
+class DeleteUserView(LoginRequiredMixin, DeleteView):
+    model = AdvUser
+    template_name = 'main/delete_user.html'
+    success_url = reverse_lazy('main:index')
+
+    def dispatch(self, request, *args, **kwargs):
+        self.user_id = request.user.pk
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        logout(request)
+        messages.add_message(request, messages.SUCCESS, 'Пользователь удален')
+        return super().post(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if not queryset:
+            queryset = self.get_queryset()
+        return get_object_or_404(queryset, pk=self.user_id)
+
 
 
