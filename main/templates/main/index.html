@@ -2,10 +2,10 @@
 
 {% load static %}
 
-{% block title %}Последние 10 тестов{% endblock %}
+{% block title %}Последние {{ count_limit }} тестов{% endblock %}
 
 {% block content %}
-    <h2>Последние опубликованные 10 тестов</h2>
+    <h2>Последние опубликованные {{ count_limit }} тестов</h2>
     <table class="table">
         <thead>
             <tr>

@@ -30,7 +30,9 @@ def other_page(request, page):
 
 
 def index(request):
-    count_limit = 10 #Количество записей на странице
+    context = {}
+    count_limit = 10 # Количество последних тестов для отображения на странице
+    context['count_limit'] = count_limit
     content_type = ContentType.objects.get_for_model(Task)
     last_tests = Task.objects.raw("\
             SELECT task.id, task.lesson_id, task.name, task.content, task.max_score, MAX (log.action_time) AS modified_at\
@@ -53,7 +55,7 @@ def index(request):
         if max_len > 0:
             str += '.'
         test.group_in = str
-    context = {'tests': last_tests}
+    context['tests'] = last_tests
     return render(request, 'main/index.html', context)
 
 
