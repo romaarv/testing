@@ -14,6 +14,7 @@ from django.views.generic.base import TemplateView
 from django.core.signing import BadSignature
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q, OuterRef, Subquery, Max
 
 from .models import *
 from .forms import ChangeUserInfoForm, RegisterUserForm
@@ -29,7 +30,15 @@ def other_page(request, page):
 
 
 def index(request):
-    last_tests = Task.objects.filter(is_active=True).order_by('-id')[:10]
+    count_limit = 10 #Количество записей на странице
+    content_type = ContentType.objects.get_for_model(Task)
+    last_tests = Task.objects.raw("\
+            SELECT task.id, task.lesson_id, task.name, task.content, task.max_score, MAX (log.action_time) AS modified_at\
+            FROM main_task task, django_admin_log log\
+            WHERE task.is_active=True AND log.content_type_id=%d AND task.id=CAST(log.object_id AS INTEGER)\
+            GROUP BY task.id, log.object_id ORDER BY modified_at DESC LIMIT %d\
+        " % (content_type.id, count_limit)
+    )
     for test in last_tests:
         str = ''
         test.group_in = str
@@ -44,11 +53,6 @@ def index(request):
         if max_len > 0:
             str += '.'
         test.group_in = str
-        test.modified_at = ''
-        str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Task),
-            object_id=test.id).order_by('-action_time')[:1]
-        if len(str) > 0:
-            test.modified_at = str[0].action_time.strftime('%d.%m.%Y')
     context = {'tests': last_tests}
     return render(request, 'main/index.html', context)
 

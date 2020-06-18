@@ -27,7 +27,7 @@
                     <td>{{ test.content }}</td>
                     <td>{{ test.max_score }}</td>
                     <td>{{ test.group_in }}</td>
-                    <td>{{ test.modified_at }}</td>
+                    <td>{{ test.modified_at|date:"d.m.Y H:i:s" }}</td>
                 </tr>
             {% endfor %}
         </tbody>
