@@ -1,0 +1,38 @@
+{% extends "main/basic.html" %}
+
+{% load filtersandtags %}
+
+{% load bootstrap4 %}
+
+{% block title %} {{ current_lesson.name }}{% endblock %}
+
+{% block content %}
+    <h2>Для группы (класса): {{ current_group.name }}</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                  <th scope="col">Номер<br>п/п</th>
+                  <th scope="col">Предмет<br>(урок)</th>
+                  <th scope="col">Название теста</th>
+                  <th scope="col">Описание теста</th>
+                  <th scope="col">Количество<br>балов</th>
+                  <th scope="col">Последнее<br>изменение</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ page_obj.number|multiplic:page_obj.paginator.per_page|add:forloop.counter }}</td>
+                    <td>{{ task.lesson.name }}</td>
+                    <th scope="col">{{ task.name }}</th>
+                    <td>{{ task.content }}</td>
+                    <td>{{ task.max_score }}</td>
+                    <td>{{ task.modified_at|date:"d.m.Y H:i:s" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if is_paginated %}
+        {% bootstrap_pagination page_obj size="small" pages_to_show=3 %}
+    {% endif %}
+{% endblock %}

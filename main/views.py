@@ -14,7 +14,7 @@ from django.views.generic.base import TemplateView
 from django.core.signing import BadSignature
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Q, OuterRef, Subquery, Max
+from django.views.generic import ListView
 
 from .models import *
 from .forms import ChangeUserInfoForm, RegisterUserForm
@@ -145,4 +145,57 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
         return get_object_or_404(queryset, pk=self.user_id)
 
 
+class TaskByLessonView (ListView):
+    context_object_name = 'tasks'
+    paginate_by = 10
 
+    def get_queryset (self):
+        qs = Task.objects.filter(is_active=True, lesson=self.kwargs['lesson_id'])
+        for test in qs:
+            str = ''
+            test.group_in = str
+            max_len = len(test.groups.filter(is_active=True))
+            count = 0
+            for group in test.groups.filter(is_active=True):
+                count += 1
+                if count == 1:
+                    str = group.name
+                else:
+                    str += ', ' + group.name
+            if max_len > 0:
+                str += '.'
+            test.group_in = str
+            str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Task),
+                object_id=test.id).order_by('-action_time')[:1]
+            if len(str) > 0:
+                test.modified_at = str[0].action_time
+            else:
+                test.modified_at = None
+        return qs
+
+    def get_context_data (self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['current_lesson'] = Lesson.objects.get(pk=self.kwargs['lesson_id'])
+        return context
+
+
+class TaskByGroupView (ListView):
+    context_object_name = 'tasks'
+    template_name = 'main/task_for_group_list.html'
+    paginate_by = 10
+
+    def get_queryset (self):
+        qs = Task.objects.filter(is_active=True, groups=self.kwargs['group_id'])
+        for test in qs:
+            str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Task),
+                object_id=test.id).order_by('-action_time')[:1]
+            if len(str) > 0:
+                test.modified_at = str[0].action_time
+            else:
+                test.modified_at = None
+        return qs
+
+    def get_context_data (self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['current_group'] = Group.objects.get(pk=self.kwargs['group_id'])
+        return context

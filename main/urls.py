@@ -15,6 +15,8 @@ urlpatterns = [
     path('accounts/profile/delete/', DeleteUserView.as_view(), name='profile_delete'),
     path('accounts/profile/change/', ChangeUserInfoView.as_view(), name='profile_change'),
     path('accounts/profile/', profile, name='profile'),
+    path( 'lesson/<int:lesson_id>/', TaskByLessonView.as_view(), name='by_lesson'),
+    path( 'group/<int:group_id>/', TaskByGroupView.as_view(), name='by_group'),
     path('<str:page>/', other_page, name='other'),
     path('', index, name='index'),
 ]

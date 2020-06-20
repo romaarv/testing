@@ -46,12 +46,12 @@
             <div class="dropdown-divider"></div>
             <div class="nav-link">Предметы (уроки):</div>
             {% for lesson in lessons %}
-                <a class="nav-link" href="#">{{ lesson.name }}</a>
+                <a class="nav-link" href="{% url 'main:by_lesson' lesson.pk %}">{{ lesson.name }}</a>
             {% endfor %}
             <div class="dropdown-divider"></div>
             <div class="nav-link">Группы (классы):</div>
             {% for group in groups %}
-                <a class="nav-link" href="#">{{ group.name }}</a>
+                <a class="nav-link" href="{% url 'main:by_group' group.pk %}">{{ group.name }}</a>
             {% endfor %}
             <div class="dropdown-divider"></div>
             <a class="nav-link root" href="{% url 'main:other' page='about' %}">О сайте</a>

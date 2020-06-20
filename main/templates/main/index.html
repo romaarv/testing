@@ -1,7 +1,5 @@
 {% extends "main/basic.html" %}
 
-{% load static %}
-
 {% block title %}Последние {{ count_limit }} тестов{% endblock %}
 
 {% block content %}
@@ -9,13 +7,13 @@
     <table class="table">
         <thead>
             <tr>
-                  <th scope="col">Номер п/п</th>
-                  <th scope="col">Предмет (урок)</th>
+                  <th scope="col">Номер<br>п/п</th>
+                  <th scope="col">Предмет<br>(урок)</th>
                   <th scope="col">Название теста</th>
                   <th scope="col">Описание теста</th>
-                  <th scope="col">MAX балов</th>
-                  <th scope="col">Номера групп (классов)</th>
-                  <th scope="col">Дата изменения</th>
+                  <th scope="col">Количество<br>балов</th>
+                  <th scope="col">Для групп<br>(классов)</th>
+                  <th scope="col">Последнее<br>изменение</th>
             </tr>
         </thead>
         <tbody>
