@@ -15,6 +15,7 @@ from django.core.signing import BadSignature
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.views.generic import ListView
+from django.db.models import Q
 
 from .models import *
 from .forms import ChangeUserInfoForm, RegisterUserForm
@@ -199,3 +200,42 @@ class TaskByGroupView (ListView):
         context = super().get_context_data(*args, **kwargs)
         context['current_group'] = Group.objects.get(pk=self.kwargs['group_id'])
         return context
+
+
+class SearchResultView (ListView):
+    model = Task
+    template_name = 'main/search_results.html'
+    paginate_by = 10
+
+    def get_context_data (self, *args, **kwargs):
+        context = {}
+        context = super().get_context_data(*args, **kwargs)
+        context['last_question'] = '?search_text=%s' % self.request.GET.get('search_text', '')
+        context['search_text'] = self.request.GET.get('search_text', '')
+        return context
+
+    def get_queryset (self):
+        sh = self.request.GET.get('search_text', '')
+        qs = Task.objects.filter(Q(lesson__name__icontains=sh) | Q(groups__name__icontains=sh) |
+                Q(max_score__icontains=sh) | Q(content__icontains=sh)).filter(is_active=True).distinct()
+        for test in qs:
+            str = ''
+            test.group_in = str
+            max_len = len(test.groups.filter(is_active=True))
+            count = 0
+            for group in test.groups.filter(is_active=True):
+                count += 1
+                if count == 1:
+                    str = group.name
+                else:
+                    str += ', ' + group.name
+            if max_len > 0:
+                str += '.'
+            test.group_in = str
+            str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Task),
+                object_id=test.id).order_by('-action_time')[:1]
+            if len(str) > 0:
+                test.modified_at = str[0].action_time
+            else:
+                test.modified_at = None
+        return qs

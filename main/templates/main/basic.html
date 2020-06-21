@@ -44,6 +44,15 @@
         <nav class="col-md-auto nav flex-column border">
             <a class="nav-link root" href="{% url 'main:index' %}">Главная</a>
             <div class="dropdown-divider"></div>
+            <form action="{% url 'main:search_results' %}" method="get">
+                <div class="input-group mb-1">
+                    <input name="search_text" type="text" class="form-control text-orange" placeholder="Поиск..." aria-label="Искать текст" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary text-orange" type="submit">Найти</button>
+                    </div>
+                </div>
+            </form>
+            <div class="dropdown-divider"></div>
             <div class="nav-link">Предметы (уроки):</div>
             {% for lesson in lessons %}
                 <a class="nav-link" href="{% url 'main:by_lesson' lesson.pk %}">{{ lesson.name }}</a>

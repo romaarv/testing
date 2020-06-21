@@ -1,0 +1,44 @@
+{% extends "main/basic.html" %}
+
+{% load filtersandtags %}
+
+{% load bootstrap4 %}
+
+{% block title %}Поиск теста (билета){% endblock %}
+
+{% block content %}
+    {% if search_text|length %}
+        <h2>Тесты (билеты) содержащие: "{{ search_text }}"</h2>
+    {% else %}
+         <h2>Все тесты (билеты)</h2>
+    {% endif %}
+    <table class="table">
+        <thead>
+            <tr>
+                  <th scope="col">Номер<br>п/п</th>
+                  <th scope="col">Предмет<br>(урок)</th>
+                  <th scope="col">Название теста</th>
+                  <th scope="col">Описание теста</th>
+                  <th scope="col">Количество<br>балов</th>
+                  <th scope="col">Для групп<br>(классов)</th>
+                  <th scope="col">Последнее<br>изменение</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for test in object_list %}
+                <tr>
+                    <td>{{ page_obj.number|multiplic:page_obj.paginator.per_page|add:forloop.counter }}</td>
+                    <td>{{ test.lesson.name }}</td>
+                    <th scope="col">{{ test.name }}</th>
+                    <td>{{ test.content }}</td>
+                    <td>{{ test.max_score }}</td>
+                    <td>{{ test.group_in }}</td>
+                    <td>{{ test.modified_at|date:"d.m.Y H:i:s" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if is_paginated %}
+        {% bootstrap_pagination page_obj url=last_question size="small" %}
+    {% endif %}
+{% endblock %}
