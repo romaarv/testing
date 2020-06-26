@@ -15,7 +15,7 @@ from django.core.signing import BadSignature
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.views.generic import ListView
-from django.db.models import Q
+from django.db.models import Q, OuterRef, Subquery
 
 from .models import *
 from .forms import ChangeUserInfoForm, RegisterUserForm
@@ -35,6 +35,10 @@ def index(request):
     count_limit = 10 # Количество последних тестов для отображения на странице
     context['count_limit'] = count_limit
     content_type = ContentType.objects.get_for_model(Task)
+    # last_tests = Task.objects.filter(is_active=True).annotate(modified_at=Subquery(
+    #     LogEntry.objects.filter(content_type_id=content_type.id, object_id=str(OuterRef('pk')),).order_by(
+    #   '-action_time').values('action_time')[:1]
+    # )).order_by('-modified_at')[:count_limit]
     last_tests = Task.objects.raw("\
             SELECT task.id, task.lesson_id, task.name, task.content, task.max_score, MAX (log.action_time) AS modified_at\
             FROM main_task task, django_admin_log log\
@@ -43,19 +47,19 @@ def index(request):
         " % (content_type.id, count_limit)
     )
     for test in last_tests:
-        str = ''
-        test.group_in = str
+        str1 = ''
+        test.group_in = str1
         max_len = len(test.groups.filter(is_active=True))
         count = 0
         for group in test.groups.filter(is_active=True):
             count += 1
             if count == 1:
-                str = group.name
+                str1 = group.name
             else:
-                str += ', ' + group.name
+                str1 += ', ' + group.name
         if max_len > 0:
-            str += '.'
-        test.group_in = str
+            str1 += '.'
+        test.group_in = str1
     context['tests'] = last_tests
     return render(request, 'main/index.html', context)
 
@@ -239,3 +243,5 @@ class SearchResultView (ListView):
             else:
                 test.modified_at = None
         return qs
+
+

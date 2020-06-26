@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .views import *
+from .ajax import *
 
 
 app_name = 'main'
@@ -18,6 +19,7 @@ urlpatterns = [
     path('lesson/<int:lesson_id>/', TaskByLessonView.as_view(), name='by_lesson'),
     path('group/<int:group_id>/', TaskByGroupView.as_view(), name='by_group'),
     path('search/', SearchResultView.as_view(), name='search_results'),
+    path('check_username_exist/', check_username_exist, name="check_username_exist"),
     path('<str:page>/', other_page, name='other'),
     path('', index, name='index'),
 ]

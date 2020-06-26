@@ -235,6 +235,7 @@ class QuestionAdmin(admin.ModelAdmin):
         ('is_active', 'variant')
     )
     inlines = (AdditionalAnswerInline,)
+    raw_id_fields = ('test', )
     formfield_overrides = {
         models.TextField: {
             'widget': Textarea(

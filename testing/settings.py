@@ -172,5 +172,3 @@ SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [
     # ('first_name', 'first_name'),
     # ('last_name', 'last_name'),
 ]
-
-

@@ -9,7 +9,6 @@
     <title>{% block title %}Главная{% endblock %} - Тесты</title>
     {% bootstrap_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">
-    {% bootstrap_javascript jquery='slim' %}
 </head>
 <body class="container-fluid">
     <header class="mb-4">
@@ -74,5 +73,7 @@
     <footer class="mt-3">
         <p class="text-right font-italic">&copy; <a target="_blank" href="https://github.com/romaarv">ArvSoft</a>, 2020 г.</p>
     </footer>
+{% bootstrap_javascript jquery='full' %}
+{% block add_script %}{% endblock %}
 </body>
 </html>
