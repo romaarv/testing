@@ -10,7 +10,7 @@ $("#id_username").keyup(function(){
                   })
                   .done(function(response){
                       console.log(response);
-                      if(response=="False"){
+                      if(response==0){
                           $(".username_error").remove();
                           $("<small class='form-text text-muted username_error'>Логин свободен.</small>").insertAfter("#id_username");
                       }
