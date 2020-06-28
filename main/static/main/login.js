@@ -1,5 +1,6 @@
 var csrftoken = $("[name=csrfmiddlewaretoken]").val();
 
+
 $("#id_username").change(function(){
     var username=$(this).val();
     if(username!=""){

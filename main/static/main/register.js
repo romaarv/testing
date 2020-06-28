@@ -1,5 +1,6 @@
-$(".btn-primary").attr('disabled', true);
 var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+
+
 $("#id_username").keyup(function(){
               var username=$(this).val();
               if(username!=""){
