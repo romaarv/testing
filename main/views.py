@@ -15,7 +15,7 @@ from django.core.signing import BadSignature
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.views.generic import ListView
-from django.db.models import Q, OuterRef, Subquery
+# from django.db.models import Q, OuterRef, Subquery
 
 from .models import *
 from .forms import ChangeUserInfoForm, RegisterUserForm

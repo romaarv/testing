@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 
