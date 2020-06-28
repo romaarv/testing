@@ -1,3 +1,4 @@
+$(".btn-primary").attr('disabled', true);
 var csrftoken = $("[name=csrfmiddlewaretoken]").val();
 $("#id_username").keyup(function(){
               var username=$(this).val();
@@ -13,10 +14,12 @@ $("#id_username").keyup(function(){
                       if(response==0){
                           $(".username_error").remove();
                           $("<small class='form-text text-muted username_error'>Логин свободен.</small>").insertAfter("#id_username");
+                          $(".btn-primary").attr('disabled', false);
                       }
                       else{
                           $(".username_error").remove();
                           $("<small class='form-text username_error' style='color: red;'>Логин занят.</small>").insertAfter("#id_username");
+                          $(".btn-primary").attr('disabled', true);
                       }
                   })
                   .fail(function(){
@@ -25,5 +28,6 @@ $("#id_username").keyup(function(){
               }
               else{
                   $(".username_error").remove();
+                  $(".btn-primary").attr('disabled', true);
               }
           });
