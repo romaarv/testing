@@ -15,6 +15,7 @@ from django.core.signing import BadSignature
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.views.generic import ListView
+from django.contrib.admin.views.decorators import staff_member_required
 # from django.db.models import Q, OuterRef, Subquery
 
 from .models import *
@@ -36,9 +37,10 @@ def index(request):
     context['count_limit'] = count_limit
     content_type = ContentType.objects.get_for_model(Task)
     # last_tests = Task.objects.filter(is_active=True).annotate(modified_at=Subquery(
-    #     LogEntry.objects.filter(content_type_id=content_type.id, object_id=str(OuterRef('pk')),).order_by(
+    #     LogEntry.objects.filter(content_type_id=content_type.id, object_id=str(OuterRef('id')),).order_by(
     #   '-action_time').values('action_time')[:1]
     # )).order_by('-modified_at')[:count_limit]
+    # print(last_tests.query)
     last_tests = Task.objects.raw("\
             SELECT task.id, task.lesson_id, task.name, task.content, task.max_score, MAX (log.action_time) AS modified_at\
             FROM main_task task, django_admin_log log\
@@ -245,3 +247,26 @@ class SearchResultView (ListView):
         return qs
 
 
+@login_required
+def testing(request, task_id):
+    if request.user.is_staff:
+        return HttpResponse('<h3 style="color:red; font-size: 2em;">Тесты для учителей не предусмотрены!</h3>')
+    task = get_object_or_404(Task, id=task_id)
+    str = ''
+    task.group_in = str
+    max_len = len(task.groups.filter(is_active=True))
+    count = 0
+    for group in task.groups.filter(is_active=True):
+        count += 1
+        if count == 1:
+            str = group.name
+        else:
+            str += ', ' + group.name
+    if max_len > 0:
+        str += '.'
+    task.group_in = str
+    context = {'task': task}
+    context['is_pass'] = False
+    if Exam.objects.filter(user=request.user.pk, tasks=task_id).exists():
+        context['is_pass'] = True
+    return render(request, 'main/start_testing.html', context)

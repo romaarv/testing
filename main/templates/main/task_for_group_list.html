@@ -24,7 +24,11 @@
                 <tr>
                     <td>{{ page_obj.number|multiplic:page_obj.paginator.per_page|add:forloop.counter }}</td>
                     <td>{{ task.lesson.name }}</td>
-                    <th scope="col">{{ task.name }}</th>
+                    {% if user.is_authenticated and not user.is_staff %}
+                        <td scope="col"><a href="{% url 'main:testing' task.pk %}">{{ task.name }}</a></td>
+                    {% else %}
+                        <td scope="col">{{ task.name }}</td>
+                    {% endif %}
                     <td>{{ task.content }}</td>
                     <td>{{ task.max_score }}</td>
                     <td>{{ task.modified_at|date:"d.m.Y" }}</td>
