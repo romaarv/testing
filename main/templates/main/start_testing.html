@@ -14,10 +14,10 @@
     {% else %}
         <h6>Тест пройден: Да</h6>
     {% endif %}
-    <button type="button" class="btn btn-secondary">Назад</button>
+    <input type="button" class="btn btn-outline-secondary" onclick="history.back();" value="Назад"/>
     {% if not is_pass %}
-        <button type="button" class="btn btn-primary">Начать</button>
+        <button type="button" class="btn btn-outline-primary">Начать</button>
     {% else %}
-        <button type="button" class="btn btn-primary" disabled>Начать</button>
+        <button type="button" class="btn btn-outline-primary" disabled>Начать</button>
     {% endif %}
 {% endblock %}

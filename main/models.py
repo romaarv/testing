@@ -78,7 +78,7 @@ class Task(models.Model):
                 help_text='Отображение теста на сайте')
 
     class Meta:
-        unique_together = ('name', 'lesson', 'content', 'is_active')
+        # unique_together = ('name', 'lesson', 'content', 'is_active')
         ordering = ('-is_active', 'lesson', 'name')
         verbose_name = 'Тест (билет)'
         verbose_name_plural = 'Тесты (билеты)'
@@ -108,7 +108,7 @@ class Question(models.Model):
                 help_text='Учитывать вопрос в тесте')
 
     class Meta:
-        unique_together = ('content', 'test', 'variant', 'is_active')
+        #unique_together = ('content', 'test', 'variant', 'is_active')
         ordering = ('variant', 'test', 'content')
         verbose_name = 'Задание'
         verbose_name_plural = 'Задания'
