@@ -19,6 +19,7 @@ urlpatterns = [
     path('lesson/<int:lesson_id>/', TaskByLessonView.as_view(), name='by_lesson'),
     path('group/<int:group_id>/', TaskByGroupView.as_view(), name='by_group'),
     path('search/', SearchResultView.as_view(), name='search_results'),
+    path('start_testing/<int:task_id>/', start_testing, name='start_testing'),
     path('testing/<int:task_id>/', testing, name='testing'),
     path('check_username_exist/', check_username_exist, name="check_username_exist"),
     path('<str:page>/', other_page, name='other'),

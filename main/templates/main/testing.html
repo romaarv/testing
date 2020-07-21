@@ -1,0 +1,35 @@
+{% extends "main/basic.html" %}
+
+{% block title %}Тестирование{% endblock %}
+
+{% block content %}
+    <div>
+        <h2>Тест: {{ task.name }}</h2>
+        <br>
+        <h5>Описание: {{ task.content }}</h5>
+        <h6>Предмет (урок): {{ task.lesson.name }}</h6>
+        <h6>Количество балов: {{ task.max_score }}</h6>
+        <h6>Для групп (классов): {{ task.group_in }}</h6>
+        <h6>Всего вопросов: {{ question_of }}</h6>
+        <br>
+        <h6>Вопрос:</h6>
+        <h5>{{ question.content }}</h5>
+        <br>
+        <h6>Варианты ответов:</h6>
+    </div>
+    {% for answer in answers %}
+        <div class="input-group">
+            {% if question.type_answer %}
+                <h5><label><input class="mr-3" type="checkbox" name="answer_user" value="">{{ answer.content }}</label></h5>
+            {% else %}
+                <h5><label><input class="mr-3" type="radio" name="answer_user" value="">{{ answer.content }}</label></h5>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <br>
+    <form action="{% url 'main:testing' task.pk%}" method='POST'>
+        {% csrf_token %}
+        <button type='submit' class="btn btn-outline-primary">Далее</button>
+    </form>
+
+{% endblock %}

@@ -141,7 +141,6 @@ class Answer(models.Model):
     is_active = models.BooleanField(default=True, db_index=True, verbose_name='Ответ учтен',
                 help_text='Учитывать ответ при отображение вопроса')
 
-
     class Meta:
         unique_together = ('content', 'question', 'is_active')
         verbose_name = 'Ответ'

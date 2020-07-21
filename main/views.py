@@ -9,6 +9,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
+from django.views.decorators.http import require_POST
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.core.signing import BadSignature
@@ -16,7 +17,8 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.views.generic import ListView
 from django.contrib.admin.views.decorators import staff_member_required
-# from django.db.models import Q, OuterRef, Subquery
+from django.db.models import Max #Q, OuterRef, Subquery
+import random
 
 from .models import *
 from .forms import ChangeUserInfoForm, RegisterUserForm
@@ -248,9 +250,9 @@ class SearchResultView (ListView):
 
 
 @login_required
-def testing(request, task_id):
+def start_testing(request, task_id):
     if request.user.is_staff:
-        return HttpResponse('<h3 style="color:red; font-size: 2em;">Тесты для учителей не предусмотрены!</h3>')
+        return render(request, 'main/start_testing.html', None)
     task = get_object_or_404(Task, id=task_id)
     str = ''
     task.group_in = str
@@ -270,3 +272,36 @@ def testing(request, task_id):
     if Exam.objects.filter(user=request.user.pk, tasks=task_id).exists():
         context['is_pass'] = True
     return render(request, 'main/start_testing.html', context)
+
+
+@login_required
+@require_POST
+def testing(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    str_ = ''
+    task.group_in = str_
+    max_len = len(task.groups.filter(is_active=True))
+    count = 0
+    for group in task.groups.filter(is_active=True):
+        count += 1
+        if count == 1:
+            str_ = group.name
+        else:
+            str_ += ', ' + group.name
+    if max_len > 0:
+        str_ += '.'
+    task.group_in = str_
+    context = {'task': task}
+    exam = Exam.objects.filter(user=request.user.id, tasks=task_id)
+    if exam.exists():
+        print('Да')
+    else:
+        question = Question.objects.filter(test=task_id, is_active=True).order_by('-variant')[0]
+        variant = random.randint(1, question.variant)
+        question = Question.objects.filter(test=task_id, variant=variant, is_active=True).order_by('id').count()
+        context['question_of'] = '1 из '+str(question)+'.'
+        question = Question.objects.filter(test=task_id, variant=variant, is_active=True).order_by('id').first()
+        context['question'] = question
+        answers = Answer.objects.filter(question=question, is_active=True).order_by('id')
+        context['answers'] = answers
+    return render(request, 'main/testing.html', context)
