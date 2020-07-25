@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -12,12 +12,13 @@ from django.views.generic.edit import UpdateView, CreateView, DeleteView
 from django.views.decorators.http import require_POST
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
+from django.core.paginator import Paginator
 from django.core.signing import BadSignature
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.views.generic import ListView
 from django.contrib.admin.views.decorators import staff_member_required
-from django.db.models import Max #Q, OuterRef, Subquery
+from django.db.models import Max, Sum #Q, OuterRef, Subquery
 import random
 
 from .models import *
@@ -78,8 +79,35 @@ class TestingLogoutView(LoginRequiredMixin, LogoutView):
 
 @login_required
 def profile(request):
-    tests = Exam.objects.filter(user=request.user.pk)
-    context = {'tests': tests}
+    tests = Test.objects.filter(user=request.user.id)
+    for test in tests:
+        str = ''
+        test.group_in = str
+        max_len = len(test.task.groups.filter(is_active=True))
+        count = 0
+        for group in test.task.groups.filter(is_active=True):
+            count += 1
+            if count == 1:
+                str = group.name
+            else:
+                str += ', ' + group.name
+        if max_len > 0:
+            str += '.'
+        test.group_in = str
+        date_ = Exam.objects.filter(answer__question__test=test.task_id).order_by('id').first()
+        test.start_at = date_.date_at
+        date_ = Exam.objects.filter(answer__question__test=test.task_id).order_by('id').last()
+        test.end_at = date_.date_at
+    context = {}
+    paginator = Paginator(tests, 20)
+    if 'page' in request.GET:
+        page_num = request.GET['page']
+    else:
+        page_num = 1
+    page = paginator.get_page(page_num)
+    context['page'] = page
+    page = paginator.get_page(page_num)
+    context['tests'] = page.object_list
     return render(request, 'main/profile.html', context)
 
 
@@ -156,7 +184,7 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
 
 class TaskByLessonView (ListView):
     context_object_name = 'tasks'
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset (self):
         qs = Task.objects.filter(is_active=True, lesson=self.kwargs['lesson_id'])
@@ -191,7 +219,7 @@ class TaskByLessonView (ListView):
 class TaskByGroupView (ListView):
     context_object_name = 'tasks'
     template_name = 'main/task_for_group_list.html'
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset (self):
         qs = Task.objects.filter(is_active=True, groups=self.kwargs['group_id'])
@@ -213,7 +241,7 @@ class TaskByGroupView (ListView):
 class SearchResultView (ListView):
     model = Task
     template_name = 'main/search_results.html'
-    paginate_by = 10
+    paginate_by = 20
 
     def get_context_data (self, *args, **kwargs):
         context = {}
@@ -269,7 +297,7 @@ def start_testing(request, task_id):
     task.group_in = str
     context = {'task': task}
     context['is_pass'] = False
-    if Exam.objects.filter(user=request.user.pk, tasks=task_id).exists():
+    if Test.objects.filter(user=request.user.id, task=task_id).exists():
         context['is_pass'] = True
     return render(request, 'main/start_testing.html', context)
 
@@ -292,9 +320,65 @@ def testing(request, task_id):
         str_ += '.'
     task.group_in = str_
     context = {'task': task}
-    exam = Exam.objects.filter(user=request.user.id, tasks=task_id)
+    if (len(request.POST.getlist('answer_user'))) > 0:
+        for answer_user in request.POST.getlist('answer_user'):
+            answer_ = Exam(user=AdvUser(id=request.user.id), answer=Answer(id=answer_user))
+            answer_.save()
+    exam = Exam.objects.filter(user=request.user.id, answer__question__test=task_id)
     if exam.exists():
-        print('Да')
+        v = exam.first()
+        variant = v.answer.question.variant
+        v = Question.objects.filter(test=task_id, variant=variant, is_active=True).count()
+        questions = Question.objects.raw("\
+            SELECT DISTINCT question.id, question.content\
+            FROM main_question question, main_answer answer\
+            WHERE question.test_id=%d and question.variant=%d and question.is_active=True and answer.is_active=True\
+                and question.id=answer.question_id AND question.id not IN\
+            (SELECT DISTINCT answer.question_id FROM main_exam exam, main_answer answer WHERE exam.answer_id=answer.id)\
+            ORDER BY question.id" % (task_id, variant)
+        )
+        question_of = v - len(questions) + 1
+        if question_of > v:
+            questions = Question.objects.filter(test=task_id, variant=variant, is_active=True)
+            max_score = questions[0].test.max_score # МАХ оценка за тест
+            questions = Question.objects.filter(test=task_id, variant=variant, 
+                is_active=True).aggregate(max_score_of_questions=Sum('score'))
+            max_score_of_questions = questions['max_score_of_questions'] # MAX количество балов в тесте
+            score_of_questions = 0 # Набранное количество балов
+            questions = Question.objects.raw("\
+                SELECT question.id, question.score FROM main_answer answer, main_exam exam, main_question question\
+                WHERE question.test_id=%d AND question.variant=%d AND question.is_active=True AND answer.question_id=question.id\
+                    AND question.type_answer=FALSE AND answer.is_true=True AND answer.id=exam.answer_id\
+                GROUP BY question.id" % (task_id, variant)
+            )
+            for question in questions:
+                score_of_questions += question.score
+            questions = Question.objects.raw("\
+                SELECT question.id, COUNT(answer.id) as asks_is_true, question.score\
+                FROM main_question question, main_answer answer\
+                    RIGHT JOIN main_exam exam ON answer.id=exam.answer_id\
+                WHERE question.test_id=%d AND question.variant=%d AND question.is_active=True and question.type_answer=TRUE\
+                    AND answer.question_id=question.id AND (question.type_answer=True AND answer.is_true=TRUE)\
+                    AND question.id NOT IN\
+                (SELECT question.id FROM main_question question, main_answer answer, main_exam exam\
+                WHERE question.test_id=%d AND question.variant=%d AND question.is_active=True AND answer.question_id=question.id\
+                AND answer.id=exam.answer_id AND (question.type_answer=TRUE AND answer.is_true=FALSE))\
+                GROUP BY question.id\
+                " % (task_id, variant, task_id, variant)
+            )
+            for question in questions:
+                if question.asks_is_true == Answer.objects.filter(question__test=task_id, question=question.id,
+                                            question__variant=variant, is_active=True, is_true=True).count():
+                    score_of_questions += question.score
+            test_score = score_of_questions * max_score / max_score_of_questions # Оценка за тест
+            test_ = Test(task=Task(id=task_id) ,user=AdvUser(id=request.user.id), test_score=test_score)
+            test_.save()
+            return redirect(reverse_lazy('main:profile'))
+        else:
+            context['question_of'] = str(question_of) + ' из ' + str(v) + '.'
+            context['question'] = questions[0]
+            answers = Answer.objects.filter(question=questions[0], is_active=True).order_by('id')
+            context['answers'] = answers
     else:
         question = Question.objects.filter(test=task_id, is_active=True).order_by('-variant')[0]
         variant = random.randint(1, question.variant)

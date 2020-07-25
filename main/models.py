@@ -72,7 +72,7 @@ class Task(models.Model):
             help_text='Названия групп (классов) где проводится тест')
     name = models.CharField(max_length=100, db_index=True, verbose_name='Название теста', help_text='Короткое название теста')
     max_score = models.PositiveIntegerField(default=12, verbose_name='Максимальная оценка',
-                help_text='Максимальное количество балов которые можно набрать за все правильные ответы в тесте')
+                help_text='Максимальная оценка за все правильные ответы в тесте')
     content = models.TextField(verbose_name='Описание теста', db_index=True, help_text='Полное описание теста')
     is_active = models.BooleanField(default=False, db_index=True, verbose_name='Статус отображения',
                 help_text='Отображение теста на сайте')
@@ -103,7 +103,7 @@ class Question(models.Model):
     variant = models.PositiveIntegerField(default=1, db_index=True, verbose_name='№ варианта',
             help_text='При создании нескольких вариантов теста')
     type_answer = models.BooleanField(default=False, db_index=True, verbose_name='Множественный выбор',
-            help_text='Возможность выбора нескольких вариантов ответа')
+            help_text='Предоставить пользователю возможность выбора нескольких вариантов ответа')
     is_active = models.BooleanField(default=True, db_index=True, verbose_name='Задание учтено',
                 help_text='Учитывать вопрос в тесте')
 
@@ -161,7 +161,7 @@ class Answer(models.Model):
 class Exam(models.Model):
     user = models.ForeignKey(AdvUser, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='exams')
     answer = models.ForeignKey(Answer, on_delete=models.PROTECT, verbose_name='Выбранный ответ', related_name='exams')
-    tasks = models.ManyToManyField(Task, through='Test')
+    date_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('user', 'answer')
@@ -176,11 +176,12 @@ class Exam(models.Model):
 
 
 class Test(models.Model):
-    task = models.ForeignKey(Task, on_delete=models.PROTECT)
-    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
-    test_score = models.FloatField(default=None, blank=True, db_index=True, verbose_name='Оценка')
+    task = models.ForeignKey(Task, on_delete=models.PROTECT, verbose_name='Тест', related_name='tests')
+    user = models.ForeignKey(AdvUser, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='tests')
+    test_score = models.PositiveIntegerField(default=0, db_index=True, verbose_name='Оценка за тест')
 
     class Meta:
+        unique_together = ('user', 'task')
         verbose_name = 'Сданный тест'
         verbose_name_plural = 'Сданные тесты'
         constraints = [
@@ -190,10 +191,7 @@ class Test(models.Model):
         ]
 
     def __str__(self):
-        if test_end is None:
-            return '%s - %s - Тест не закончен' % (self.exam.user, self.task)
-        else:
-            return '%s - %s - Балов: %d' % (self.exam.user, self.task, self.test_score)
+        return '%s - %s - Балов: %d' % (self.task, self.user, self.test_score)
 
 
 user_registrated = Signal(providing_args=['instance'])

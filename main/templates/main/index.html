@@ -22,9 +22,9 @@
                     <td>{{ forloop.counter }}</td>
                     <td>{{ test.lesson.name }}</td>
                     {% if user.is_authenticated and not user.is_staff %}
-                        <td scope="col"><a href="{% url 'main:start_testing' test.pk %}">{{ test.name }}</a></td>
+                        <th scope="col"><a href="{% url 'main:start_testing' test.pk %}">{{ test.name }}</a></th>
                     {% else %}
-                        <td scope="col">{{ test.name }}</td>
+                        <th scope="col">{{ test.name }}</th>
                     {% endif %}
                     <td>{{ test.content }}</td>
                     <td>{{ test.max_score }}</td>

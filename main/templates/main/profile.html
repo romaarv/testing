@@ -1,6 +1,9 @@
 {% extends "main/basic.html" %}
 
 {% load static %}
+{% load bootstrap4 %}
+
+{% load filtersandtags %}
 
 {% block title %}Профиль пользователя{% endblock %}
 
@@ -10,35 +13,37 @@
     {% if not user.is_staff %}
         {% if tests %}
             <h5>Ваши пройденные тесты</h5>
-            {% comment %}
-            <ul class="list-unstyled">
-                {% for test in tests %}
-                    <li class="media my-5 p-3 border">
-                        {% url 'main:profile_bb_detail' pk=bb.pk as url %}
-                        <a href="{{ url }}">
-                        {% if bb.image %}
-                            <img class="mr-3" src="{% thumbnail bb.image 'default' %}">
-                        {% else %}
-                            <img class="mr-3" src="{% static 'main/empty.jpg' %}">
-                        {% endif %}
-                        </a>
-                        <div class="media-body">
-                            <p>Рубрика: {{ bb.rubric }}</p>
-                            <h3><a href="{{ url }}">{{ bb.title }}</a></h3>
-                            <div>{{ bb.content }}</div>
-                            <p class="text-right font-weight-bold">{{ bb.price }} ₴</p>
-                            <p class="text-right font-italic">{{ bb.created_at }}</p>
-                            <p class="text-right mt-2">
-                                <a href="{% url 'main:profile_bb_change' pk=bb.pk %}">Исправить</a>
-                                <a href="{% url 'main:profile_bb_delete' pk=bb.pk %}">Удалить</a>
-                            </p>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-            {% endcomment %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Номер<br>п/п</th>
+                        <th scope="col">Предмет<br>(урок)</th>
+                        <th scope="col">Название теста</th>
+                        <th scope="col">Описание теста</th>
+                        <th scope="col">Оценка за<br>тест</th>
+                        <th scope="col">Для групп<br>(классов)</th>
+                        <th scope="col">Начало<br>теста</th>
+                        <th scope="col">Завершение<br>теста</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for test in tests %}
+                        <tr>
+                            <td>{{ page.number|multiplic:page.paginator.per_page|add:forloop.counter }}</td>
+                            <td>{{ test.task.lesson.name }}</td>
+                            <th>{{ test.task.name }}</th>
+                            <td>{{ test.task.content }}</td>
+                            <th>{{ test.test_score }}</th>
+                            <td>{{ test.group_in }}</td>
+                            <td>{{ test.start_at|date:"d.m.Y H:i:s" }}</td>
+                            <td>{{ test.end_at|date:"d.m.Y H:i:s" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         {% else%}
             <h5 class="text-danger">Вы не прошли ни одного теста</h5>
         {% endif %}
+        {% bootstrap_pagination page url=keyword %}
     {% endif %}
 {% endblock %}
