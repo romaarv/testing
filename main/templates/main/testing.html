@@ -15,7 +15,11 @@
         <h6>Вопрос:</h6>
         <h4>{{ question.content }}</h4>
         <br>
-        <h6>Варианты ответов:</h6>
+        {% if question.type_answer %}
+            <h6>Выберите несколько вариантов:</h6>
+        {% else %}
+            <h6>Выберите любой правильный вариант:</h6>
+        {% endif %}
     </div>
     <form action="{% url 'main:testing' task.pk%}" method='POST'>
         {% csrf_token %}
