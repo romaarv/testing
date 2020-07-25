@@ -137,7 +137,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 AUTH_USER_MODEL = 'main.AdvUser'
 
 EMAIL_USE_SSL = True
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.ukr.com'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_HOST_USER', 'secret')
 EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD', 'secret')
