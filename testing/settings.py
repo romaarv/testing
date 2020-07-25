@@ -144,7 +144,8 @@ EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD', 'secret')
 DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', 'secret')
 
 if DEBUG:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    pass
+    # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     SECURE_HSTS_SECONDS = 3600
     SECURE_SSL_REDIRECT = True
