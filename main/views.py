@@ -334,8 +334,9 @@ def testing(request, task_id):
             FROM main_question question, main_answer answer\
             WHERE question.test_id=%d and question.variant=%d and question.is_active=True and answer.is_active=True\
                 and question.id=answer.question_id AND question.id not IN\
-            (SELECT DISTINCT answer.question_id FROM main_exam exam, main_answer answer WHERE exam.answer_id=answer.id)\
-            ORDER BY question.id" % (task_id, variant)
+            (SELECT DISTINCT answer.question_id FROM main_exam exam, main_answer answer WHERE exam.answer_id=answer.id\
+                AND exam.user_id=%d)\
+            ORDER BY question.id" % (task_id, variant, request.user.id)
         )
         question_of = v - len(questions) + 1
         if question_of > v:
@@ -348,8 +349,8 @@ def testing(request, task_id):
             questions = Question.objects.raw("\
                 SELECT question.id, question.score FROM main_answer answer, main_exam exam, main_question question\
                 WHERE question.test_id=%d AND question.variant=%d AND question.is_active=True AND answer.question_id=question.id\
-                    AND question.type_answer=FALSE AND answer.is_true=True AND answer.id=exam.answer_id\
-                GROUP BY question.id" % (task_id, variant)
+                    AND question.type_answer=FALSE AND answer.is_true=True AND answer.id=exam.answer_id AND exam.user_id=%d\
+                GROUP BY question.id" % (task_id, variant, request.user.id)
             )
             for question in questions:
                 score_of_questions += question.score
@@ -359,12 +360,12 @@ def testing(request, task_id):
                     RIGHT JOIN main_exam exam ON answer.id=exam.answer_id\
                 WHERE question.test_id=%d AND question.variant=%d AND question.is_active=True and question.type_answer=TRUE\
                     AND answer.question_id=question.id AND (question.type_answer=True AND answer.is_true=TRUE)\
-                    AND question.id NOT IN\
+                    AND exam.user_id=%d AND question.id NOT IN\
                 (SELECT question.id FROM main_question question, main_answer answer, main_exam exam\
                 WHERE question.test_id=%d AND question.variant=%d AND question.is_active=True AND answer.question_id=question.id\
-                AND answer.id=exam.answer_id AND (question.type_answer=TRUE AND answer.is_true=FALSE))\
+                AND answer.id=exam.answer_id AND exam.user_id=%d AND (question.type_answer=TRUE AND answer.is_true=FALSE))\
                 GROUP BY question.id\
-                " % (task_id, variant, task_id, variant)
+                " % (task_id, variant, request.user.id, task_id, variant, request.user.id)
             )
             for question in questions:
                 if question.asks_is_true == Answer.objects.filter(question__test=task_id, question=question.id,
