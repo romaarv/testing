@@ -139,7 +139,7 @@ class Answer(models.Model):
     is_true = models.BooleanField(default=False, db_index=True, verbose_name='Правильный ответ',
         help_text='Статус правильного ответ на вопорос')
     is_active = models.BooleanField(default=True, db_index=True, verbose_name='Ответ учтен',
-                help_text='Учитывать ответ при отображение вопроса')
+                help_text='Учитывать ответ при отображении вопроса')
 
     class Meta:
         unique_together = ('content', 'question', 'is_active')
@@ -158,27 +158,12 @@ class Answer(models.Model):
         super().save(*args, **kwargs)
 
 
-class Exam(models.Model):
-    user = models.ForeignKey(AdvUser, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='exams')
-    answer = models.ForeignKey(Answer, on_delete=models.PROTECT, verbose_name='Выбранный ответ', related_name='exams')
-    date_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('user', 'answer')
-        verbose_name = 'Ответил'
-        verbose_name_plural = 'Ответили'
-
-    def __str__(self):
-        if self.answer.is_true:
-            return '%s - %s - Балов: %0.2f' % (self.user, self.answer, self.answer.question.score)
-        else:
-            return '%s - %s - Балов: %0.2f' % (self.user, self.answer, 0)
-
-
 class Test(models.Model):
     task = models.ForeignKey(Task, on_delete=models.PROTECT, verbose_name='Тест', related_name='tests')
     user = models.ForeignKey(AdvUser, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='tests')
     test_score = models.PositiveIntegerField(default=0, db_index=True, verbose_name='Оценка за тест')
+    is_end = models.BooleanField(default=False, db_index=True, verbose_name='Закончен',
+                help_text='Прохождение теста закончено')
 
     class Meta:
         unique_together = ('user', 'task')
@@ -193,6 +178,23 @@ class Test(models.Model):
 
     def __str__(self):
         return '%s - %s - Балов: %d' % (self.task, self.user, self.test_score)
+
+
+class Exam(models.Model):
+    test = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name='Тест', related_name='exams')
+    answer = models.ForeignKey(Answer, on_delete=models.PROTECT, verbose_name='Выбранный ответ', related_name='exams')
+    date_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('test', 'answer')
+        verbose_name = 'Ответил'
+        verbose_name_plural = 'Ответили'
+
+    def __str__(self):
+        if self.answer.is_true:
+            return '%s - %s - Балов: %0.2f' % (self.user, self.answer, self.answer.question.score)
+        else:
+            return '%s - %s - Балов: %0.2f' % (self.user, self.answer, 0)
 
 
 user_registrated = Signal(providing_args=['instance'])

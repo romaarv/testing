@@ -104,7 +104,7 @@ class TestingLogoutView(LoginRequiredMixin, LogoutView):
 
 @login_required
 def profile(request):
-    tests = Test.objects.filter(user=request.user.id)
+    tests = Test.objects.filter(user=request.user.id, is_end=True)
     for test in tests:
         str = ''
         test.group_in = str
@@ -119,9 +119,9 @@ def profile(request):
         if max_len > 0:
             str += '.'
         test.group_in = str
-        date_ = Exam.objects.filter(answer__question__test=test.task_id, user=request.user.id).order_by('id').first()
+        date_ = Exam.objects.filter(test=test.id).order_by('id').first()
         test.start_at = date_.date_at
-        date_ = Exam.objects.filter(answer__question__test=test.task_id, user=request.user.id).order_by('id').last()
+        date_ = Exam.objects.filter(test=test.id).order_by('id').last()
         test.end_at = date_.date_at
     context = {}
     paginator = Paginator(tests, 20)
@@ -321,7 +321,7 @@ def start_testing(request, task_id):
     task.group_in = str
     context = {'task': task}
     context['is_pass'] = False
-    if Test.objects.filter(user=request.user.id, task=task_id).exists():
+    if Test.objects.filter(user=request.user.id, task=task_id, is_end=True).exists():
         context['is_pass'] = True
     return render(request, 'main/start_testing.html', context)
 
@@ -330,25 +330,22 @@ def start_testing(request, task_id):
 @require_POST
 def testing(request, task_id):
     task = get_object_or_404(Task, id=task_id)
-    str_ = ''
-    task.group_in = str_
-    max_len = len(task.groups.filter(is_active=True))
-    count = 0
-    for group in task.groups.filter(is_active=True):
-        count += 1
-        if count == 1:
-            str_ = group.name
-        else:
-            str_ += ', ' + group.name
-    if max_len > 0:
-        str_ += '.'
-    task.group_in = str_
     context = {'task': task}
+    test = Test.objects.filter(task=task_id, user=request.user.id)
+    if test.exists():
+        if test[0].is_end == True:
+            return redirect(reverse_lazy('main:profile')) # Тест уже пройден
+    else:
+        test = Test(task=Task(id=task_id), user=AdvUser(id=request.user.id))
+        test.save()
+        test = Test.objects.filter(task=task_id, user=request.user.id)
     if (len(request.POST.getlist('answer_user'))) > 0:
         for answer_user in request.POST.getlist('answer_user'):
-            answer_ = Exam(user=AdvUser(id=request.user.id), answer=Answer(id=answer_user))
-            answer_.save()
-    exam = Exam.objects.filter(user=request.user.id, answer__question__test=task_id)
+            exam = Exam.objects.filter(test=test[0].id, answer=answer_user)
+            if not exam.exists():
+                answer_ = Exam(test=Test(id=test[0].id), answer=Answer(id=answer_user))
+                answer_.save()
+    exam = Exam.objects.filter(test=test[0].id)
     if exam.exists():
         v = exam.first()
         variant = v.answer.question.variant
@@ -359,8 +356,8 @@ def testing(request, task_id):
             WHERE question.test_id=%d and question.variant=%d and question.is_active=True and answer.is_active=True\
                 and question.id=answer.question_id AND question.id not IN\
             (SELECT DISTINCT answer.question_id FROM main_exam exam, main_answer answer WHERE exam.answer_id=answer.id\
-                AND exam.user_id=%d)\
-            ORDER BY question.id" % (task_id, variant, request.user.id)
+                AND exam.test_id=%d)\
+            ORDER BY question.id" % (task_id, variant, test[0].id)
         )
         question_of = v - len(questions) + 1
         if question_of > v:
@@ -373,8 +370,8 @@ def testing(request, task_id):
             questions = Question.objects.raw("\
                 SELECT question.id, question.score FROM main_answer answer, main_exam exam, main_question question\
                 WHERE question.test_id=%d AND question.variant=%d AND question.is_active=True AND answer.question_id=question.id\
-                    AND question.type_answer=FALSE AND answer.is_true=True AND answer.id=exam.answer_id AND exam.user_id=%d\
-                GROUP BY question.id" % (task_id, variant, request.user.id)
+                    AND question.type_answer=FALSE AND answer.is_true=True AND answer.id=exam.answer_id AND exam.test_id=%d\
+                GROUP BY question.id" % (task_id, variant, test[0].id)
             )
             for question in questions:
                 score_of_questions += question.score
@@ -384,21 +381,23 @@ def testing(request, task_id):
                     RIGHT JOIN main_exam exam ON answer.id=exam.answer_id\
                 WHERE question.test_id=%d AND question.variant=%d AND question.is_active=True and question.type_answer=TRUE\
                     AND answer.question_id=question.id AND (question.type_answer=True AND answer.is_true=TRUE)\
-                    AND exam.user_id=%d AND question.id NOT IN\
+                    AND exam.test_id=%d AND question.id NOT IN\
                 (SELECT question.id FROM main_question question, main_answer answer, main_exam exam\
                 WHERE question.test_id=%d AND question.variant=%d AND question.is_active=True AND answer.question_id=question.id\
-                AND answer.id=exam.answer_id AND exam.user_id=%d AND (question.type_answer=TRUE AND answer.is_true=FALSE))\
+                AND answer.id=exam.answer_id AND exam.test_id=%d AND (question.type_answer=TRUE AND answer.is_true=FALSE))\
                 GROUP BY question.id\
-                " % (task_id, variant, request.user.id, task_id, variant, request.user.id)
+                " % (task_id, variant, test[0].id, task_id, variant, test[0].id)
             )
             for question in questions:
                 if question.asks_is_true == Answer.objects.filter(question__test=task_id, question=question.id,
                                             question__variant=variant, is_active=True, is_true=True).count():
                     score_of_questions += question.score
             test_score = score_of_questions * max_score / max_score_of_questions # Оценка за тест
-            test_ = Test(task=Task(id=task_id) ,user=AdvUser(id=request.user.id), test_score=test_score)
+            test_ = test[0]
+            test_.test_score = test_score
+            test_.is_end = True
             test_.save()
-            return redirect(reverse_lazy('main:profile'))
+            return redirect(reverse_lazy('main:profile')) # Тест пройден
         else:
             context['question_of'] = str(question_of) + ' из ' + str(v) + '.'
             context['question'] = questions[0]
