@@ -15,6 +15,7 @@
             {% csrf_token %}
             {% bootstrap_form form layout='horizontal' %}
             <input type="hidden" name="next" value="{{ next }}">
+            <p><a href="{% url 'main:password_reset' %}">Забыли пароль?</a></p>
             {% buttons submit='Войти' %}{% endbuttons %}
         </form>
         <p><a href="{% url 'social:begin' 'facebook' %}">Войти через Facebook</a></p>

@@ -22,6 +22,10 @@ urlpatterns = [
     path('start_testing/<int:task_id>/', start_testing, name='start_testing'),
     path('testing/<int:task_id>/', testing, name='testing'),
     path('check_username_exist/', check_username_exist, name="check_username_exist"),
+    path('password-reset/', TestingPasswordResetView.as_view(), name='password_reset'),
+    path('password-reset/done/', TestingPasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', TestingPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', TestingPasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('<str:page>/', other_page, name='other'),
     path('', index, name='index'),
 ]

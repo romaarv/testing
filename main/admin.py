@@ -10,7 +10,7 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 
 
-from .models import AdvUser, Lesson, Task, Question, Answer, Group
+from .models import AdvUser, Lesson, Task, Question, Answer, Group, Test, Exam
 from .utilities import send_activation_notification
 
 def send_activation_notifications(modeladmin, request,queryset):
@@ -271,6 +271,69 @@ class QuestionAdmin(admin.ModelAdmin):
         obj.save()
 
 admin.site.register(Question, QuestionAdmin)
+
+
+class TestAdmin(admin.ModelAdmin):
+    list_display = ('task', 'user', 'score','test_groups','start_at', 'end_at')
+    readonly_fields = ('task', 'user', 'test_score')
+    search_fields = ( 'task__name', 'task__lesson__name', 'test_score', 'user__last_name', 'user__first_name', 'user__username')
+    list_filter = ('task__lesson', 'test_score', 'task')
+
+
+    def start_at(self, rec):
+        date_ = Exam.objects.filter(answer__question__test=rec.task, user=rec.user).order_by('id').first()
+        return '%s' % (date_.date_at.strftime('%d.%m.%Y %H:%M:%S'))
+    start_at.short_description = 'Начат'
+
+    def end_at(self, rec):
+        date_ = Exam.objects.filter(answer__question__test=rec.task, user=rec.user).order_by('id').last()
+        return '%s' % (date_.date_at.strftime('%d.%m.%Y %H:%M:%S'))
+    end_at.short_description = 'Закончен'
+
+    def score(self, rec):
+        task = Task.objects.filter(id=rec.task.id)
+        return '%d из %d' % (rec.test_score, task[0].max_score)
+    score.short_description = 'Оценка'
+
+    def test_groups(self, rec):
+        count_type = 100    #Количество символов для отображения на экране
+        str_ = ''
+        max_len = len(rec.task.groups.filter(is_active=True))
+        if max_len > 0:
+            str_ = 'Группы (отображ): '
+            count = 0
+            for group in rec.task.groups.filter(is_active=True):
+                count += 1
+                str_ += '%s' % (group.name)
+                if count < max_len:
+                    str_ += ', '
+            if len(str_) > count_type:
+                str_ = '%s...' % (str_[:count_type - 5])
+            else:
+                str_ = '%s.' % (str_)
+        if len(str_) < count_type - 25:
+            max_len = len(rec.task.groups.filter(is_active=False))
+            if max_len > 0:
+                count = 0
+                if len(str_) > 0:
+                    str_ += ' Группы (не отображ): '
+                else:
+                    str_ = 'Группы (не отображ): '
+                for group in rec.task.groups.filter(is_active=False):
+                    count +=1
+                    str_ += '%s' % (group.name)
+                    if count < max_len:
+                        str_ += ', '
+                if len(str_) > count_type:
+                    str_ = '%s...' % (str_[:count_type - 5])
+                else:
+                    str_ = '%s.' % (str_)
+        if len(str_) == 0:
+            str_ = 'Группы не определены'
+        return '%s' % (str_)
+    test_groups.short_description = 'Номера групп (классов)'
+
+admin.site.register(Test, TestAdmin)
 
 
 admin.site.register(LogEntry)

@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import logout
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.contrib.auth.views import (LoginView, LogoutView, PasswordChangeView, PasswordResetView, PasswordResetDoneView,
+                                        PasswordResetConfirmView, PasswordResetCompleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
@@ -24,6 +25,30 @@ import random
 from .models import *
 from .forms import ChangeUserInfoForm, RegisterUserForm
 from .utilities import signer
+
+
+class TestingPasswordResetView(PasswordResetView):
+    email_template_name = 'main/password_reset_email.html'
+    email_template_name = 'main/password_reset_email.html'
+    success_url = reverse_lazy('main:password_reset_done')
+    template_name = 'main/password_reset_form.html'
+    title = ('Пароль сброшен')
+
+
+class TestingPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'main/password_reset_done.html'
+    title = ('Письмо на сброс пароля отправлено')
+
+
+class TestingPasswordResetConfirmView(PasswordResetConfirmView):
+    success_url = reverse_lazy('main:password_reset_complete')
+    template_name = 'main/password_reset_confirm.html'
+    title = ('Введите новый пароль')
+
+
+class TestingPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'main/password_reset_complete.html'
+    title = ('Пароль успешно сброшен')
 
 
 def other_page(request, page):
@@ -94,9 +119,9 @@ def profile(request):
         if max_len > 0:
             str += '.'
         test.group_in = str
-        date_ = Exam.objects.filter(answer__question__test=test.task_id).order_by('id').first()
+        date_ = Exam.objects.filter(answer__question__test=test.task_id, user=request.user.id).order_by('id').first()
         test.start_at = date_.date_at
-        date_ = Exam.objects.filter(answer__question__test=test.task_id).order_by('id').last()
+        date_ = Exam.objects.filter(answer__question__test=test.task_id, user=request.user.id).order_by('id').last()
         test.end_at = date_.date_at
     context = {}
     paginator = Paginator(tests, 20)
@@ -106,7 +131,6 @@ def profile(request):
         page_num = 1
     page = paginator.get_page(page_num)
     context['page'] = page
-    page = paginator.get_page(page_num)
     context['tests'] = page.object_list
     return render(request, 'main/profile.html', context)
 
@@ -390,3 +414,5 @@ def testing(request, task_id):
         answers = Answer.objects.filter(question=question, is_active=True).order_by('id')
         context['answers'] = answers
     return render(request, 'main/testing.html', context)
+
+

@@ -184,6 +184,7 @@ class Test(models.Model):
         unique_together = ('user', 'task')
         verbose_name = 'Сданный тест'
         verbose_name_plural = 'Сданные тесты'
+        ordering = ('-id', )
         constraints = [
             CheckConstraint(
                 check=Q(test_score__gte=0) | Q(test_score=None), name='test_score_non_negative',
