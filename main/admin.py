@@ -275,19 +275,22 @@ admin.site.register(Question, QuestionAdmin)
 
 class TestAdmin(admin.ModelAdmin):
     list_display = ('task', 'user', 'score','test_groups','start_at', 'end_at')
-    readonly_fields = ('task', 'user', 'test_score')
-    search_fields = ( 'task__name', 'task__lesson__name', 'test_score', 'user__last_name', 'user__first_name', 'user__username')
-    list_filter = ('task__lesson', 'test_score', 'task')
+    readonly_fields = ('task', 'user', 'test_score', 'is_end')
+    search_fields = ('task__name', 'task__lesson__name', 'task__groups__name', 'test_score', 'user__last_name', 'user__first_name', 'user__username')
+    list_filter = ('is_end', 'task__lesson', 'task__groups', 'test_score', 'task')
 
 
     def start_at(self, rec):
-        date_ = Exam.objects.filter(answer__question__test=rec.task, user=rec.user).order_by('id').first()
+        date_ = Exam.objects.filter(test=rec.id).order_by('id').first()
         return '%s' % (date_.date_at.strftime('%d.%m.%Y %H:%M:%S'))
     start_at.short_description = 'Начат'
 
     def end_at(self, rec):
-        date_ = Exam.objects.filter(answer__question__test=rec.task, user=rec.user).order_by('id').last()
-        return '%s' % (date_.date_at.strftime('%d.%m.%Y %H:%M:%S'))
+        if rec.is_end:
+            date_ = Exam.objects.filter(test=rec.id).order_by('id').last()
+            return '%s' % (date_.date_at.strftime('%d.%m.%Y %H:%M:%S'))
+        else:
+            return 'Нет'
     end_at.short_description = 'Закончен'
 
     def score(self, rec):
