@@ -226,8 +226,8 @@ class AdditionalAnswerInline(admin.TabularInline):
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'test', 'variant', 'is_active', 'creator', 'modified')
     list_editable = ('is_active', )
-    search_fields = ('content', 'test__name')
-    list_filter = ('is_active', 'test__lesson', 'variant', 'test')
+    search_fields = ('content', 'test__name', 'test__lesson__name', 'test__groups__name', 'variant')
+    list_filter = ('is_active','test__lesson', 'test__groups', 'variant', 'test')
     fields = (
         'test',
         'content',
@@ -284,7 +284,8 @@ class AdditionalExamInline(admin.TabularInline):
 class TestAdmin(admin.ModelAdmin):
     list_display = ('task', 'user', 'score','test_groups','start_at', 'end_at')
     readonly_fields = ('task', 'user', 'test_score', 'is_end')
-    search_fields = ('task__name', 'task__lesson__name', 'task__groups__name', 'test_score', 'user__last_name', 'user__first_name', 'user__username')
+    search_fields = ('task__name', 'task__lesson__name', 'task__groups__name', 'test_score', 
+        'user__last_name', 'user__first_name', 'user__username')
     list_filter = ('is_end', 'task__lesson', 'task__groups', 'test_score', 'task')
     inlines = (AdditionalExamInline, )
 
