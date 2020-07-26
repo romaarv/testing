@@ -273,11 +273,20 @@ class QuestionAdmin(admin.ModelAdmin):
 admin.site.register(Question, QuestionAdmin)
 
 
+class AdditionalExamInline(admin.TabularInline):
+    model = Exam
+    fields = ('answer', 'date_at')
+    readonly_fields = ('answer', 'date_at')
+    extra = 0
+    can_delete = False
+
+
 class TestAdmin(admin.ModelAdmin):
     list_display = ('task', 'user', 'score','test_groups','start_at', 'end_at')
     readonly_fields = ('task', 'user', 'test_score', 'is_end')
     search_fields = ('task__name', 'task__lesson__name', 'task__groups__name', 'test_score', 'user__last_name', 'user__first_name', 'user__username')
     list_filter = ('is_end', 'task__lesson', 'task__groups', 'test_score', 'task')
+    inlines = (AdditionalExamInline, )
 
 
     def start_at(self, rec):

@@ -122,8 +122,8 @@ class Question(models.Model):
         ]
 
     def __str__(self):
-        if len(self.content)>100:
-            return '%s...' % (self.content[:96])
+        if len(self.content)>150:
+            return '%s...' % (self.content[:146])
         else:
             return '%s' % (self.content)
 
@@ -147,8 +147,8 @@ class Answer(models.Model):
         verbose_name_plural = 'Ответы'
 
     def __str__(self):
-        if len(self.content)>100:
-            return '%s...' % (self.content[:96])
+        if len(self.content)>150:
+            return '%s...' % (self.content[:146])
         else:
             return '%s' % (self.content)
 
@@ -183,18 +183,34 @@ class Test(models.Model):
 class Exam(models.Model):
     test = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name='Тест', related_name='exams')
     answer = models.ForeignKey(Answer, on_delete=models.PROTECT, verbose_name='Выбранный ответ', related_name='exams')
-    date_at = models.DateTimeField(auto_now_add=True)
+    date_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата ответа')
 
     class Meta:
         unique_together = ('test', 'answer')
         verbose_name = 'Ответил'
         verbose_name_plural = 'Ответили'
+        ordering = ('id', )
 
     def __str__(self):
         if self.answer.is_true:
-            return '%s - %s - Балов: %0.2f' % (self.user, self.answer, self.answer.question.score)
+            str_ = '%s - (Балов: %0.2f)' % (self.answer.question, self.answer.question.score)
         else:
-            return '%s - %s - Балов: %0.2f' % (self.user, self.answer, 0)
+            str_ = '%s - (Балов: %0.2f)' % (self.answer.question, 0)
+        if not self.answer.question.type_answer:
+            str_ += ' - Один из:'
+        else:
+            str_ += ' - Все из:'
+        answers = Answer.objects.filter(question=self.answer.question, is_true=True, is_active=True)
+        max_len = len (answers)
+        count = 0
+        for answer in answers:
+            count += 1
+            if count < max_len:
+                str_ += ' [' + answer.content +'],'
+            else:
+                str_ += ' [' + answer.content +'].'
+        print(max_len, count)
+        return str_
 
 
 user_registrated = Signal(providing_args=['instance'])
