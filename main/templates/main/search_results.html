@@ -30,7 +30,11 @@
                     <td>{{ page_obj.number|multiplic:page_obj.paginator.per_page|add:forloop.counter }}</td>
                     <td>{{ test.lesson.name }}</td>
                     {% if user.is_authenticated and not user.is_staff %}
-                        <th scope="col"><a href="{% url 'main:start_testing' test.pk %}">{{ test.name }}</a></th>
+                        {% if test.is_show %}
+                            <th scope="col"><a href="{% url 'main:start_testing' test.pk %}">{{ test.name }}</a></th>
+                        {% else %}
+                            <th scope="col">{{ test.name }}</th>
+                        {% endif %}
                     {% else %}
                         <th scope="col">{{ test.name }}</th>
                     {% endif %}

@@ -209,7 +209,6 @@ class Exam(models.Model):
                 str_ += ' [' + answer.content +'],'
             else:
                 str_ += ' [' + answer.content +'].'
-        print(max_len, count)
         return str_
 
 

@@ -77,19 +77,25 @@ def index(request):
         " % (content_type.id, count_limit)
     )
     for test in last_tests:
-        str1 = ''
-        test.group_in = str1
+        if request.user.is_authenticated and not request.user.is_staff:
+            test_ = Test.objects.filter(user=request.user.id, task=test.id, is_end=True)
+            if test_.exists():
+                test.is_show = False
+            else:
+                test.is_show = True
+        str_ = ''
+        test.group_in = str_
         max_len = len(test.groups.filter(is_active=True))
         count = 0
         for group in test.groups.filter(is_active=True):
             count += 1
             if count == 1:
-                str1 = group.name
+                str_ = group.name
             else:
-                str1 += ', ' + group.name
+                str_ += ', ' + group.name
         if max_len > 0:
-            str1 += '.'
-        test.group_in = str1
+            str_ += '.'
+        test.group_in = str_
     context['tests'] = last_tests
     return render(request, 'main/index.html', context)
 
@@ -104,7 +110,7 @@ class TestingLogoutView(LoginRequiredMixin, LogoutView):
 
 @login_required
 def profile(request):
-    tests = Test.objects.filter(user=request.user.id, is_end=True)
+    tests = Test.objects.filter(user=request.user.id)
     for test in tests:
         str = ''
         test.group_in = str
@@ -213,6 +219,12 @@ class TaskByLessonView (ListView):
     def get_queryset (self):
         qs = Task.objects.filter(is_active=True, lesson=self.kwargs['lesson_id'])
         for test in qs:
+            if self.request.user.is_authenticated and not self.request.user.is_staff:
+                test_ = Test.objects.filter(user=self.request.user.id, task=test.id, is_end=True)
+                if test_.exists():
+                    test.is_show = False
+                else:
+                    test.is_show = True
             str = ''
             test.group_in = str
             max_len = len(test.groups.filter(is_active=True))
@@ -248,6 +260,12 @@ class TaskByGroupView (ListView):
     def get_queryset (self):
         qs = Task.objects.filter(is_active=True, groups=self.kwargs['group_id'])
         for test in qs:
+            if self.request.user.is_authenticated and not self.request.user.is_staff:
+                test_ = Test.objects.filter(user=self.request.user.id, task=test.id, is_end=True)
+                if test_.exists():
+                    test.is_show = False
+                else:
+                    test.is_show = True
             str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Task),
                 object_id=test.id).order_by('-action_time')[:1]
             if len(str) > 0:
@@ -279,6 +297,12 @@ class SearchResultView (ListView):
         qs = Task.objects.filter(Q(lesson__name__icontains=sh) | Q(groups__name__icontains=sh) |
                 Q(max_score__icontains=sh) | Q(content__icontains=sh)).filter(is_active=True).distinct()
         for test in qs:
+            if self.request.user.is_authenticated and not self.request.user.is_staff:
+                test_ = Test.objects.filter(user=self.request.user.id, task=test.id, is_end=True)
+                if test_.exists():
+                    test.is_show = False
+                else:
+                    test.is_show = True
             str = ''
             test.group_in = str
             max_len = len(test.groups.filter(is_active=True))

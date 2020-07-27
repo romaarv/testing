@@ -22,8 +22,8 @@
                         <th scope="col">Описание теста</th>
                         <th scope="col">Оценка за<br>тест</th>
                         <th scope="col">Для групп<br>(классов)</th>
-                        <th scope="col">Начало<br>теста</th>
-                        <th scope="col">Завершение<br>теста</th>
+                        <th scope="col">Начат<br>теста</th>
+                        <th scope="col">Завершен<br>теста</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,12 +31,20 @@
                         <tr>
                             <td>{{ page.number|multiplic:page.paginator.per_page|add:forloop.counter }}</td>
                             <td>{{ test.task.lesson.name }}</td>
-                            <th>{{ test.task.name }}</th>
+                             {% if not test.is_end %}
+                                <th scope="col"><a href="{% url 'main:start_testing' test.task.id %}">{{ test.task.name }}</a></th>
+                            {% else %}
+                                <th scope="col">{{ test.task.name }}</th>
+                            {% endif %}
                             <td>{{ test.task.content }}</td>
                             <th>{{ test.test_score }} из {{ test.task.max_score }}</th>
                             <td>{{ test.group_in }}</td>
                             <td>{{ test.start_at|date:"d.m.Y H:i:s" }}</td>
-                            <td>{{ test.end_at|date:"d.m.Y H:i:s" }}</td>
+                            {% if test.is_end %}
+                                <td>{{ test.end_at|date:"d.m.Y H:i:s" }}</td>
+                            {% else %}
+                                <td>Нет</td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                 </tbody>
