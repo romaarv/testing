@@ -4,24 +4,26 @@
 
 {% load bootstrap4 %}
 
-{% block title %}Поиск теста (билета){% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Поиск теста (билета)" %}{% endblock %}
 
 {% block content %}
     {% if search_text|length %}
-        <h2>Тесты (билеты) содержащие: "{{ search_text }}"</h2>
+        <h2>{% trans "Тесты (билеты) содержащие" %}: "{{ search_text }}"</h2>
     {% else %}
-         <h2>Все тесты (билеты)</h2>
+         <h2>{% trans "Все тесты (билеты)" %}</h2>
     {% endif %}
     <table class="table">
         <thead>
             <tr>
-                  <th scope="col">Номер<br>п/п</th>
-                  <th scope="col">Предмет<br>(урок)</th>
-                  <th scope="col">Название теста</th>
-                  <th scope="col">Описание теста</th>
-                  <th scope="col">Количество<br>баллов</th>
-                  <th scope="col">Для групп<br>(классов)</th>
-                  <th scope="col">Последнее<br>изменение</th>
+                  <th scope="col">{% trans "Номер" %}<br>{% trans "п/п" %}</th>
+                  <th scope="col">{% trans "Предмет" %}<br>({% trans "урок" %})</th>
+                  <th scope="col">{% trans "Название теста" %}</th>
+                  <th scope="col">{% trans "Описание теста" %}</th>
+                  <th scope="col">{% trans "Количество" %}<br>{% trans "баллов" %}</th>
+                  <th scope="col">{% trans "Для групп" %}<br>({% trans "классов" %})</th>
+                  <th scope="col">{% trans "Последнее" %}<br>{% trans "изменение" %}</th>
             </tr>
         </thead>
         <tbody>

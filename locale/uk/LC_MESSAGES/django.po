@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-02 14:27+0300\n"
+"POT-Creation-Date: 2020-08-02 20:21+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,6 +82,7 @@ msgid "Отображение предмета на сайте"
 msgstr "Відображення предмета на сайті"
 
 #: .\main\models.py:61 .\main\models.py:72
+#: .\main\templates\main\task_list.html:12
 msgid "Предмет (урок)"
 msgstr "Предмет (урок)"
 
@@ -94,6 +95,9 @@ msgid "Названия групп (классов) где проводится 
 msgstr "Назви груп (класів) де проводиться тест"
 
 #: .\main\models.py:75 .\main\templates\main\index.html:14
+#: .\main\templates\main\search_results.html:22
+#: .\main\templates\main\task_for_group_list.html:18
+#: .\main\templates\main\task_list.html:17
 msgid "Название теста"
 msgstr "Назва тесту"
 
@@ -110,6 +114,9 @@ msgid "Максимальная оценка за все правильные о
 msgstr "Максимальна оцінка за всі правильні відповіді в тесті"
 
 #: .\main\models.py:78 .\main\templates\main\index.html:15
+#: .\main\templates\main\search_results.html:23
+#: .\main\templates\main\task_for_group_list.html:19
+#: .\main\templates\main\task_list.html:18
 msgid "Описание теста"
 msgstr "Опис тесту"
 
@@ -134,8 +141,10 @@ msgid "Задание"
 msgstr "Завдання"
 
 #: .\main\models.py:102
-msgid "Опис питання, що задається  в тесті"
-msgstr ""
+#, fuzzy
+#| msgid "Описание возможного ответа"
+msgid "Описание задаваемого вопроса в тесте"
+msgstr "Опис можливої ​​відповіді"
 
 #: .\main\models.py:103
 msgid "Балов за ответ"
@@ -158,7 +167,8 @@ msgid "Множественный выбор"
 msgstr "Множинний вибір"
 
 #: .\main\models.py:108
-msgid "Предоставить пользователю возможность выбора нескольких вариантов ответа"
+msgid ""
+"Предоставить пользователю возможность выбора нескольких вариантов ответа"
 msgstr "Надати користувачеві можливість вибору декількох варіантів відповіді"
 
 #: .\main\models.py:109
@@ -261,6 +271,24 @@ msgstr "Один з"
 msgid "Все из"
 msgstr "Усі з"
 
+#: .\main\templates\main\about.html:7 .\main\templates\main\about.html:10
+#: .\main\templates\main\basic.html:90
+msgid "О сайте"
+msgstr "Про сайт"
+
+#: .\main\templates\main\about.html:11
+msgid "Логотип"
+msgstr "Логотип"
+
+#: .\main\templates\main\about.html:12
+msgid "Сайт для подготовки и публикации тестов, а также оценка ответов на них."
+msgstr ""
+"Сайт для підготовки та публікації тестів, а також оцінка відповідей на них."
+
+#: .\main\templates\main\about.html:13
+msgid "Все права принадлежат"
+msgstr "Всі права належать"
+
 #: .\main\templates\main\basic.html:13 .\main\templates\main\basic.html:68
 msgid "Главная"
 msgstr "Головна"
@@ -317,10 +345,6 @@ msgstr "Пошук"
 msgid "Найти"
 msgstr "Знайти"
 
-#: .\main\templates\main\basic.html:90
-msgid "О сайте"
-msgstr "Про сайт"
-
 #: .\main\templates\main\index.html:5
 msgid "Последние"
 msgstr "Останні"
@@ -334,44 +358,85 @@ msgid "Последние опубликованные"
 msgstr "Останні опубліковані"
 
 #: .\main\templates\main\index.html:12
+#: .\main\templates\main\search_results.html:20
+#: .\main\templates\main\task_for_group_list.html:16
+#: .\main\templates\main\task_list.html:16
 msgid "Номер"
 msgstr "Номер"
 
 #: .\main\templates\main\index.html:12
+#: .\main\templates\main\search_results.html:20
+#: .\main\templates\main\task_for_group_list.html:16
 msgid "п/п"
 msgstr "з/п"
 
 #: .\main\templates\main\index.html:13
+#: .\main\templates\main\search_results.html:21
+#: .\main\templates\main\task_for_group_list.html:17
 msgid "Предмет"
 msgstr "Предмет"
 
 #: .\main\templates\main\index.html:13
+#: .\main\templates\main\search_results.html:21
+#: .\main\templates\main\task_for_group_list.html:17
 msgid "урок"
 msgstr "урок"
 
 #: .\main\templates\main\index.html:16
+#: .\main\templates\main\search_results.html:24
+#: .\main\templates\main\task_for_group_list.html:20
+#: .\main\templates\main\task_list.html:19
 msgid "Количество"
 msgstr "Кільксть"
 
 #: .\main\templates\main\index.html:16
+#: .\main\templates\main\search_results.html:24
+#: .\main\templates\main\task_for_group_list.html:20
+#: .\main\templates\main\task_list.html:19
 msgid "баллов"
 msgstr "балів"
 
 #: .\main\templates\main\index.html:17
+#: .\main\templates\main\search_results.html:25
+#: .\main\templates\main\task_list.html:20
 msgid "Для групп"
 msgstr "Для груп"
 
 #: .\main\templates\main\index.html:17
+#: .\main\templates\main\search_results.html:25
+#: .\main\templates\main\task_list.html:20
 msgid "классов"
 msgstr "класів"
 
 #: .\main\templates\main\index.html:18
+#: .\main\templates\main\search_results.html:26
+#: .\main\templates\main\task_for_group_list.html:21
+#: .\main\templates\main\task_list.html:21
 msgid "Последнее"
 msgstr "Остання"
 
 #: .\main\templates\main\index.html:18
+#: .\main\templates\main\search_results.html:26
+#: .\main\templates\main\task_for_group_list.html:21
+#: .\main\templates\main\task_list.html:21
 msgid "изменение"
 msgstr "зміна"
+
+#: .\main\templates\main\search_results.html:9
+msgid "Поиск теста (билета)"
+msgstr "Пошук тесту (квитка)"
+
+#: .\main\templates\main\search_results.html:13
+msgid "Тесты (билеты) содержащие"
+msgstr "Тести (квитки) містять"
+
+#: .\main\templates\main\search_results.html:15
+msgid "Все тесты (билеты)"
+msgstr "Всі тести (квитки)"
+
+#: .\main\templates\main\task_for_group_list.html:12
+msgid "Для группы (класса)"
+msgstr "Для групи (класу)"
 
 #: .\testing\settings.py:129
 msgid "Russian"

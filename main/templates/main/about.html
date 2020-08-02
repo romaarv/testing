@@ -2,11 +2,13 @@
 
 {% load static %}
 
-{% block title %}О сайте{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans 'О сайте' %}{% endblock %}
 
 {% block content %}
-    <h2>О сайте</h2>
-    <img src="{% static 'main/images.jpg' %}" alt="Логотип" align="left" hspace="5">
-    <h5>Сайт для подготовки и публикации тестов, а также оценки ответов на них.</h5>
-    <h5>Все права принадлежат <a target="_blank" href="https://github.com/romaarv">ArvSoft</a>.</h5>
+    <h2>{% trans 'О сайте' %}</h2>
+    <img src="{% static 'main/images.jpg' %}" alt="{% trans 'Логотип' %}" align="left" hspace="5">
+    <h5>{% trans 'Сайт для подготовки и публикации тестов, а также оценка ответов на них.' %}</h5>
+    <h5>{% trans 'Все права принадлежат' %} <a target="_blank" href="https://github.com/romaarv">ArvSoft</a>.</h5>
 {% endblock %}
