@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-02 12:54+0300\n"
+"POT-Creation-Date: 2020-08-02 14:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,156 +52,155 @@ msgstr "Display status"
 
 #: .\main\models.py:36
 msgid "Отображение группы (класса) на сайте"
-msgstr ""
+msgstr "Displaying a group (class) on the site"
 
 #: .\main\models.py:42
 msgid "Группа (класс)"
-msgstr ""
+msgstr "Group (class)"
 
-#: .\main\models.py:43 .\main\models.py:73
+#: .\main\models.py:43 .\main\models.py:73 .\main\templates\main\basic.html:85
 msgid "Группы (классы)"
-msgstr ""
+msgstr "Groups (classes)"
 
 #: .\main\models.py:47 .\main\models.py:66 .\main\models.py:95
 msgid "отображается"
-msgstr ""
+msgstr "displayed"
 
 #: .\main\models.py:49 .\main\models.py:68 .\main\models.py:97
 msgid "не отображается"
-msgstr ""
+msgstr "not displayed"
 
 #: .\main\models.py:54
 msgid "Предмет, знания которого проверяются в тесте"
-msgstr ""
+msgstr "A lesson whose knowledge is tested in the test"
 
 #: .\main\models.py:56
 msgid "Отображение предмета на сайте"
-msgstr ""
+msgstr "Displaying the lesson on the site"
 
 #: .\main\models.py:61 .\main\models.py:72
 msgid "Предмет (урок)"
-msgstr ""
+msgstr "Lesson"
 
-#: .\main\models.py:62
+#: .\main\models.py:62 .\main\templates\main\basic.html:80
 msgid "Предметы (уроки)"
-msgstr ""
+msgstr "Lessons"
 
 #: .\main\models.py:74
 msgid "Названия групп (классов) где проводится тест"
-msgstr ""
+msgstr "Names of groups (classes) where the test is conducted"
 
-#: .\main\models.py:75
+#: .\main\models.py:75 .\main\templates\main\index.html:14
 msgid "Название теста"
-msgstr ""
+msgstr "Test name"
 
 #: .\main\models.py:75
 msgid "Короткое название теста"
-msgstr ""
+msgstr "Test short name"
 
 #: .\main\models.py:76
 msgid "Максимальная оценка"
-msgstr ""
+msgstr "Maximum score"
 
 #: .\main\models.py:77
 msgid "Максимальная оценка за все правильные ответы в тесте"
-msgstr ""
+msgstr "Maximum score for all correct answers in the test"
 
-#: .\main\models.py:78
+#: .\main\models.py:78 .\main\templates\main\index.html:15
 msgid "Описание теста"
-msgstr ""
+msgstr "Test description"
 
 #: .\main\models.py:78
 msgid "Полное описание теста"
-msgstr ""
+msgstr "Full test description"
 
 #: .\main\models.py:80
 msgid "Отображение теста на сайте"
-msgstr ""
+msgstr "Displaying the test on the site"
 
 #: .\main\models.py:85
 msgid "Тест (билет)"
-msgstr ""
+msgstr "Test (ticket)"
 
 #: .\main\models.py:86
 msgid "Тесты (билеты)"
-msgstr ""
+msgstr "Tests (tickets)"
 
 #: .\main\models.py:102 .\main\models.py:115
 msgid "Задание"
-msgstr ""
+msgstr "The task"
 
 #: .\main\models.py:102
 msgid "Описание задаваемого вопроса в тесте"
-msgstr ""
+msgstr "Description of the question being asked in the test"
 
 #: .\main\models.py:103
 msgid "Балов за ответ"
-msgstr ""
+msgstr "Balls for the answer"
 
 #: .\main\models.py:104
 msgid "Количество балов начисленных за правильный ответ"
-msgstr ""
+msgstr "The number of points awarded for the correct answer"
 
 #: .\main\models.py:105
 msgid "Вариант"
-msgstr ""
+msgstr "Variant"
 
 #: .\main\models.py:106
 msgid "При создании нескольких вариантов теста"
-msgstr ""
+msgstr "When creating multiple test cases"
 
 #: .\main\models.py:107
 msgid "Множественный выбор"
-msgstr ""
+msgstr "Multiple choice"
 
 #: .\main\models.py:108
-msgid ""
-"Предоставить пользователю возможность выбора нескольких вариантов ответа"
-msgstr ""
+msgid "Предоставить пользователю возможность выбора нескольких вариантов ответа"
+msgstr "Give the user the ability to select multiple answer options"
 
 #: .\main\models.py:109
 msgid "Задание учтено"
-msgstr ""
+msgstr "The task was taken"
 
 #: .\main\models.py:110
 msgid "Учитывать вопрос в тесте"
-msgstr ""
+msgstr "The task was taken into account"
 
 #: .\main\models.py:116
 msgid "Задания"
-msgstr ""
+msgstr "Tasks"
 
 #: .\main\models.py:139
 msgid "Вопрос"
-msgstr ""
+msgstr "Question"
 
 #: .\main\models.py:140 .\main\models.py:148
 msgid "Ответ"
-msgstr ""
+msgstr "Answer"
 
 #: .\main\models.py:140
 msgid "Описание возможного ответа"
-msgstr ""
+msgstr "Description of a possible answer"
 
 #: .\main\models.py:141
 msgid "Правильный ответ"
-msgstr ""
+msgstr "Correct answer"
 
 #: .\main\models.py:142
 msgid "Статус правильного ответ на вопорос"
-msgstr ""
+msgstr "The status of the correct answer to the question"
 
 #: .\main\models.py:143
 msgid "Ответ учтен"
-msgstr ""
+msgstr "The answer is included"
 
 #: .\main\models.py:144
 msgid "Учитывать ответ при отображении вопроса"
-msgstr ""
+msgstr "Consider the answer when displaying a question"
 
 #: .\main\models.py:149
 msgid "Ответы"
-msgstr ""
+msgstr "Answers"
 
 #: .\main\models.py:164 .\main\models.py:186
 msgid "Тест"
@@ -209,63 +208,115 @@ msgstr "Test"
 
 #: .\main\models.py:165
 msgid "Пользователь"
-msgstr ""
+msgstr "User"
 
 #: .\main\models.py:166
 msgid "Оценка за тест"
-msgstr ""
+msgstr "Test score"
 
 #: .\main\models.py:167
 msgid "Закончен"
-msgstr ""
+msgstr "Finished"
 
 #: .\main\models.py:168
 msgid "Прохождение теста закончено"
-msgstr ""
+msgstr "Completed the test"
 
 #: .\main\models.py:172
 msgid "Сданный тест"
-msgstr ""
+msgstr "Passed test"
 
 #: .\main\models.py:173
 msgid "Сданные тесты"
-msgstr ""
+msgstr "Passed tests"
 
 #: .\main\models.py:182 .\main\models.py:198 .\main\models.py:200
 msgid "Балов"
-msgstr ""
+msgstr "Points"
 
 #: .\main\models.py:187
 msgid "Выбранный ответ"
-msgstr ""
+msgstr "Selected answer"
 
 #: .\main\models.py:188
 msgid "Дата ответа"
-msgstr ""
+msgstr "Reply date"
 
 #: .\main\models.py:192
 msgid "Ответил"
-msgstr ""
+msgstr "Answered"
 
 #: .\main\models.py:193
 msgid "Ответили"
-msgstr ""
+msgstr "Answered"
 
 #: .\main\models.py:202
 msgid "Один из"
-msgstr ""
+msgstr "One of"
 
 #: .\main\models.py:204
 msgid "Все из"
-msgstr ""
+msgstr "All of"
 
-#: .\main\templates\main\basic.html:13
+#: .\main\templates\main\basic.html:13 .\main\templates\main\basic.html:68
 msgid "Главная"
 msgstr "Home page"
 
 #: .\main\templates\main\basic.html:13 .\main\templates\main\basic.html:19
 msgid "Тесты"
 msgstr "Tests"
+
+#: .\main\templates\main\basic.html:43
+msgid "Вход для учителей"
+msgstr "Login for teachers"
+
+#: .\main\templates\main\basic.html:47
+msgid "Здравствуйте"
+msgstr "Hello"
+
+#: .\main\templates\main\basic.html:49
+msgid "Профиль"
+msgstr "Profile"
+
+#: .\main\templates\main\basic.html:51
+msgid "Мой профиль"
+msgstr "My profile"
+
+#: .\main\templates\main\basic.html:52
+msgid "Изменить личные данные"
+msgstr "Change personal data"
+
+#: .\main\templates\main\basic.html:53
+msgid "Изменить пароль"
+msgstr "Change Password"
+
+#: .\main\templates\main\basic.html:55
+msgid "Выйти"
+msgstr "Log off"
+
+#: .\main\templates\main\basic.html:57
+msgid "Удалить"
+msgstr "Delete"
+
+#: .\main\templates\main\basic.html:61
+msgid "Регистрация"
+msgstr "Check in"
+
+#: .\main\templates\main\basic.html:62
+msgid "Вход"
+msgstr "Log in"
+
+#: .\main\templates\main\basic.html:72
+msgid "Поиск"
+msgstr "Search"
+
+#: .\main\templates\main\basic.html:75
+msgid "Найти"
+msgstr "To find"
+
+#: .\main\templates\main\basic.html:90
+msgid "О сайте"
+msgstr "About the site"
 
 #: .\main\templates\main\index.html:5
 msgid "Последние"
@@ -278,6 +329,46 @@ msgstr "tests"
 #: .\main\templates\main\index.html:8
 msgid "Последние опубликованные"
 msgstr "Latest published"
+
+#: .\main\templates\main\index.html:12
+msgid "Номер"
+msgstr "Number"
+
+#: .\main\templates\main\index.html:12
+msgid "п/п"
+msgstr "in order"
+
+#: .\main\templates\main\index.html:13
+msgid "Предмет"
+msgstr "Subject"
+
+#: .\main\templates\main\index.html:13
+msgid "урок"
+msgstr "lesson"
+
+#: .\main\templates\main\index.html:16
+msgid "Количество"
+msgstr "Number"
+
+#: .\main\templates\main\index.html:16
+msgid "баллов"
+msgstr "of balls"
+
+#: .\main\templates\main\index.html:17
+msgid "Для групп"
+msgstr "For groups"
+
+#: .\main\templates\main\index.html:17
+msgid "классов"
+msgstr "classes"
+
+#: .\main\templates\main\index.html:18
+msgid "Последнее"
+msgstr "Last"
+
+#: .\main\templates\main\index.html:18
+msgid "изменение"
+msgstr "modified"
 
 #: .\testing\settings.py:129
 msgid "Russian"

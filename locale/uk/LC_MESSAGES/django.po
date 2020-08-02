@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-01 19:47+0300\n"
+"POT-Creation-Date: 2020-08-02 14:27+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,263 +21,366 @@ msgstr ""
 "100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
-#: .\main\admin.py:54
+#: .\main\admin.py:55
 msgid "Personal info"
 msgstr ""
 
-#: .\main\admin.py:55
+#: .\main\admin.py:56
 msgid "Permissions"
 msgstr ""
 
-#: .\main\admin.py:58
+#: .\main\admin.py:59
 msgid "Important dates"
 msgstr ""
 
 #: .\main\models.py:12
 msgid "Подтверждение аккаунта"
-msgstr ""
+msgstr "Підтвердження облікового запису"
 
 #: .\main\models.py:13
 msgid "Пользовательский аккаунт, который прошел процесс подтверждения"
-msgstr ""
+msgstr "Користувальницький аккаунт, який пройшов процес підтвердження"
 
 #: .\main\models.py:33 .\main\models.py:53
 msgid "Название"
-msgstr ""
+msgstr "Назва"
 
 #: .\main\models.py:34
 msgid "Название класса или группы"
-msgstr ""
+msgstr "Назва класу або групи"
 
 #: .\main\models.py:35 .\main\models.py:55 .\main\models.py:79
 msgid "Статус отображения"
-msgstr ""
+msgstr "Статус відображення"
 
 #: .\main\models.py:36
 msgid "Отображение группы (класса) на сайте"
-msgstr ""
+msgstr "Відображення групи (класу) на сайті"
 
 #: .\main\models.py:42
 msgid "Группа (класс)"
-msgstr ""
+msgstr "Група (клас)"
 
-#: .\main\models.py:43 .\main\models.py:73
+#: .\main\models.py:43 .\main\models.py:73 .\main\templates\main\basic.html:85
 msgid "Группы (классы)"
-msgstr ""
+msgstr "Групи (класи)"
 
 #: .\main\models.py:47 .\main\models.py:66 .\main\models.py:95
 msgid "отображается"
-msgstr ""
+msgstr "відображається"
 
 #: .\main\models.py:49 .\main\models.py:68 .\main\models.py:97
 msgid "не отображается"
-msgstr ""
+msgstr "не відображається"
 
 #: .\main\models.py:54
 msgid "Предмет, знания которого проверяются в тесте"
-msgstr ""
+msgstr "Предмет, знання якого перевіряються в тесті"
 
 #: .\main\models.py:56
 msgid "Отображение предмета на сайте"
-msgstr ""
+msgstr "Відображення предмета на сайті"
 
 #: .\main\models.py:61 .\main\models.py:72
 msgid "Предмет (урок)"
-msgstr ""
+msgstr "Предмет (урок)"
 
-#: .\main\models.py:62
+#: .\main\models.py:62 .\main\templates\main\basic.html:80
 msgid "Предметы (уроки)"
-msgstr ""
+msgstr "Предмети (уроки)"
 
 #: .\main\models.py:74
 msgid "Названия групп (классов) где проводится тест"
-msgstr ""
+msgstr "Назви груп (класів) де проводиться тест"
 
-#: .\main\models.py:75
+#: .\main\models.py:75 .\main\templates\main\index.html:14
 msgid "Название теста"
-msgstr ""
+msgstr "Назва тесту"
 
 #: .\main\models.py:75
 msgid "Короткое название теста"
-msgstr ""
+msgstr "Коротка назва тесту"
 
 #: .\main\models.py:76
 msgid "Максимальная оценка"
-msgstr ""
+msgstr "Максимальна оцінка"
 
 #: .\main\models.py:77
 msgid "Максимальная оценка за все правильные ответы в тесте"
-msgstr ""
+msgstr "Максимальна оцінка за всі правильні відповіді в тесті"
 
-#: .\main\models.py:78
+#: .\main\models.py:78 .\main\templates\main\index.html:15
 msgid "Описание теста"
-msgstr ""
+msgstr "Опис тесту"
 
 #: .\main\models.py:78
 msgid "Полное описание теста"
-msgstr ""
+msgstr "Повний опис тесту"
 
 #: .\main\models.py:80
 msgid "Отображение теста на сайте"
-msgstr ""
+msgstr "Відображення тесту на сайті"
 
 #: .\main\models.py:85
 msgid "Тест (билет)"
-msgstr ""
+msgstr "Тест (квиток)"
 
 #: .\main\models.py:86
 msgid "Тесты (билеты)"
-msgstr ""
+msgstr "Тести (квитки)"
 
 #: .\main\models.py:102 .\main\models.py:115
 msgid "Задание"
-msgstr ""
+msgstr "Завдання"
 
 #: .\main\models.py:102
-msgid "Описание задаваемого вопроса в тесте"
+msgid "Опис питання, що задається  в тесті"
 msgstr ""
 
 #: .\main\models.py:103
 msgid "Балов за ответ"
-msgstr ""
+msgstr "Балов за відповідь"
 
 #: .\main\models.py:104
 msgid "Количество балов начисленных за правильный ответ"
-msgstr ""
+msgstr "Кількість балів нарахованих за правильну відповідь"
 
 #: .\main\models.py:105
 msgid "Вариант"
-msgstr ""
+msgstr "Варіант"
 
 #: .\main\models.py:106
 msgid "При создании нескольких вариантов теста"
-msgstr ""
+msgstr "При створенні декількох варіантів тесту"
 
 #: .\main\models.py:107
 msgid "Множественный выбор"
-msgstr ""
+msgstr "Множинний вибір"
 
 #: .\main\models.py:108
-msgid ""
-"Предоставить пользователю возможность выбора нескольких вариантов ответа"
-msgstr ""
+msgid "Предоставить пользователю возможность выбора нескольких вариантов ответа"
+msgstr "Надати користувачеві можливість вибору декількох варіантів відповіді"
 
 #: .\main\models.py:109
 msgid "Задание учтено"
-msgstr ""
+msgstr "Завдання враховано"
 
 #: .\main\models.py:110
 msgid "Учитывать вопрос в тесте"
-msgstr ""
+msgstr "Враховувати питання в тесті"
 
 #: .\main\models.py:116
 msgid "Задания"
-msgstr ""
+msgstr "Завдання"
 
 #: .\main\models.py:139
 msgid "Вопрос"
-msgstr ""
+msgstr "Запитання"
 
 #: .\main\models.py:140 .\main\models.py:148
 msgid "Ответ"
-msgstr ""
+msgstr "Відповідь"
 
 #: .\main\models.py:140
 msgid "Описание возможного ответа"
-msgstr ""
+msgstr "Опис можливої ​​відповіді"
 
 #: .\main\models.py:141
 msgid "Правильный ответ"
-msgstr ""
+msgstr "Правильна відповідь"
 
 #: .\main\models.py:142
 msgid "Статус правильного ответ на вопорос"
-msgstr ""
+msgstr "Статус правильної відповіді на запитання"
 
 #: .\main\models.py:143
 msgid "Ответ учтен"
-msgstr ""
+msgstr "Відповідь врахована"
 
 #: .\main\models.py:144
 msgid "Учитывать ответ при отображении вопроса"
-msgstr ""
+msgstr "Враховувати відповідь при відображенні запитання"
 
 #: .\main\models.py:149
 msgid "Ответы"
-msgstr ""
+msgstr "Відповіді"
 
 #: .\main\models.py:164 .\main\models.py:186
 msgid "Тест"
-msgstr ""
+msgstr "Тест"
 
 #: .\main\models.py:165
 msgid "Пользователь"
-msgstr ""
+msgstr "Користувач"
 
 #: .\main\models.py:166
 msgid "Оценка за тест"
-msgstr ""
+msgstr "Оцінка за тест"
 
 #: .\main\models.py:167
 msgid "Закончен"
-msgstr ""
+msgstr "Закінчено"
 
 #: .\main\models.py:168
 msgid "Прохождение теста закончено"
-msgstr ""
+msgstr "Проходження тесту закінчено"
 
 #: .\main\models.py:172
 msgid "Сданный тест"
-msgstr ""
+msgstr "Зданий тест"
 
 #: .\main\models.py:173
 msgid "Сданные тесты"
-msgstr ""
+msgstr "Здані тести"
 
 #: .\main\models.py:182 .\main\models.py:198 .\main\models.py:200
 msgid "Балов"
-msgstr ""
+msgstr "Балів"
 
 #: .\main\models.py:187
 msgid "Выбранный ответ"
-msgstr ""
+msgstr "Обрана відповідь"
 
 #: .\main\models.py:188
 msgid "Дата ответа"
-msgstr ""
+msgstr "Дата відповіді"
 
 #: .\main\models.py:192
 msgid "Ответил"
-msgstr ""
+msgstr "Відповив"
 
 #: .\main\models.py:193
 msgid "Ответили"
-msgstr ""
+msgstr "Відповіли"
 
 #: .\main\models.py:202
 msgid "Один из"
-msgstr ""
+msgstr "Один з"
 
 #: .\main\models.py:204
 msgid "Все из"
-msgstr ""
+msgstr "Усі з"
+
+#: .\main\templates\main\basic.html:13 .\main\templates\main\basic.html:68
+msgid "Главная"
+msgstr "Головна"
+
+#: .\main\templates\main\basic.html:13 .\main\templates\main\basic.html:19
+msgid "Тесты"
+msgstr "Тести"
+
+#: .\main\templates\main\basic.html:43
+msgid "Вход для учителей"
+msgstr "Вхід для вчителів"
+
+#: .\main\templates\main\basic.html:47
+msgid "Здравствуйте"
+msgstr "Доброго дня"
+
+#: .\main\templates\main\basic.html:49
+msgid "Профиль"
+msgstr "Профіль"
+
+#: .\main\templates\main\basic.html:51
+msgid "Мой профиль"
+msgstr "Мій профіль"
+
+#: .\main\templates\main\basic.html:52
+msgid "Изменить личные данные"
+msgstr "Змінити особисті дані"
+
+#: .\main\templates\main\basic.html:53
+msgid "Изменить пароль"
+msgstr "Змінити пароль"
+
+#: .\main\templates\main\basic.html:55
+msgid "Выйти"
+msgstr "Вийти"
+
+#: .\main\templates\main\basic.html:57
+msgid "Удалить"
+msgstr "Видалити"
+
+#: .\main\templates\main\basic.html:61
+msgid "Регистрация"
+msgstr "Реєстрація"
+
+#: .\main\templates\main\basic.html:62
+msgid "Вход"
+msgstr "Вхід"
+
+#: .\main\templates\main\basic.html:72
+msgid "Поиск"
+msgstr "Пошук"
+
+#: .\main\templates\main\basic.html:75
+msgid "Найти"
+msgstr "Знайти"
+
+#: .\main\templates\main\basic.html:90
+msgid "О сайте"
+msgstr "Про сайт"
 
 #: .\main\templates\main\index.html:5
 msgid "Последние"
-msgstr ""
+msgstr "Останні"
 
-#: .\main\templates\main\index.html:5
+#: .\main\templates\main\index.html:5 .\main\templates\main\index.html:8
 msgid "тестов"
-msgstr ""
+msgstr "тестів"
 
-#: .\testing\settings.py:127
+#: .\main\templates\main\index.html:8
+msgid "Последние опубликованные"
+msgstr "Останні опубліковані"
+
+#: .\main\templates\main\index.html:12
+msgid "Номер"
+msgstr "Номер"
+
+#: .\main\templates\main\index.html:12
+msgid "п/п"
+msgstr "з/п"
+
+#: .\main\templates\main\index.html:13
+msgid "Предмет"
+msgstr "Предмет"
+
+#: .\main\templates\main\index.html:13
+msgid "урок"
+msgstr "урок"
+
+#: .\main\templates\main\index.html:16
+msgid "Количество"
+msgstr "Кільксть"
+
+#: .\main\templates\main\index.html:16
+msgid "баллов"
+msgstr "балів"
+
+#: .\main\templates\main\index.html:17
+msgid "Для групп"
+msgstr "Для груп"
+
+#: .\main\templates\main\index.html:17
+msgid "классов"
+msgstr "класів"
+
+#: .\main\templates\main\index.html:18
+msgid "Последнее"
+msgstr "Остання"
+
+#: .\main\templates\main\index.html:18
+msgid "изменение"
+msgstr "зміна"
+
+#: .\testing\settings.py:129
 msgid "Russian"
 msgstr ""
 
-#: .\testing\settings.py:128
+#: .\testing\settings.py:130
 msgid "Ukrainian"
 msgstr ""
 
-#: .\testing\settings.py:129
+#: .\testing\settings.py:131
 msgid "English"
 msgstr ""
