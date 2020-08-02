@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+from django.utils.translation import gettext
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -31,6 +34,7 @@ ALLOWED_HOSTS = [os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1'), 'localhost
 # Application definition
 
 INSTALLED_APPS = [
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +50,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -116,7 +121,23 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'ru-ua'
+LANGUAGE_CODE = 'ru'
+
+gettext = lambda s: s
+
+LANGUAGES = (
+    ('ru', gettext('Russian')),
+    ('uk', gettext('Ukrainian')),
+    ('en', gettext('English')),
+)
+
+MULTILINGUAL_LANGUAGES = (
+    "en-us",
+    "ru",
+    "ua",
+)
+
+PREFIX_DEFAULT_LOCALE = ''
 
 TIME_ZONE = 'Europe/Kiev'
 
@@ -125,6 +146,11 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = False
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+    # os.path.join(BASE_DIR, 'main/locale')
+)
 
 
 # Static files (CSS, JavaScript, Images)

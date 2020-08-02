@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.utils.safestring import mark_safe
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
+from modeltranslation.admin import TranslationAdmin
 
 
 from .models import AdvUser, Lesson, Task, Question, Answer, Group, Test, Exam
@@ -62,7 +63,7 @@ class AdvUserAdmin(UserAdmin, admin.ModelAdmin):
     actions = (send_activation_notifications, )
 
 
-class LessonAdmin(admin.ModelAdmin):
+class LessonAdmin(TranslationAdmin):
     list_display = ('name', 'is_active', 'creator', 'modified')
     search_fields = ('name', )
     list_editable = ('is_active', )
@@ -88,8 +89,7 @@ class LessonAdmin(admin.ModelAdmin):
 
 admin.site.register(Lesson, LessonAdmin)
 
-
-class GroupAdmin(admin.ModelAdmin):
+class GroupAdmin(TranslationAdmin):
     list_display = ('name', 'is_active', 'creator', 'modified')
     search_fields = ('name',)
     list_editable = ('is_active', )

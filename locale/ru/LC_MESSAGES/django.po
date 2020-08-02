@@ -1,0 +1,282 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-08-01 19:48+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: .\main\admin.py:54
+msgid "Personal info"
+msgstr ""
+
+#: .\main\admin.py:55
+msgid "Permissions"
+msgstr ""
+
+#: .\main\admin.py:58
+msgid "Important dates"
+msgstr ""
+
+#: .\main\models.py:12
+msgid "Подтверждение аккаунта"
+msgstr ""
+
+#: .\main\models.py:13
+msgid "Пользовательский аккаунт, который прошел процесс подтверждения"
+msgstr ""
+
+#: .\main\models.py:33 .\main\models.py:53
+msgid "Название"
+msgstr ""
+
+#: .\main\models.py:34
+msgid "Название класса или группы"
+msgstr ""
+
+#: .\main\models.py:35 .\main\models.py:55 .\main\models.py:79
+msgid "Статус отображения"
+msgstr ""
+
+#: .\main\models.py:36
+msgid "Отображение группы (класса) на сайте"
+msgstr ""
+
+#: .\main\models.py:42
+msgid "Группа (класс)"
+msgstr ""
+
+#: .\main\models.py:43 .\main\models.py:73
+msgid "Группы (классы)"
+msgstr ""
+
+#: .\main\models.py:47 .\main\models.py:66 .\main\models.py:95
+msgid "отображается"
+msgstr ""
+
+#: .\main\models.py:49 .\main\models.py:68 .\main\models.py:97
+msgid "не отображается"
+msgstr ""
+
+#: .\main\models.py:54
+msgid "Предмет, знания которого проверяются в тесте"
+msgstr ""
+
+#: .\main\models.py:56
+msgid "Отображение предмета на сайте"
+msgstr ""
+
+#: .\main\models.py:61 .\main\models.py:72
+msgid "Предмет (урок)"
+msgstr ""
+
+#: .\main\models.py:62
+msgid "Предметы (уроки)"
+msgstr ""
+
+#: .\main\models.py:74
+msgid "Названия групп (классов) где проводится тест"
+msgstr ""
+
+#: .\main\models.py:75
+msgid "Название теста"
+msgstr ""
+
+#: .\main\models.py:75
+msgid "Короткое название теста"
+msgstr ""
+
+#: .\main\models.py:76
+msgid "Максимальная оценка"
+msgstr ""
+
+#: .\main\models.py:77
+msgid "Максимальная оценка за все правильные ответы в тесте"
+msgstr ""
+
+#: .\main\models.py:78
+msgid "Описание теста"
+msgstr ""
+
+#: .\main\models.py:78
+msgid "Полное описание теста"
+msgstr ""
+
+#: .\main\models.py:80
+msgid "Отображение теста на сайте"
+msgstr ""
+
+#: .\main\models.py:85
+msgid "Тест (билет)"
+msgstr ""
+
+#: .\main\models.py:86
+msgid "Тесты (билеты)"
+msgstr ""
+
+#: .\main\models.py:102 .\main\models.py:115
+msgid "Задание"
+msgstr ""
+
+#: .\main\models.py:102
+msgid "Описание задаваемого вопроса в тесте"
+msgstr ""
+
+#: .\main\models.py:103
+msgid "Балов за ответ"
+msgstr ""
+
+#: .\main\models.py:104
+msgid "Количество балов начисленных за правильный ответ"
+msgstr ""
+
+#: .\main\models.py:105
+msgid "Вариант"
+msgstr ""
+
+#: .\main\models.py:106
+msgid "При создании нескольких вариантов теста"
+msgstr ""
+
+#: .\main\models.py:107
+msgid "Множественный выбор"
+msgstr ""
+
+#: .\main\models.py:108
+msgid ""
+"Предоставить пользователю возможность выбора нескольких вариантов ответа"
+msgstr ""
+
+#: .\main\models.py:109
+msgid "Задание учтено"
+msgstr ""
+
+#: .\main\models.py:110
+msgid "Учитывать вопрос в тесте"
+msgstr ""
+
+#: .\main\models.py:116
+msgid "Задания"
+msgstr ""
+
+#: .\main\models.py:139
+msgid "Вопрос"
+msgstr ""
+
+#: .\main\models.py:140 .\main\models.py:148
+msgid "Ответ"
+msgstr ""
+
+#: .\main\models.py:140
+msgid "Описание возможного ответа"
+msgstr ""
+
+#: .\main\models.py:141
+msgid "Правильный ответ"
+msgstr ""
+
+#: .\main\models.py:142
+msgid "Статус правильного ответ на вопорос"
+msgstr ""
+
+#: .\main\models.py:143
+msgid "Ответ учтен"
+msgstr ""
+
+#: .\main\models.py:144
+msgid "Учитывать ответ при отображении вопроса"
+msgstr ""
+
+#: .\main\models.py:149
+msgid "Ответы"
+msgstr ""
+
+#: .\main\models.py:164 .\main\models.py:186
+msgid "Тест"
+msgstr ""
+
+#: .\main\models.py:165
+msgid "Пользователь"
+msgstr ""
+
+#: .\main\models.py:166
+msgid "Оценка за тест"
+msgstr ""
+
+#: .\main\models.py:167
+msgid "Закончен"
+msgstr ""
+
+#: .\main\models.py:168
+msgid "Прохождение теста закончено"
+msgstr ""
+
+#: .\main\models.py:172
+msgid "Сданный тест"
+msgstr ""
+
+#: .\main\models.py:173
+msgid "Сданные тесты"
+msgstr ""
+
+#: .\main\models.py:182 .\main\models.py:198 .\main\models.py:200
+msgid "Балов"
+msgstr ""
+
+#: .\main\models.py:187
+msgid "Выбранный ответ"
+msgstr ""
+
+#: .\main\models.py:188
+msgid "Дата ответа"
+msgstr ""
+
+#: .\main\models.py:192
+msgid "Ответил"
+msgstr ""
+
+#: .\main\models.py:193
+msgid "Ответили"
+msgstr ""
+
+#: .\main\models.py:202
+msgid "Один из"
+msgstr ""
+
+#: .\main\models.py:204
+msgid "Все из"
+msgstr ""
+
+#: .\main\templates\main\index.html:5
+msgid "Последние"
+msgstr ""
+
+#: .\main\templates\main\index.html:5
+msgid "тестов"
+msgstr ""
+
+#: .\testing\settings.py:127
+msgid "Russian"
+msgstr ""
+
+#: .\testing\settings.py:128
+msgid "Ukrainian"
+msgstr ""
+
+#: .\testing\settings.py:129
+msgid "English"
+msgstr ""

@@ -1,6 +1,8 @@
 {% extends "main/basic.html" %}
 
-{% block title %}Последние {{ count_limit }} тестов{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Последние" %} {{ count_limit }} {% trans "тестов" %}{% endblock %}
 
 {% block content %}
     <h2>Последние опубликованные {{ count_limit }} тестов</h2>
