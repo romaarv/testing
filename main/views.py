@@ -21,6 +21,7 @@ from django.views.generic import ListView
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Max, Sum #Q, OuterRef, Subquery
 import random
+from django.utils import translation
 
 from .models import *
 from .forms import ChangeUserInfoForm, RegisterUserForm
@@ -294,8 +295,17 @@ class SearchResultView (ListView):
 
     def get_queryset (self):
         sh = self.request.GET.get('search_text', '')
-        qs = Task.objects.filter(Q(lesson__name__icontains=sh) | Q(groups__name__icontains=sh) |
-                Q(max_score__icontains=sh) | Q(content__icontains=sh)).filter(is_active=True).distinct()
+        lenguage = translation.get_language()
+        if lenguage=='en':
+            qs = Task.objects.filter(Q(lesson__name_en__icontains=sh) | Q(groups__name_en__icontains=sh) |
+                    Q(max_score__icontains=sh) | Q(content__icontains=sh)).filter(is_active=True).distinct()
+        if lenguage=='ru':
+            qs = Task.objects.filter(Q(lesson__name__icontains=sh) | Q(groups__name__icontains=sh) |
+                    Q(max_score__icontains=sh) | Q(content__icontains=sh)).filter(is_active=True).distinct()
+        if lenguage=='uk':
+            qs = Task.objects.filter(Q(lesson__name_uk__icontains=sh) | Q(groups__name_uk__icontains=sh) |
+                    Q(max_score__icontains=sh) | Q(content__icontains=sh)).filter(is_active=True).distinct()
+
         for test in qs:
             if self.request.user.is_authenticated and not self.request.user.is_staff:
                 test_ = Test.objects.filter(user=self.request.user.id, task=test.id, is_end=True)
