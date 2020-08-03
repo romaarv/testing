@@ -21,7 +21,7 @@ from django.views.generic import ListView
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Max, Sum #Q, OuterRef, Subquery
 import random
-# from django.utils import translation
+from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 
 from .models import *
