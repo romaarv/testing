@@ -1,9 +1,12 @@
 {% extends "main/basic.html" %}
 
-{% block title %}Ошибка при активации{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans 'Ошибка при активации' %}{% endblock %}
 
 {% block content %}
-    <h2>Активация</h2>
-    <h5 class="text-danger">Активация пользователя прошла неудачно.</h5>
-    <h5>Попробуйте пройти <a href="{% url 'main:register' %}">регистрирацию</a> еще раз.</h5>
+    <h2>{% trans 'Активация' %}</h2>
+    <h5 class="text-danger">{% trans 'Активация пользователя прошла неудачно' %}.</h5>
+    <h5>{% trans 'Попробуйте пройти' %} <a href="{% url 'main:register' %}">
+        {% trans 'регистрирацию' %}</a> {% trans 'еще раз' %}.</h5>
 {% endblock %}

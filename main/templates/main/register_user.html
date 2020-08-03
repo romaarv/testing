@@ -4,14 +4,16 @@
 
 {% load static %}
 
-{% block title %}Регистрация{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Регистрация" %}{% endblock %}
 
 {% block content %}
-<h2>Регистрация нового пользователя</h2>
+<h2>{% trans "Регистрация нового пользователя" %}</h2>
 <form method="post">
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
-    {% buttons submit='Зарегистрироваться' %}{% endbuttons %}
+    <button type='submit' class="btn btn-outline-primary">{% trans "Зарегистрироваться" %}</button>
 </form>
 {% endblock %}
 

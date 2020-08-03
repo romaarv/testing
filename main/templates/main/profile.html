@@ -1,29 +1,32 @@
 {% extends "main/basic.html" %}
 
 {% load static %}
+
 {% load bootstrap4 %}
+
+{% load i18n %}
 
 {% load filtersandtags %}
 
-{% block title %}Профиль пользователя{% endblock %}
+{% block title %}{% trans "Профиль пользователя" %}{% endblock %}
 
 {% block content %}
-    <h2>Профиль пользователя {{ user.username }}</h2><br>
+    <h2>{% trans "Профиль пользователя" %} {{ user.username }}</h2><br>
     <h5>{{ user }}!</h5>
     {% if not user.is_staff %}
         {% if tests %}
-            <h5>Ваши пройденные тесты</h5>
+            <h5>{% trans "Ваши пройденные тесты" %}</h5>
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">Номер<br>п/п</th>
-                        <th scope="col">Предмет<br>(урок)</th>
-                        <th scope="col">Название теста</th>
-                        <th scope="col">Описание теста</th>
-                        <th scope="col">Оценка за<br>тест</th>
-                        <th scope="col">Для групп<br>(классов)</th>
-                        <th scope="col">Начат<br>теста</th>
-                        <th scope="col">Завершен<br>теста</th>
+                        <th scope="col">{% trans "Номер" %}<br>{% trans "п/п" %}</th>
+                        <th scope="col">{% trans "Предмет" %}<br>({% trans "урок" %})</th>
+                        <th scope="col">{% trans "Название теста" %}</th>
+                        <th scope="col">{% trans "Описание теста" %}</th>
+                        <th scope="col">{% trans "Оценка за" %}<br>{% trans "тест" %}</th>
+                        <th scope="col">{% trans "Для групп" %}<br>({% trans "классов" %})</th>
+                        <th scope="col">{% trans "Начало" %}<br>{% trans "теста" %}</th>
+                        <th scope="col">{% trans "Завершение" %}<br>{% trans "теста" %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,7 +53,7 @@
                 </tbody>
             </table>
         {% else%}
-            <h5 class="text-danger">Вы не прошли ни одного теста</h5>
+            <h5 class="text-danger">{% trans "Вы не прошли ни одного теста" %}.</h5>
         {% endif %}
         {% bootstrap_pagination page url=keyword %}
     {% endif %}

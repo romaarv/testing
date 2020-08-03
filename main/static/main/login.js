@@ -8,7 +8,7 @@ $("#id_username").change(function(){
             url:'/check_username_exist/',
             type:'POST',
             headers:{"X-CSRFToken": csrftoken },
-            data:{username:username}
+            data:{username: username }
         })
         .done(function(response){
             console.log(response);

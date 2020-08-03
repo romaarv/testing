@@ -17,10 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.i18n import i18n_patterns
 
+from main.ajax import *
+
 
 urlpatterns = [
     path('social/', include('social_django.urls', namespace='social')),
     path('admin/', admin.site.urls),
+    path('check_username_exist/', check_username_exist),
     path('i18n/', include('django.conf.urls.i18n')),
 ]
 

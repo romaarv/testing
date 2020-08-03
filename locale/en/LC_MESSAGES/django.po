@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-02 20:21+0300\n"
+"POT-Creation-Date: 2020-08-03 11:02+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,6 +28,45 @@ msgstr ""
 
 #: .\main\admin.py:59
 msgid "Important dates"
+msgstr ""
+
+#: .\main\apps.py:7 .\main\templates\main\start_testing.html:5
+#: .\main\templates\main\testing.html:5
+#, fuzzy
+#| msgid "Название"
+msgid "Тестирование"
+msgstr "Name"
+
+#: .\main\forms.py:10 .\main\forms.py:21
+msgid "Логин"
+msgstr ""
+
+#: .\main\forms.py:11 .\main\forms.py:22
+msgid "Адрес электронной почты"
+msgstr ""
+
+#: .\main\forms.py:12 .\main\forms.py:23
+msgid "Имя"
+msgstr ""
+
+#: .\main\forms.py:13 .\main\forms.py:24
+msgid "Фамилия"
+msgstr ""
+
+#: .\main\forms.py:25
+msgid "Пароль"
+msgstr ""
+
+#: .\main\forms.py:27
+msgid "Пароль (повторно)"
+msgstr ""
+
+#: .\main\forms.py:28
+msgid "Введите тот же самый пароль еще раз для проверки"
+msgstr ""
+
+#: .\main\forms.py:44
+msgid "Введенные пароли не совпадают"
 msgstr ""
 
 #: .\main\models.py:12
@@ -79,6 +118,7 @@ msgid "Отображение предмета на сайте"
 msgstr "Displaying the lesson on the site"
 
 #: .\main\models.py:61 .\main\models.py:72
+#: .\main\templates\main\start_testing.html:15
 #: .\main\templates\main\task_list.html:12
 msgid "Предмет (урок)"
 msgstr "Lesson"
@@ -92,6 +132,7 @@ msgid "Названия групп (классов) где проводится 
 msgstr "Names of groups (classes) where the test is conducted"
 
 #: .\main\models.py:75 .\main\templates\main\index.html:14
+#: .\main\templates\main\profile.html:24
 #: .\main\templates\main\search_results.html:22
 #: .\main\templates\main\task_for_group_list.html:18
 #: .\main\templates\main\task_list.html:17
@@ -111,6 +152,7 @@ msgid "Максимальная оценка за все правильные о
 msgstr "Maximum score for all correct answers in the test"
 
 #: .\main\models.py:78 .\main\templates\main\index.html:15
+#: .\main\templates\main\profile.html:25
 #: .\main\templates\main\search_results.html:23
 #: .\main\templates\main\task_for_group_list.html:19
 #: .\main\templates\main\task_list.html:18
@@ -178,7 +220,7 @@ msgstr "The task was taken into account"
 msgid "Задания"
 msgstr "Tasks"
 
-#: .\main\models.py:139
+#: .\main\models.py:139 .\main\templates\main\testing.html:13
 msgid "Вопрос"
 msgstr "Question"
 
@@ -211,6 +253,8 @@ msgid "Ответы"
 msgstr "Answers"
 
 #: .\main\models.py:164 .\main\models.py:186
+#: .\main\templates\main\start_testing.html:12
+#: .\main\templates\main\testing.html:9
 msgid "Тест"
 msgstr "Test"
 
@@ -285,6 +329,95 @@ msgstr ""
 msgid "Все права принадлежат"
 msgstr "All rights reserved"
 
+#: .\main\templates\main\activation_done.html:5
+msgid "Активация выполнена"
+msgstr ""
+
+#: .\main\templates\main\activation_done.html:8
+#: .\main\templates\main\bad_signature.html:8
+#: .\main\templates\main\user_is_activated.html:8
+#, fuzzy
+#| msgid "Регистрация"
+msgid "Активация"
+msgstr "Check in"
+
+#: .\main\templates\main\activation_done.html:9
+#: .\main\templates\main\basic.html:47
+#: .\main\templates\main\user_is_activated.html:9
+msgid "Здравствуйте"
+msgstr "Hello"
+
+#: .\main\templates\main\activation_done.html:10
+#: .\main\templates\main\user_is_activated.html:10
+#, fuzzy
+#| msgid "Пользователь"
+msgid "Пользователь с логином"
+msgstr "User"
+
+#: .\main\templates\main\activation_done.html:10
+msgid "успешно активирован"
+msgstr ""
+
+#: .\main\templates\main\activation_done.html:12
+#: .\main\templates\main\user_is_activated.html:12
+msgid "Данный сеанс использует пользователь с логином"
+msgstr ""
+
+#: .\main\templates\main\activation_done.html:13
+#: .\main\templates\main\user_is_activated.html:13
+msgid "Для смены пользователя Вам необходимо"
+msgstr ""
+
+#: .\main\templates\main\activation_done.html:14
+#: .\main\templates\main\user_is_activated.html:14
+#, fuzzy
+#| msgid "Выйти"
+msgid "выйти"
+msgstr "Log off"
+
+#: .\main\templates\main\activation_done.html:14
+msgid "с текущего сеанс"
+msgstr ""
+
+#: .\main\templates\main\activation_done.html:16
+#: .\main\templates\main\user_is_activated.html:16
+msgid "Вы можете"
+msgstr ""
+
+#: .\main\templates\main\activation_done.html:16
+#: .\main\templates\main\user_is_activated.html:16
+msgid "войти"
+msgstr ""
+
+#: .\main\templates\main\activation_done.html:16
+#: .\main\templates\main\user_is_activated.html:16
+#, fuzzy
+#| msgid "О сайте"
+msgid "на сайт"
+msgstr "About the site"
+
+#: .\main\templates\main\bad_signature.html:5
+msgid "Ошибка при активации"
+msgstr ""
+
+#: .\main\templates\main\bad_signature.html:9
+msgid "Активация пользователя прошла неудачно"
+msgstr ""
+
+#: .\main\templates\main\bad_signature.html:10
+msgid "Попробуйте пройти"
+msgstr ""
+
+#: .\main\templates\main\bad_signature.html:11
+#, fuzzy
+#| msgid "Регистрация"
+msgid "регистрирацию"
+msgstr "Check in"
+
+#: .\main\templates\main\bad_signature.html:11
+msgid "еще раз"
+msgstr ""
+
 #: .\main\templates\main\basic.html:13 .\main\templates\main\basic.html:68
 msgid "Главная"
 msgstr "Home page"
@@ -296,10 +429,6 @@ msgstr "Tests"
 #: .\main\templates\main\basic.html:43
 msgid "Вход для учителей"
 msgstr "Login for teachers"
-
-#: .\main\templates\main\basic.html:47
-msgid "Здравствуйте"
-msgstr "Hello"
 
 #: .\main\templates\main\basic.html:49
 msgid "Профиль"
@@ -322,14 +451,18 @@ msgid "Выйти"
 msgstr "Log off"
 
 #: .\main\templates\main\basic.html:57
+#: .\main\templates\main\delete_user.html:13
 msgid "Удалить"
 msgstr "Delete"
 
 #: .\main\templates\main\basic.html:61
+#: .\main\templates\main\register_done.html:8
+#: .\main\templates\main\register_user.html:9
 msgid "Регистрация"
 msgstr "Check in"
 
-#: .\main\templates\main\basic.html:62
+#: .\main\templates\main\basic.html:62 .\main\templates\main\login.html:9
+#: .\main\templates\main\login.html:12
 msgid "Вход"
 msgstr "Log in"
 
@@ -340,6 +473,29 @@ msgstr "Search"
 #: .\main\templates\main\basic.html:75
 msgid "Найти"
 msgstr "To find"
+
+#: .\main\templates\main\change_user_info.html:7
+#, fuzzy
+#| msgid "Изменить личные данные"
+msgid "Правка личных данных"
+msgstr "Change personal data"
+
+#: .\main\templates\main\change_user_info.html:10
+msgid "Правка личных данных пользователя"
+msgstr ""
+
+#: .\main\templates\main\change_user_info.html:14
+#, fuzzy
+#| msgid "Изменить пароль"
+msgid "Сохранить"
+msgstr "Change Password"
+
+#: .\main\templates\main\delete_user.html:7
+#: .\main\templates\main\delete_user.html:10
+#, fuzzy
+#| msgid "Пользователь"
+msgid "Удаление пользователя"
+msgstr "User"
 
 #: .\main\templates\main\index.html:5
 msgid "Последние"
@@ -353,26 +509,26 @@ msgstr "tests"
 msgid "Последние опубликованные"
 msgstr "Latest published"
 
-#: .\main\templates\main\index.html:12
+#: .\main\templates\main\index.html:12 .\main\templates\main\profile.html:22
 #: .\main\templates\main\search_results.html:20
 #: .\main\templates\main\task_for_group_list.html:16
 #: .\main\templates\main\task_list.html:16
 msgid "Номер"
 msgstr "Number"
 
-#: .\main\templates\main\index.html:12
+#: .\main\templates\main\index.html:12 .\main\templates\main\profile.html:22
 #: .\main\templates\main\search_results.html:20
 #: .\main\templates\main\task_for_group_list.html:16
 msgid "п/п"
 msgstr "in order"
 
-#: .\main\templates\main\index.html:13
+#: .\main\templates\main\index.html:13 .\main\templates\main\profile.html:23
 #: .\main\templates\main\search_results.html:21
 #: .\main\templates\main\task_for_group_list.html:17
 msgid "Предмет"
 msgstr "Subject"
 
-#: .\main\templates\main\index.html:13
+#: .\main\templates\main\index.html:13 .\main\templates\main\profile.html:23
 #: .\main\templates\main\search_results.html:21
 #: .\main\templates\main\task_for_group_list.html:17
 msgid "урок"
@@ -392,13 +548,13 @@ msgstr "Number"
 msgid "баллов"
 msgstr "of balls"
 
-#: .\main\templates\main\index.html:17
+#: .\main\templates\main\index.html:17 .\main\templates\main\profile.html:27
 #: .\main\templates\main\search_results.html:25
 #: .\main\templates\main\task_list.html:20
 msgid "Для групп"
 msgstr "For groups"
 
-#: .\main\templates\main\index.html:17
+#: .\main\templates\main\index.html:17 .\main\templates\main\profile.html:27
 #: .\main\templates\main\search_results.html:25
 #: .\main\templates\main\task_list.html:20
 msgid "классов"
@@ -418,6 +574,192 @@ msgstr "Last"
 msgid "изменение"
 msgstr "modified"
 
+#: .\main\templates\main\login.html:14
+msgid "Вы уже выполнили вход"
+msgstr ""
+
+#: .\main\templates\main\login.html:20
+#, fuzzy
+#| msgid "Изменить пароль"
+msgid "Забыли пароль"
+msgstr "Change Password"
+
+#: .\main\templates\main\login.html:21
+msgid "Войти"
+msgstr ""
+
+#: .\main\templates\main\login.html:23
+msgid "Войти через"
+msgstr ""
+
+#: .\main\templates\main\logout.html:5 .\main\templates\main\logout.html:8
+msgid "Выход"
+msgstr ""
+
+#: .\main\templates\main\logout.html:9
+msgid "Вы успешно вышли с сайта"
+msgstr ""
+
+#: .\main\templates\main\password_change.html:7
+#, fuzzy
+#| msgid "Изменить пароль"
+msgid "Смена пароля"
+msgstr "Change Password"
+
+#: .\main\templates\main\password_change.html:10
+#, fuzzy
+#| msgid "Пользователь"
+msgid "Смена пароля пользователя"
+msgstr "User"
+
+#: .\main\templates\main\password_change.html:14
+#, fuzzy
+#| msgid "Изменить пароль"
+msgid "Сменить пароль"
+msgstr "Change Password"
+
+#: .\main\templates\main\password_reset_complete.html:5 .\main\views.py:37
+msgid "Пароль сброшен"
+msgstr ""
+
+#: .\main\templates\main\password_reset_complete.html:12 .\main\views.py:53
+msgid "Пароль успешно сброшен"
+msgstr ""
+
+#: .\main\templates\main\password_reset_complete.html:15
+msgid "Ваш пароль установлен. Вы можете войти по"
+msgstr ""
+
+#: .\main\templates\main\password_reset_complete.html:16
+msgid "ссылке"
+msgstr ""
+
+#: .\main\templates\main\password_reset_complete.html:16
+msgid "сейчас"
+msgstr ""
+
+#: .\main\templates\main\password_reset_confirm.html:5
+#: .\main\templates\main\password_reset_confirm.html:12
+#, fuzzy
+#| msgid "Изменить пароль"
+msgid "Изменение пароля"
+msgstr "Change Password"
+
+#: .\main\templates\main\password_reset_confirm.html:27
+#, fuzzy
+#| msgid "Изменить пароль"
+msgid "Изменить"
+msgstr "Change Password"
+
+#: .\main\templates\main\password_reset_done.html:6
+msgid ""
+"Мы отпраили Вам инструкцию по установке нового пароля, если такой email "
+"существует"
+msgstr ""
+
+#: .\main\templates\main\password_reset_email.html:3
+msgid ""
+"Кто-то отправил запрос на смену пароля у пользователя с почтовым адресом"
+msgstr ""
+
+#: .\main\templates\main\password_reset_email.html:4
+msgid "Для установления нового пароля перейдите по ссылке"
+msgstr ""
+
+#: .\main\templates\main\password_reset_email.html:7
+msgid "Ваш логин, если Вы забыли"
+msgstr ""
+
+#: .\main\templates\main\password_reset_email.html:10
+msgid "С уважением, администрация сайта \"Тесты\""
+msgstr ""
+
+#: .\main\templates\main\password_reset_form.html:5
+#, fuzzy
+#| msgid "Изменить пароль"
+msgid "Сброс пароля"
+msgstr "Change Password"
+
+#: .\main\templates\main\password_reset_form.html:10
+msgid "Сброс Вашего пароля"
+msgstr ""
+
+#: .\main\templates\main\password_reset_form.html:16
+msgid "Отправить"
+msgstr ""
+
+#: .\main\templates\main\profile.html:11 .\main\templates\main\profile.html:14
+#, fuzzy
+#| msgid "Пользователь"
+msgid "Профиль пользователя"
+msgstr "User"
+
+#: .\main\templates\main\profile.html:18
+#, fuzzy
+#| msgid "Сданные тесты"
+msgid "Ваши пройденные тесты"
+msgstr "Passed tests"
+
+#: .\main\templates\main\profile.html:26
+#, fuzzy
+#| msgid "Оценка за тест"
+msgid "Оценка за"
+msgstr "Test score"
+
+#: .\main\templates\main\profile.html:26
+#, fuzzy
+#| msgid "тестов"
+msgid "тест"
+msgstr "tests"
+
+#: .\main\templates\main\profile.html:28
+msgid "Начало"
+msgstr ""
+
+#: .\main\templates\main\profile.html:28 .\main\templates\main\profile.html:29
+#, fuzzy
+#| msgid "тестов"
+msgid "теста"
+msgstr "tests"
+
+#: .\main\templates\main\profile.html:29
+#, fuzzy
+#| msgid "изменение"
+msgid "Завершение"
+msgstr "modified"
+
+#: .\main\templates\main\profile.html:56
+#, fuzzy
+#| msgid "Описание возможного ответа"
+msgid "Вы не прошли ни одного теста"
+msgstr "Description of a possible answer"
+
+#: .\main\templates\main\register_done.html:5
+#, fuzzy
+#| msgid "Регистрация"
+msgid "Регистрация завершена"
+msgstr "Check in"
+
+#: .\main\templates\main\register_done.html:9
+msgid "Регистрация пользователя завершена"
+msgstr ""
+
+#: .\main\templates\main\register_done.html:10
+msgid ""
+"На адрес электронной почты, указанный пользователем, выслано письмо для "
+"активации"
+msgstr ""
+
+#: .\main\templates\main\register_user.html:12
+msgid "Регистрация нового пользователя"
+msgstr ""
+
+#: .\main\templates\main\register_user.html:16
+#, fuzzy
+#| msgid "Регистрация"
+msgid "Зарегистрироваться"
+msgstr "Check in"
+
 #: .\main\templates\main\search_results.html:9
 msgid "Поиск теста (билета)"
 msgstr "Search test (ticket)"
@@ -430,9 +772,109 @@ msgstr "Tests (tickets) containing"
 msgid "Все тесты (билеты)"
 msgstr "All tests (tickets)"
 
+#: .\main\templates\main\start_testing.html:9
+msgid "Тесты для учителей не предусмотрены"
+msgstr ""
+
+#: .\main\templates\main\start_testing.html:10
+#: .\main\templates\main\start_testing.html:25
+msgid "Назад"
+msgstr ""
+
+#: .\main\templates\main\start_testing.html:14
+#, fuzzy
+#| msgid "Описание теста"
+msgid "Описание"
+msgstr "Test description"
+
+#: .\main\templates\main\start_testing.html:16
+#, fuzzy
+#| msgid "Максимальная оценка"
+msgid "Максимальная оценка за тест"
+msgstr "Maximum score"
+
+#: .\main\templates\main\start_testing.html:17
+#, fuzzy
+#| msgid "Для группы (класса)"
+msgid "Для групп (классов)"
+msgstr "For a group (class)"
+
+#: .\main\templates\main\start_testing.html:19
+#, fuzzy
+#| msgid "Тест (билет)"
+msgid "Тест пройден: Нет"
+msgstr "Test (ticket)"
+
+#: .\main\templates\main\start_testing.html:21
+msgid "Тест пройден: Да"
+msgstr ""
+
+#: .\main\templates\main\start_testing.html:29
+#: .\main\templates\main\start_testing.html:32
+msgid "Начать"
+msgstr ""
+
 #: .\main\templates\main\task_for_group_list.html:12
 msgid "Для группы (класса)"
 msgstr "For a group (class)"
+
+#: .\main\templates\main\testing.html:11
+msgid "Текущий вопрос"
+msgstr ""
+
+#: .\main\templates\main\testing.html:17
+#, fuzzy
+#| msgid "При создании нескольких вариантов теста"
+msgid "Выберите несколько вариантов"
+msgstr "When creating multiple test cases"
+
+#: .\main\templates\main\testing.html:19
+msgid "Выберите любой правильный вариант"
+msgstr ""
+
+#: .\main\templates\main\testing.html:34
+msgid "Далее"
+msgstr ""
+
+#: .\main\templates\main\user_is_activated.html:5
+#, fuzzy
+#| msgid "Пользователь"
+msgid "Пользователь уже активирован"
+msgstr "User"
+
+#: .\main\templates\main\user_is_activated.html:10
+msgid "был активирован ранее"
+msgstr ""
+
+#: .\main\templates\main\user_is_activated.html:14
+msgid "с текущего сеанса"
+msgstr ""
+
+#: .\main\views.py:42
+msgid "Письмо на сброс пароля отправлено"
+msgstr ""
+
+#: .\main\views.py:48
+#, fuzzy
+#| msgid "Изменить пароль"
+msgid "Введите новый пароль"
+msgstr "Change Password"
+
+#: .\main\views.py:151
+msgid "Личные данные пользователя изменены"
+msgstr ""
+
+#: .\main\views.py:166
+#, fuzzy
+#| msgid "Пользователь"
+msgid "Пароль пользователя изменен"
+msgstr "User"
+
+#: .\main\views.py:208
+#, fuzzy
+#| msgid "Пользователь"
+msgid "Пользователь удален"
+msgstr "User"
 
 #: .\testing\settings.py:129
 msgid "Russian"

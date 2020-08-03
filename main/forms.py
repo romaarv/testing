@@ -1,15 +1,16 @@
 from django import forms
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from .models import AdvUser, user_registrated
 
 
 class ChangeUserInfoForm(forms.ModelForm):
-    username = forms.CharField(required=True, label='Логин')
-    email = forms.EmailField(required=True, label='Адрес электронной почты')
-    first_name = forms.CharField(required=True, label='Имя')
-    last_name = forms.CharField(required=True, label='Фамилия')
+    username = forms.CharField(required=True, label=_('Логин'))
+    email = forms.EmailField(required=True, label=_('Адрес электронной почты'))
+    first_name = forms.CharField(required=True, label=_('Имя'))
+    last_name = forms.CharField(required=True, label=_('Фамилия'))
 
     class Meta:
         model = AdvUser
@@ -17,14 +18,14 @@ class ChangeUserInfoForm(forms.ModelForm):
 
 
 class RegisterUserForm(forms.ModelForm):
-    username = forms.CharField(required=True, label='Логин')
-    email = forms.EmailField(required=True, label='Адрес электронной почты')
-    first_name = forms.CharField(required=True, label='Имя')
-    last_name = forms.CharField(required=True, label='Фамилия')
-    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput,
+    username = forms.CharField(required=True, label=_('Логин'))
+    email = forms.EmailField(required=True, label=_('Адрес электронной почты'))
+    first_name = forms.CharField(required=True, label=_('Имя'))
+    last_name = forms.CharField(required=True, label=_('Фамилия'))
+    password1 = forms.CharField(label=_('Пароль'), widget=forms.PasswordInput,
         help_text=password_validation.password_validators_help_text_html())
-    password2 = forms.CharField(label='Пароль (повторно)', widget=forms.PasswordInput,
-        help_text='Введите тот же самый пароль еще раз для проверки')
+    password2 = forms.CharField(label=_('Пароль (повторно)'), widget=forms.PasswordInput,
+        help_text=_('Введите тот же самый пароль еще раз для проверки'))
 
     def clean_password1(self):
         password1 = self.cleaned_data['password1']
@@ -40,7 +41,7 @@ class RegisterUserForm(forms.ModelForm):
         password2 = self.cleaned_data['password2']
         
         if password1 and password2 and password1 != password2:
-            errors = {'password2': ValidationError('Введенные пароли не совпадают',
+            errors = {'password2': ValidationError(_('Введенные пароли не совпадают'),
                 code='password_mismatch')}
             raise ValidationError(errors)
 

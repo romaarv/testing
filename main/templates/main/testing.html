@@ -1,20 +1,22 @@
 {% extends "main/basic.html" %}
 
-{% block title %}Тестирование{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Тестирование" %}{% endblock %}
 
 {% block content %}
     <div>
-        <h2>Тест: {{ task.name }}</h2>
+        <h2>{% trans "Тест" %}: {{ task.name }}</h2>
         <br>
-        <h5>Текущий вопрос: {{ question_of }}</h5>
+        <h5>{% trans "Текущий вопрос" %}: {{ question_of }}</h5>
         <br>
-        <h6>Вопрос:</h6>
+        <h6>{% trans "Вопрос" %}:</h6>
         <h4>{{ question.content }}</h4>
         <br>
         {% if question.type_answer %}
-            <h6>Выберите несколько вариантов:</h6>
+            <h6>{% trans "Выберите несколько вариантов" %}:</h6>
         {% else %}
-            <h6>Выберите любой правильный вариант:</h6>
+            <h6>{% trans "Выберите любой правильный вариант" %}:</h6>
         {% endif %}
     </div>
     <form action="{% url 'main:testing' task.pk%}" method='POST'>
@@ -29,6 +31,6 @@
             </div>
         {% endfor %}
         <br>    
-        <button type='submit' class="btn btn-outline-primary">Далее</button>
+        <button type='submit' class="btn btn-outline-primary">{% trans "Далее" %}</button>
     </form>
 {% endblock %}

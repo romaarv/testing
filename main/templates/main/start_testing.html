@@ -1,32 +1,35 @@
 {% extends "main/basic.html" %}
 
-{% block title %}Тестирование{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Тестирование" %}{% endblock %}
 
 {% block content %}
     {% if user.is_staff%}
-        <h3 style="color:red; font-size: 2em;">Тесты для учителей не предусмотрены!</h3>
-        <input type="button" class="btn btn-outline-secondary ml-3" onclick="history.back();" value="Назад"/>
+        <h3 style="color:red; font-size: 2em;">{% trans "Тесты для учителей не предусмотрены" %}!</h3>
+        <input type="button" class="btn btn-outline-secondary ml-3" onclick="history.back();" value="{% trans 'Назад' %}"/>
     {% else %}
-        <h2>Тест: {{ task.name }}</h2>
+        <h2>{% trans "Тест" %}: {{ task.name }}</h2>
         <br>
-        <h5>Описание: {{ task.content }}</h5>
-        <h6>Предмет (урок): {{ task.lesson.name }}</h6>
-        <h6>Максимальная оценка за тест: {{ task.max_score }}</h6>
-        <h6>Для групп (классов): {{ task.group_in }}</h6>
+        <h5>{% trans "Описание" %}: {{ task.content }}</h5>
+        <h6>{% trans "Предмет (урок)" %}: {{ task.lesson.name }}</h6>
+        <h6>{% trans "Максимальная оценка за тест" %}: {{ task.max_score }}</h6>
+        <h6>{% trans "Для групп (классов)" %}: {{ task.group_in }}</h6>
         {% if not is_pass %}
-            <h6>Тест пройден: Нет</h6>
+            <h6>{% trans "Тест пройден: Нет" %}</h6>
         {% else %}
-            <h6>Тест пройден: Да</h6>
+            <h6>{% trans "Тест пройден: Да" %}</h6>
         {% endif %}
             <div class="row">
-            <input type="button" class="btn btn-outline-secondary ml-3 mr-3" onclick="history.back();" value="Назад"/>
+            <input type="button" class="btn btn-outline-secondary ml-3 mr-3" onclick="history.back();" 
+                value="{% trans 'Назад' %}"/>
             {% if not is_pass %}
                 <form action="{% url 'main:testing' task.pk%}" method='POST'>
                     {% csrf_token %}
-                    <button type='submit' class="btn btn-outline-primary">Начать</button>
+                    <button type='submit' class="btn btn-outline-primary">{% trans "Начать" %}</button>
                 </form>
             {% else %}
-                <button type="button" class="btn btn-outline-primary" disabled>Начать</button>
+                <button type="button" class="btn btn-outline-primary" disabled>{% trans "Начать" %}</button>
             {% endif %}
             </div>
     {% endif %}

@@ -4,21 +4,23 @@
 
 {% load static %}
 
-{% block title %}Вход{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Вход" %}{% endblock %}
 
 {% block content %}
-    <h2>Вход</h2>
+    <h2>{% trans "Вход" %}</h2>
     {% if user.is_authenticated %}
-        <p>{{ user }}, Вы уже выполнили вход.</p>
+        <p>{{ user }}, {% trans "Вы уже выполнили вход" %}.</p>
     {% else %}
         <form method="post">
             {% csrf_token %}
             {% bootstrap_form form layout='horizontal' %}
             <input type="hidden" name="next" value="{{ next }}">
-            <p><a href="{% url 'main:password_reset' %}">Забыли пароль?</a></p>
-            {% buttons submit='Войти' %}{% endbuttons %}
+            <p><a href="{% url 'main:password_reset' %}">{% trans "Забыли пароль" %}?</a></p>
+            <button type='submit' class="btn btn-outline-primary">{% trans "Войти" %}</button>
         </form>
-        <p><a href="{% url 'social:begin' 'facebook' %}">Войти через Facebook</a></p>
+        <p><a href="{% url 'social:begin' 'facebook' %}">{% trans "Войти через" %} Facebook</a></p>
     {% endif %}
 {% endblock %}
 
