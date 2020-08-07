@@ -164,9 +164,9 @@ AUTH_USER_MODEL = 'main.AdvUser'
 
 # EMAIL_FILE_PATH = ''
 # MAIL_USE_SSL=True
-EMAIL_USE_TLS = True
+EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_PORT = 465
 EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_HOST_USER', 'secret')
 EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD', 'secret')
 DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', 'secret')
