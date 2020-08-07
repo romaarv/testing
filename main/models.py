@@ -166,6 +166,10 @@ class Test(models.Model):
     test_score = models.PositiveIntegerField(default=0, db_index=True, verbose_name=_('Оценка за тест'))
     is_end = models.BooleanField(default=False, db_index=True, verbose_name=_('Закончен'),
                 help_text=_('Прохождение теста закончено'))
+    variant = models.PositiveIntegerField(default=1, db_index=True, verbose_name=_('Вариант вопросов'),
+            help_text=_('Вариант прохождения теста'))
+    date_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата начала ответа'),
+            help_text=_('Дата начала ответа на тест'))
 
     class Meta:
         unique_together = ('user', 'task')

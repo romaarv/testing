@@ -291,8 +291,8 @@ class TestAdmin(admin.ModelAdmin):
 
 
     def start_at(self, rec):
-        date_ = Exam.objects.filter(test=rec.id).order_by('id').first()
-        return '%s' % (date_.date_at.strftime('%d.%m.%Y %H:%M:%S'))
+        # date_ = rec.date_at
+        return '%s' % (rec.date_at.strftime('%d.%m.%Y %H:%M:%S'))
     start_at.short_description = _('Начат')
 
     def end_at(self, rec):

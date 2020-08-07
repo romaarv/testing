@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-07 21:13+0300\n"
+"POT-Creation-Date: 2020-08-07 23:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,10 +64,6 @@ msgstr "Created"
 msgid "Последнее изменение"
 msgstr "Last modified"
 
-#: .\main\admin.py:163 .\main\admin.py:269
-msgid "Внесенные измененения требует повторной проверки. Тест (билет)"
-msgstr "Changes made require re-checking. Test (ticket)"
-
 #: .\main\admin.py:164 .\main\admin.py:270
 msgid "отмечен как неотображаемый."
 msgstr "marked as not displayed"
@@ -91,6 +87,10 @@ msgstr "Groups not defined"
 #: .\main\admin.py:204 .\main\admin.py:347
 msgid "Номера групп (классов)"
 msgstr "Group (class) numbers"
+
+#: .\main\admin.py:269
+msgid "Внесенные измененения требует повторной проверки. Тест (билет)"
+msgstr "Changes made require re-checking. Test (ticket)"
 
 #: .\main\admin.py:296
 msgid "Начат"
@@ -324,7 +324,7 @@ msgstr "Consider the answer when displaying a question"
 msgid "Ответы"
 msgstr "Answers"
 
-#: .\main\models.py:164 .\main\models.py:186
+#: .\main\models.py:164 .\main\models.py:190
 #: .\main\templates\main\start_testing.html:12
 #: .\main\templates\main\testing.html:9
 msgid "Тест"
@@ -342,39 +342,55 @@ msgstr "Test score"
 msgid "Прохождение теста закончено"
 msgstr "Completed the test"
 
+#: .\main\models.py:169
+msgid "Вариант вопросов"
+msgstr "Option questions"
+
+#: .\main\models.py:170
+msgid "Вариант прохождения теста"
+msgstr "Test passing option"
+
+#: .\main\models.py:171
+msgid "Дата начала ответа"
+msgstr "Reply start date"
+
 #: .\main\models.py:172
+msgid "Дата начала ответа на тест"
+msgstr "Test response start date"
+
+#: .\main\models.py:176
 msgid "Сданный тест"
 msgstr "Passed test"
 
-#: .\main\models.py:173
+#: .\main\models.py:177
 msgid "Сданные тесты"
 msgstr "Passed tests"
 
-#: .\main\models.py:182 .\main\models.py:198 .\main\models.py:200
+#: .\main\models.py:186 .\main\models.py:202 .\main\models.py:204
 msgid "Балов"
 msgstr "Points"
 
-#: .\main\models.py:187
+#: .\main\models.py:191
 msgid "Выбранный ответ"
 msgstr "Selected answer"
 
-#: .\main\models.py:188
+#: .\main\models.py:192
 msgid "Дата ответа"
 msgstr "Reply date"
 
-#: .\main\models.py:192
+#: .\main\models.py:196
 msgid "Ответил"
 msgstr "Answered"
 
-#: .\main\models.py:193
+#: .\main\models.py:197
 msgid "Ответили"
 msgstr "Answered"
 
-#: .\main\models.py:202
+#: .\main\models.py:206
 msgid "Один из"
 msgstr "One of"
 
-#: .\main\models.py:204
+#: .\main\models.py:208
 msgid "Все из"
 msgstr "All of"
 
@@ -872,17 +888,25 @@ msgstr "Password reset email sent"
 msgid "Введите новый пароль"
 msgstr "Enter a new password"
 
-#: .\main\views.py:151
+#: .\main\views.py:152
 msgid "Личные данные пользователя изменены"
 msgstr "User's personal data has been changed"
 
-#: .\main\views.py:166
+#: .\main\views.py:167
 msgid "Пароль пользователя изменен"
 msgstr "User password changed"
 
-#: .\main\views.py:208
+#: .\main\views.py:209
 msgid "Пользователь удален"
 msgstr "User deleted"
+
+#: .\main\views.py:438
+msgid " из "
+msgstr " out of "
+
+#: .\main\views.py:447
+msgid "1 из "
+msgstr "1 out of "
 
 #: .\testing\settings.py:129
 msgid "Russian"
