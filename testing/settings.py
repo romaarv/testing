@@ -162,7 +162,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 AUTH_USER_MODEL = 'main.AdvUser'
 
-EMAIL_USE_TLS = True
+# EMAIL_USE_TLS = True
 MAIL_USE_SSL=True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
