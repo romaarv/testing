@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-07 18:20+0300\n"
+"POT-Creation-Date: 2020-08-07 21:13+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,30 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\main\admin.py:21
+msgid "Письма с оповещением отправлены"
+msgstr "Notification emails sent"
+
+#: .\main\admin.py:22
+msgid "Отправка писем с оповещениями об активации"
+msgstr "Sending activation alerts"
+
+#: .\main\admin.py:26 .\main\models.py:12
+msgid "Подтверждение аккаунта"
+msgstr "Account confirmation"
+
+#: .\main\admin.py:31
+msgid "Прошли"
+msgstr "Passed"
+
+#: .\main\admin.py:32
+msgid "Не прошли более 3х дней"
+msgstr "Have not passed for more than 3 days"
+
+#: .\main\admin.py:33
+msgid "Не прошли более недели"
+msgstr "Have not been for more than a week"
 
 #: .\main\admin.py:55
 msgid "Personal info"
@@ -29,6 +53,60 @@ msgstr ""
 #: .\main\admin.py:59
 msgid "Important dates"
 msgstr ""
+
+#: .\main\admin.py:79 .\main\admin.py:105 .\main\admin.py:145
+#: .\main\admin.py:255
+msgid "Создание"
+msgstr "Created"
+
+#: .\main\admin.py:88 .\main\admin.py:114 .\main\admin.py:154
+#: .\main\admin.py:264
+msgid "Последнее изменение"
+msgstr "Last modified"
+
+#: .\main\admin.py:163 .\main\admin.py:269
+msgid "Внесенные измененения требует повторной проверки. Тест (билет)"
+msgstr "Changes made require re-checking. Test (ticket)"
+
+#: .\main\admin.py:164 .\main\admin.py:270
+msgid "отмечен как неотображаемый."
+msgstr "marked as not displayed"
+
+#: .\main\admin.py:173 .\main\admin.py:316
+msgid "Группы (отображ): "
+msgstr "Groups (displayed): "
+
+#: .\main\admin.py:189 .\main\admin.py:332
+msgid " Группы (не отображ): "
+msgstr " Groups (not displayed): "
+
+#: .\main\admin.py:191 .\main\admin.py:334
+msgid "Группы (не отображ): "
+msgstr "Groups (not displayed): "
+
+#: .\main\admin.py:202 .\main\admin.py:345
+msgid "Группы не определены"
+msgstr "Groups not defined"
+
+#: .\main\admin.py:204 .\main\admin.py:347
+msgid "Номера групп (классов)"
+msgstr "Group (class) numbers"
+
+#: .\main\admin.py:296
+msgid "Начат"
+msgstr "Started"
+
+#: .\main\admin.py:303
+msgid "Нет"
+msgstr "No"
+
+#: .\main\admin.py:304 .\main\models.py:167
+msgid "Закончен"
+msgstr "Finished"
+
+#: .\main\admin.py:309
+msgid "Оценка"
+msgstr "Score"
 
 #: .\main\apps.py:7 .\main\templates\main\start_testing.html:5
 #: .\main\templates\main\testing.html:5
@@ -66,10 +144,6 @@ msgstr "Enter the same password again for verification"
 #: .\main\forms.py:44
 msgid "Введенные пароли не совпадают"
 msgstr "The passwords entered do not match"
-
-#: .\main\models.py:12
-msgid "Подтверждение аккаунта"
-msgstr "Account confirmation"
 
 #: .\main\models.py:13
 msgid "Пользовательский аккаунт, который прошел процесс подтверждения"
@@ -263,10 +337,6 @@ msgstr "User"
 #: .\main\models.py:166
 msgid "Оценка за тест"
 msgstr "Test score"
-
-#: .\main\models.py:167
-msgid "Закончен"
-msgstr "Finished"
 
 #: .\main\models.py:168
 msgid "Прохождение теста закончено"
@@ -559,7 +629,7 @@ msgstr "modified"
 
 #: .\main\templates\main\login.html:14
 msgid "Вы уже выполнили вход"
-msgstr ""
+msgstr "You are already signed in"
 
 #: .\main\templates\main\login.html:20
 msgid "Забыли пароль"

@@ -18,19 +18,19 @@ def send_activation_notifications(modeladmin, request,queryset):
     for rec in queryset:
         if not rec.is_activated:
             send_activation_notification(rec)
-    modeladmin.message_user(request, 'Письма с оповещением отправлены')
-send_activation_notifications.short_description = 'Отправка писем с оповещениями об активации'
+    modeladmin.message_user(request, _('Письма с оповещением отправлены'))
+send_activation_notifications.short_description = _('Отправка писем с оповещениями об активации')
 
 
 class NonactivatedFilter(admin.SimpleListFilter):
-    title = 'Подтверждение аккаунта'
+    title = _('Подтверждение аккаунта')
     parameter_name = 'actstate'
 
     def lookups(self, request, model_admin):
         return (
-            ('activated', 'Прошли'),
-            ('threedays', 'Не прошли более 3х дней'),
-            ('week', 'Не прошли более недели'),
+            ('activated', _('Прошли')),
+            ('threedays', _('Не прошли более 3х дней')),
+            ('week', _('Не прошли более недели')),
         )
 
     def queryset(self, request, queryset):
@@ -76,7 +76,7 @@ class LessonAdmin(TranslationAdmin):
             return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
         else:
             return None
-    creator.short_description = 'Создание'
+    creator.short_description = _('Создание')
 
     def modified(self, rec):
         str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Lesson),
@@ -85,7 +85,7 @@ class LessonAdmin(TranslationAdmin):
             return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
         else:
             return None
-    modified.short_description = 'Последнее изменение'
+    modified.short_description = _('Последнее изменение')
 
 admin.site.register(Lesson, LessonAdmin)
 
@@ -102,7 +102,7 @@ class GroupAdmin(TranslationAdmin):
             return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
         else:
             return None
-    creator.short_description = 'Создание'
+    creator.short_description = _('Создание')
 
     def modified(self, rec):
         str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Group),
@@ -111,7 +111,7 @@ class GroupAdmin(TranslationAdmin):
             return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
         else:
             return None
-    modified.short_description = 'Последнее изменение'
+    modified.short_description = _('Последнее изменение')
 
 admin.site.register(Group, GroupAdmin)
 
@@ -142,7 +142,7 @@ class TaskAdmin(admin.ModelAdmin):
             return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
         else:
             return None
-    creator.short_description = 'Создание'
+    creator.short_description = _('Создание')
 
     def modified(self, rec):
         str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Task),
@@ -151,7 +151,7 @@ class TaskAdmin(admin.ModelAdmin):
             return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
         else:
             return None
-    modified.short_description = 'Последнее изменение'
+    modified.short_description = _('Последнее изменение')
 
     def save_model(self, request, obj, form, change):
         self.is_show = obj.is_active
@@ -160,8 +160,8 @@ class TaskAdmin(admin.ModelAdmin):
     def response_change(self, request, obj):
         if (obj.is_active == False) and (self.is_show != obj.is_active):
             messages.warning(request, 
-                    mark_safe('Внесенные измененения требует повторной проверки. Тест (билет) "\
-                        <a href="/admin/main/task/%d/change/">%s</a>" отмечен как неотображаемый.' % (obj.id ,obj)))
+                    mark_safe((str_('Внесенные измененения требует повторной проверки. Тест (билет)')) +
+                        '<a href="/admin/main/task/%d/change/">%s</a>' % (obj.id ,obj) + str(_('отмечен как неотображаемый.'))))
         self.is_show = obj.is_active
         return super().response_change(request, obj)
 
@@ -170,7 +170,7 @@ class TaskAdmin(admin.ModelAdmin):
         str = ''
         max_len = len(rec.groups.filter(is_active=True))
         if max_len > 0:
-            str = 'Группы (отображ): '
+            str = _('Группы (отображ): ')
             count = 0
             for group in rec.groups.filter(is_active=True):
                 count += 1
@@ -186,9 +186,9 @@ class TaskAdmin(admin.ModelAdmin):
             if max_len > 0:
                 count = 0
                 if len(str) > 0:
-                    str += ' Группы (не отображ): '
+                    str += _(' Группы (не отображ): ')
                 else:
-                    str = 'Группы (не отображ): '
+                    str = _('Группы (не отображ): ')
                 for group in rec.groups.filter(is_active=False):
                     count +=1
                     str += '%s' % (group.name)
@@ -199,9 +199,9 @@ class TaskAdmin(admin.ModelAdmin):
                 else:
                     str = '%s.' % (str)
         if len(str) == 0:
-            str = 'Группы не определены'
+            str = _('Группы не определены')
         return '%s' % (str)
-    task_groups.short_description = 'Номера групп (классов)'
+    task_groups.short_description = _('Номера групп (классов)')
 
 admin.site.register(Task, TaskAdmin)
 
@@ -252,7 +252,7 @@ class QuestionAdmin(admin.ModelAdmin):
             return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
         else:
             return None
-    creator.short_description = 'Создание'
+    creator.short_description = _('Создание')
 
     def modified(self, rec):
         str = LogEntry.objects.filter(content_type_id=ContentType.objects.get_for_model(Question),
@@ -261,13 +261,13 @@ class QuestionAdmin(admin.ModelAdmin):
             return '%s - %s' % (str[0].user, str[0].action_time.strftime('%d.%m.%Y %H:%M:%S'))
         else:
             return None
-    modified.short_description = 'Последнее изменение'
+    modified.short_description = _('Последнее изменение')
 
     def save_model(self, request, obj, form, change):
         if obj.test.is_active:
             messages.warning(request, 
-                    mark_safe('Внесенные измененения требует повторной проверки. Тест (билет) "\
-                        <a href="/admin/main/task/%d/change/">%s</a>" отмечен как неотображаемый.' % (obj.test.id ,obj.test)))
+                    mark_safe(str(_('Внесенные измененения требует повторной проверки. Тест (билет)')) +
+                        '<a href="/admin/main/task/%d/change/">%s</a>' % (obj.test.id ,obj.test) + str(_('отмечен как неотображаемый.'))))
         obj.save()
 
 admin.site.register(Question, QuestionAdmin)
@@ -293,27 +293,27 @@ class TestAdmin(admin.ModelAdmin):
     def start_at(self, rec):
         date_ = Exam.objects.filter(test=rec.id).order_by('id').first()
         return '%s' % (date_.date_at.strftime('%d.%m.%Y %H:%M:%S'))
-    start_at.short_description = 'Начат'
+    start_at.short_description = _('Начат')
 
     def end_at(self, rec):
         if rec.is_end:
             date_ = Exam.objects.filter(test=rec.id).order_by('id').last()
             return '%s' % (date_.date_at.strftime('%d.%m.%Y %H:%M:%S'))
         else:
-            return 'Нет'
-    end_at.short_description = 'Закончен'
+            return _('Нет')
+    end_at.short_description = _('Закончен')
 
     def score(self, rec):
         task = Task.objects.filter(id=rec.task.id)
         return '%d из %d' % (rec.test_score, task[0].max_score)
-    score.short_description = 'Оценка'
+    score.short_description = _('Оценка')
 
     def test_groups(self, rec):
         count_type = 100    #Количество символов для отображения на экране
         str_ = ''
         max_len = len(rec.task.groups.filter(is_active=True))
         if max_len > 0:
-            str_ = 'Группы (отображ): '
+            str_ = _('Группы (отображ): ')
             count = 0
             for group in rec.task.groups.filter(is_active=True):
                 count += 1
@@ -329,9 +329,9 @@ class TestAdmin(admin.ModelAdmin):
             if max_len > 0:
                 count = 0
                 if len(str_) > 0:
-                    str_ += ' Группы (не отображ): '
+                    str_ += _(' Группы (не отображ): ')
                 else:
-                    str_ = 'Группы (не отображ): '
+                    str_ = _('Группы (не отображ): ')
                 for group in rec.task.groups.filter(is_active=False):
                     count +=1
                     str_ += '%s' % (group.name)
@@ -342,9 +342,9 @@ class TestAdmin(admin.ModelAdmin):
                 else:
                     str_ = '%s.' % (str_)
         if len(str_) == 0:
-            str_ = 'Группы не определены'
+            str_ = _('Группы не определены')
         return '%s' % (str_)
-    test_groups.short_description = 'Номера групп (классов)'
+    test_groups.short_description = _('Номера групп (классов)')
 
 admin.site.register(Test, TestAdmin)
 
