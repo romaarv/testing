@@ -11,7 +11,7 @@
     {% if user.is_authenticated %}
         <h5 class="text-danger">{% trans 'Данный сеанс использует пользователь с логином' %} {{ user.username }}.</h5>
         <h5>{% trans 'Для смены пользователя Вам необходимо' %}
-            <a href="{% url 'main:logout' %}">{% trans 'выйти' %}</a> {% trans 'с текущего сеанс' %}а.</h5>
+            <a href="{% url 'main:logout' %}">{% trans 'выйти' %}</a> {% trans 'с текущего сеанса' %}.</h5>
     {% else %}
         <h5>{% trans 'Вы можете' %} <a href="{% url 'main:login' %}">{% trans 'войти' %}</a> {% trans 'на сайт' %}!</h5>
     {% endif %}

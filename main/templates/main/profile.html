@@ -40,7 +40,7 @@
                                 <th scope="col">{{ test.task.name }}</th>
                             {% endif %}
                             <td>{{ test.task.content }}</td>
-                            <th>{{ test.test_score }} из {{ test.task.max_score }}</th>
+                            <th>{{ test.test_score }} {% trans "из" %} {{ test.task.max_score }}</th>
                             <td>{{ test.group_in }}</td>
                             <td>{{ test.start_at|date:"d.m.Y H:i:s" }}</td>
                             {% if test.is_end %}
