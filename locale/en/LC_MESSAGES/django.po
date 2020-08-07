@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-07 23:54+0300\n"
+"POT-Creation-Date: 2020-08-08 00:32+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,7 +96,7 @@ msgstr "Changes made require re-checking. Test (ticket)"
 msgid "Начат"
 msgstr "Started"
 
-#: .\main\admin.py:303
+#: .\main\admin.py:303 .\main\templates\main\profile.html:49
 msgid "Нет"
 msgstr "No"
 
@@ -888,23 +888,23 @@ msgstr "Password reset email sent"
 msgid "Введите новый пароль"
 msgstr "Enter a new password"
 
-#: .\main\views.py:152
+#: .\main\views.py:153
 msgid "Личные данные пользователя изменены"
 msgstr "User's personal data has been changed"
 
-#: .\main\views.py:167
+#: .\main\views.py:168
 msgid "Пароль пользователя изменен"
 msgstr "User password changed"
 
-#: .\main\views.py:209
+#: .\main\views.py:210
 msgid "Пользователь удален"
 msgstr "User deleted"
 
-#: .\main\views.py:438
+#: .\main\views.py:439
 msgid " из "
 msgstr " out of "
 
-#: .\main\views.py:447
+#: .\main\views.py:448
 msgid "1 из "
 msgstr "1 out of "
 

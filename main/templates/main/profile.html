@@ -46,7 +46,7 @@
                             {% if test.is_end %}
                                 <td>{{ test.end_at|date:"d.m.Y H:i:s" }}</td>
                             {% else %}
-                                <td>Нет</td>
+                                <td>{% trans "Нет" %}</td>
                             {% endif %}
                         </tr>
                     {% endfor %}

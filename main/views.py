@@ -130,8 +130,9 @@ def profile(request):
         # date_ = Exam.objects.filter(test=test.id).order_by('id').first()
         # test.start_at = date_.date_at
         test.start_at = test.date_at
-        date_ = Exam.objects.filter(test=test.id).order_by('id').last()
-        test.end_at = date_.date_at
+        if test.is_end:
+            date_ = Exam.objects.filter(test=test.id).order_by('id').last()
+            test.end_at = date_.date_at
     context = {}
     paginator = Paginator(tests, 20)
     if 'page' in request.GET:
